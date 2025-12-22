@@ -20,6 +20,9 @@
 # production
 /build
 
+# build
+/dist
+
 # misc
 .DS_Store
 *.pem
@@ -42,4 +45,8 @@ next-env.d.ts
 
 # devtools
 *.backup
+*.manual-backup
 .globals.css.backup
+
+# IDE
+# .cursor/ - included for agent skills/rules

@@ -1,17 +1,45 @@
 {
   "name": "radtools",
   "version": "0.1.0",
-  "private": true,
+  "description": "Visual dev tools for Next.js + Tailwind v4 projects",
+  "keywords": ["nextjs", "tailwind", "devtools", "design-system", "visual-editor"],
+  "author": "kemos4be",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Radiants-DAO/radtools.git"
+  },
+  "homepage": "https://github.com/Radiants-DAO/radtools#readme",
+  "bugs": {
+    "url": "https://github.com/Radiants-DAO/radtools/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "type": "module",
+  "bin": {
+    "radtools": "./bin/radtools.js"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "templates"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:cli": "tsup src/cli/index.ts --format esm --outDir dist/cli --clean --target node18",
+    "prepublishOnly": "npm run build:cli",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "next": "16.0.10",
     "react": "19.2.1",
-    "react-dom": "19.2.1"
+    "react-dom": "19.2.1",
+    "react-draggable": "^4.5.0",
+    "sharp": "^0.34.5",
+    "zustand": "^5.0.9"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -21,6 +49,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
     "tailwindcss": "^4",
+    "tsup": "^8.3.0",
     "typescript": "^5"
   }
 }

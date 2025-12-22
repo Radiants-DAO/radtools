@@ -5,11 +5,10 @@ A Webflow-like visual editing dev tools system for Next.js + Tailwind v4 project
 ## Features
 
 - **Variables Tab** - Manage design tokens (brand colors, semantic tokens, color modes, border radius)
+- **Typography Tab** - Manage fonts and typography styles
 - **Components Tab** - Auto-discover components from `/components/` directory with prop information
 - **Assets Tab** - Upload, organize, and optimize images in `public/assets/`
-- **Comments Tab** - Pin comments to DOM elements for feedback
 - **Mock States Tab** - Simulate auth, wallet, subscription states during development
-- **Changelog Tab** - Track project changes with categorized entries
 
 ## Quick Start
 
@@ -22,7 +21,7 @@ A Webflow-like visual editing dev tools system for Next.js + Tailwind v4 project
 | Shortcut | Action |
 |----------|--------|
 | `⇧⌘K` / `⇧Ctrl+K` | Toggle dev tools panel |
-| `Esc` | Exit comment mode / close modals |
+| `Esc` | Close modals |
 
 ## Tab Guide
 
@@ -33,6 +32,13 @@ Edit your design tokens visually:
 - Toggle color modes (dark mode preview)
 - Adjust border radius values
 - Click "Save to CSS" to write changes to `app/globals.css`
+
+### Typography Tab
+Manage fonts and typography styles:
+- Upload and manage font files from `public/fonts/`
+- Configure typography styles for HTML elements (h1-h6, p, code, etc.)
+- Visual editor for typography properties
+- Changes automatically persist to `app/globals.css`
 
 ### Components Tab
 Discover all components in your `/components/` directory:
@@ -47,27 +53,12 @@ Manage files in `public/assets/`:
 - Select images and click "Optimize" for Sharp-based compression
 - Delete assets directly from the UI
 
-### Comments Tab
-Add feedback comments pinned to DOM elements:
-- Click "Add Comment" to enter comment mode
-- Click any element on the page to add a comment
-- View all comments in a filterable list
-- Toggle pins on/off
-- Reply to and resolve comments
-
 ### Mock States Tab
 Simulate different app states:
 - Pre-configured presets for auth, wallet, and subscription states
 - Create custom mock states with JSON values
 - Use `useMockState('category')` hook in components to consume mock data
 - Only one state per category can be active at a time
-
-### Changelog Tab
-Track project changes:
-- Add entries with type (feature, fix, refactor, style, chore)
-- List affected files
-- Entries persist across sessions
-- Export or clear the changelog
 
 ## Using Mock States in Components
 
@@ -86,20 +77,6 @@ function UserProfile() {
   if (!auth?.isAuthenticated) return <LoginPrompt />;
   return <Profile user={auth.user} />;
 }
-```
-
-## Adding Changelog Entries Programmatically
-
-```tsx
-import { useDevToolsStore } from '@/devtools';
-
-// After completing a feature
-useDevToolsStore.getState().addChangelogEntry({
-  type: 'feature',
-  description: 'Added responsive navigation menu',
-  files: ['components/layout/Nav.tsx', 'app/globals.css'],
-  author: 'Your Name',
-});
 ```
 
 ## Production Safety

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 16 16">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: currentColor;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1" shape-rendering="crispEdges">
+    <g>
+      <path class="st0" d="M7,4h2v1h1v-2h-1v-1h-2v1h-1v2h1v-1Z"/>
+      <path class="st0" d="M13,11v-2h-1v-2h-1v-2h-1v3h-1v2h-2v-2h-1v-3h-1v2h-1v2h-1v2h-1v2h1v1h10v-1h1v-2h-1ZM8,13h-1v-2h2v2h-1Z"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 20 24">
+  <defs>
+    <style>
+      .st0 {
+        fill: currentColor;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1" shape-rendering="crispEdges">
+    <path class="st0" d="M11 0H9V2V4V6V8V10H7H5H3V12H5V14H7V16H9V18H11V16H13V14H15V12H17V10H15H13H11V8V6V4V2V0ZM0 24V22V20V18V16H2V18V20V22H4H6H8H10H12H14H16H18V20V18V16H20V18V20V22V24H18H16H14H12H10H8H6H4H2H0Z"/>
+  </g>
+</svg>
+
