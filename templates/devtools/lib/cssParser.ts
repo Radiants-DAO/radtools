@@ -12,6 +12,9 @@ const KNOWN_BRAND_COLORS = [
   'sun-red', 'green', 'cream', 'black', 'white', 'transparent'
 ];
 
+// System color prefixes
+const SYSTEM_COLOR_PREFIXES = ['success-', 'warning-', 'error-', 'focus-'];
+
 /**
  * Parse globals.css and extract theme variables
  */
@@ -139,17 +142,33 @@ export function parsedCSSToStoreState(parsed: ParsedCSS): {
   // Build a map to track color IDs for reference resolution
   const colorIdMap = new Map<string, string>(); // name -> id
 
-  // Extract base colors from @theme inline
-  for (const [key, value] of Object.entries(parsed.themeInline)) {
+  // Merge theme and themeInline to get all variables
+  const themeVars = { ...parsed.themeInline, ...parsed.theme };
+
+  // Extract base colors from merged theme
+  for (const [key, value] of Object.entries(themeVars)) {
     // Skip non-color variables (like fonts)
     if (key.startsWith('--font-')) continue;
 
+    // System colors (--color-success-green, --color-error-red, etc.)
+    if (key.startsWith('--color-') && SYSTEM_COLOR_PREFIXES.some(p => key.includes(p))) {
+      const name = key.replace('--color-', '');
+      const id = name;
+      colorIdMap.set(name, id);
+      baseColors.push({
+        id,
+        name,
+        displayName: toDisplayName(name),
+        value: value.startsWith('var(') ? resolveVariable(key, parsed) || value : value,
+        category: 'system',
+      });
+    }
     // Brand colors (--color-sun-yellow, --color-cream, etc.)
-    if (key.startsWith('--color-') && !key.includes('neutral') && !key.includes('success') && !key.includes('warning') && !key.includes('error') && !key.includes('focus')) {
+    else if (key.startsWith('--color-') && !key.includes('neutral')) {
       const name = key.replace('--color-', '');
       // Only add if it's a known brand color or looks like a hex value
       if (KNOWN_BRAND_COLORS.includes(name) || value.startsWith('#')) {
-        const id = name; // Use name as ID for stable references
+        const id = name;
         colorIdMap.set(name, id);
         baseColors.push({
           id,
@@ -165,7 +184,7 @@ export function parsedCSSToStoreState(parsed: ParsedCSS): {
       const name = key.replace('--color-neutral-', '').replace('--neutral-', '');
       const id = name;
       colorIdMap.set(name, id);
-      colorIdMap.set(`neutral-${name}`, id); // Also map with neutral prefix
+      colorIdMap.set(`neutral-${name}`, id);
       baseColors.push({
         id,
         name,

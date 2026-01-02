@@ -6,7 +6,7 @@ export interface BaseColor {
   name: string;        // e.g., "sun-yellow", "lightest"
   displayName: string; // e.g., "Sun Yellow", "Lightest"
   value: string;       // e.g., "#FCE184"
-  category: 'brand' | 'neutral';
+  category: 'brand' | 'neutral' | 'system';
 }
 
 // Legacy alias for backwards compatibility
