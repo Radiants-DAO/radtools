@@ -12,39 +12,40 @@ Visual development tool for Next.js projects. Floating panel (`Shift+Cmd+K`) for
 
 ---
 
-## ⚠️ CRITICAL: RadTools is the Source of Truth
+## ⚠️ CRITICAL: Source of Truth
 
-**RadTools is the visual source of truth for all design system changes.** Any modifications to typography, fonts, colors, or design tokens MUST be made through RadTools, not by directly editing `app/globals.css`.
+**Design system changes follow different patterns by type:**
 
-### What RadTools Manages (DO NOT EDIT DIRECTLY)
+### Colors & Variables: `globals.css` is Source of Truth
 
-These sections in `app/globals.css` are managed by RadTools:
-- `@theme inline` block (color variables)
-- `@theme` block (design tokens)
+Colors are **read-only in RadTools** — edit them directly in `globals.css`:
+- `@theme` block (color variables, border radius, shadows)
+- `@theme inline` block (internal references)
+
+**Color workflow:**
+1. Edit colors directly in `globals.css` → `@theme` block
+2. RadTools Variables tab displays colors (read-only)
+3. Use "Copy Prompt" button to generate AI prompts for new color modes
+
+### Typography & Components: RadTools is Source of Truth
+
+These are managed by RadTools visual editor:
 - `@font-face` declarations
-- Typography rules (h1-h6, p, li, etc.)
+- Typography rules (`@layer base` — h1-h6, p, li, etc.)
+- Component definition files
 
-### Design System Change Workflow
-
-**Correct approach:**
-1. Open RadTools → appropriate tab (Variables/Typography/Components)
-2. Make changes in the UI using the visual editor
-3. Changes persist:
-   - **Typography**: Updates `@layer base` in `globals.css` immediately (automatic)
-   - **Variables**: Click "Save to CSS" button to persist changes to `@theme` in `globals.css` (manual save)
-   - **Components**: Updates component definition files immediately (automatic)
-
-**Incorrect approach:**
-1. ❌ Directly edit typography/variables in `globals.css`
-2. ❌ Directly edit component definitions without using visual editor
-3. ❌ Changes will be overwritten when RadTools syncs
+**Typography/Component workflow:**
+1. Open RadTools → Typography or Components tab
+2. Make changes in the visual editor
+3. Changes persist automatically to `globals.css` or component files
 
 ### Sync Mechanism
 
-| Direction | Flow | Trigger |
-|-----------|------|---------|
-| **Write** | RadTools → `globals.css` / Component files | Typography/Components: Automatic via visual editor. Variables: Manual "Save to CSS" button |
-| **Read** | `globals.css` → RadTools | On mount via `loadTypographyFromCSS()` or `loadFromCSS()` |
+| Type | Direction | Trigger |
+|------|-----------|---------|
+| **Colors** | `globals.css` → RadTools (read-only) | On mount via `loadFromCSS()` |
+| **Typography** | RadTools → `globals.css` | Automatic via visual editor |
+| **Components** | RadTools → Component files | Automatic via visual editor |
 
 ### Files Safe to Edit Directly
 
@@ -90,10 +91,12 @@ Zustand slice pattern. Each feature gets its own slice, combined in `store/index
 ## Tabs
 
 ### Variables Tab
-Visual editor for `globals.css` design tokens:
-- Brand colors (`@theme inline`) — internal reference
-- Semantic tokens (`@theme`) — generates utilities automatically
-- Border radius, color modes
+**Read-only display** of `globals.css` design tokens:
+- Brand colors, System colors, Neutrals
+- Border radius values
+- Color mode tabs (for switching between modes defined in CSS)
+
+**Colors are read-only** — edit directly in `globals.css` → `@theme` block.
 
 **Tailwind v4 Token Generation:**
 
@@ -108,12 +111,12 @@ The `@theme` block defines CSS variables that Tailwind v4 auto-generates into ut
 }
 ```
 
-**Pattern:** Use the generated utility classes in components. Reference actual token names from the Variables tab.
+**Pattern:** Use the generated utility classes in components. Check Variables tab for available tokens.
 
-**Visual Editing:**
-- Design token changes are made via the visual editor
-- Container has `data-edit-scope="theme-variables"` to signal edit scope
-- **Manual "Save to CSS" button required** - click to persist changes to `globals.css`
+**Features:**
+- "Reload" button refreshes from `globals.css`
+- "Copy Prompt" button generates AI prompts for creating new color modes
+- Color mode tabs switch between CSS-defined modes (`.dark`, `.light`, etc.)
 
 ### Typography Tab
 Manage fonts (`public/fonts/`) and typography style mappings.
@@ -243,17 +246,44 @@ export async function POST(req: Request) {
 
 ## CSS Writer (RadTools → globals.css)
 
-**⚠️ This is the ONLY correct way to modify design tokens and typography.**
-
 Writes to `globals.css` via `/api/devtools/write-css`:
-- Surgically updates only: `@theme` blocks, `@font-face`, typography rules
+- Surgically updates: `@font-face`, typography rules (`@layer base`)
+- **Colors are NOT written** — edit directly in `globals.css`
 - Preserves all other CSS (scrollbar, animations, base styles)
 - Creates `.globals.css.backup` before write
-- Parses via regex (`[\s\S]*?` pattern for nested braces)
 
 **Store locations:**
 - Typography/Fonts: `devtools/store/slices/typographySlice.ts`
-- Colors/Variables: `devtools/store/slices/variablesSlice.ts`
+- Colors/Variables: `devtools/store/slices/variablesSlice.ts` (read-only)
+
+---
+
+## Proportional Fluid Scaling
+
+All sizing uses **rem units** that scale proportionally with the root `clamp()`:
+
+```css
+html {
+  font-size: clamp(16px, 0.95rem + 0.25vw, 18px);
+}
+```
+
+**Rules:**
+- Use `rem` for spacing, padding, margins, font sizes — they scale proportionally
+- Avoid fixed `px` values (except for decorative elements like shadows, hairline borders)
+- Tailwind utilities (`p-4`, `text-lg`, etc.) use rem internally — they scale automatically
+
+**Example:**
+```tsx
+// ✅ Good — scales proportionally
+<div className="p-4 text-base gap-2">
+
+// ✅ Good — Tailwind arbitrary rem value
+<div className="text-[0.625rem] min-w-[10rem]">
+
+// ❌ Avoid — fixed pixels don't scale
+<div className="text-[10px] min-w-[160px]">
+```
 
 ---
 

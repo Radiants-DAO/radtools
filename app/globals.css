@@ -38,6 +38,14 @@
   box-sizing: border-box;
 }
 
+html {
+  /* Proportional Fluid Scaling - Master Scale
+     All rem units scale proportionally with this root size.
+     Mobile (320px+): 16px minimum
+     Large screens (1920px+): 18px maximum */
+  font-size: clamp(16px, 0.95rem + 0.25vw, 18px);
+}
+
 html,
 body {
   margin: 0;
@@ -48,7 +56,7 @@ body {
 
 body {
   font-family: 'Joystix Monospace', monospace;
-  font-size: clamp(1rem, 1vw, 1.125rem);
+  font-size: 1rem; /* Scales proportionally with html root */
   background-color: var(--color-sun-yellow);
   color: var(--color-black);
   -webkit-font-smoothing: antialiased;

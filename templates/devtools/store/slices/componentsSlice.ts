@@ -14,19 +14,8 @@ export interface ComponentsSlice {
   refreshComponents: () => Promise<void>;
 }
 
-export const createComponentsSlice: StateCreator<ComponentsSlice, [], [], ComponentsSlice> = (set) => ({
-  components: [],
-  isLoading: false,
-  lastScanned: null,
-
-  setComponents: (components) => set({ 
-    components, 
-    lastScanned: new Date().toISOString() 
-  }),
-  
-  setIsLoading: (isLoading) => set({ isLoading }),
-
-  scanComponents: async () => {
+export const createComponentsSlice: StateCreator<ComponentsSlice, [], [], ComponentsSlice> = (set, get) => {
+  const scan = async () => {
     set({ isLoading: true });
     try {
       const res = await fetch('/api/devtools/components');
@@ -36,24 +25,23 @@ export const createComponentsSlice: StateCreator<ComponentsSlice, [], [], Compon
         lastScanned: new Date().toISOString(),
         isLoading: false 
       });
-    } catch (error) {
+    } catch {
       set({ isLoading: false });
     }
-  },
+  };
 
-  refreshComponents: async () => {
-    set({ isLoading: true });
-    try {
-      const res = await fetch('/api/devtools/components');
-      const data = await res.json();
-      set({ 
-        components: data.components || [], 
-        lastScanned: new Date().toISOString(),
-        isLoading: false 
-      });
-    } catch (error) {
-      set({ isLoading: false });
-    }
-  },
-});
+  return {
+    components: [],
+    isLoading: false,
+    lastScanned: null,
 
+    setComponents: (components) => set({ 
+      components, 
+      lastScanned: new Date().toISOString() 
+    }),
+    
+    setIsLoading: (isLoading) => set({ isLoading }),
+    scanComponents: scan,
+    refreshComponents: scan,
+  };
+};

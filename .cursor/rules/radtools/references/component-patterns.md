@@ -2,6 +2,21 @@
 
 Reusable component patterns for RadTools projects. All patterns use semantic tokens and follow RadTools component requirements.
 
+## Proportional Fluid Scaling
+
+All sizing uses **rem units** that scale proportionally with the root `clamp()`:
+
+```css
+html {
+  font-size: clamp(16px, 0.95rem + 0.25vw, 18px);
+}
+```
+
+**Rules:**
+- Use `rem` for spacing, padding, margins, font sizes
+- Tailwind utilities (`p-4`, `text-lg`) use rem internally — they scale automatically
+- Avoid fixed `px` values (except shadows, hairline borders)
+
 ## Tailwind v4 Token Reference
 
 These patterns use tokens from the radOS design system. Your project's tokens are defined in `globals.css` `@theme` block:
@@ -16,10 +31,11 @@ These patterns use tokens from the radOS design system. Your project's tokens ar
 
 **Common radOS tokens used below:**
 - Colors: `sun-yellow`, `sky-blue`, `cream`, `black`, `warm-cloud`, `sun-red`, `green`
+- System: `success-green`, `error-red`, `warning-yellow`, `focus-state`
 - Radius: `sm`, `md`, `lg`, `full`
 - Shadows: `card`, `card-lg`, `btn`
 
-Check your project's Variables tab in RadTools for available tokens.
+Check your project's Variables tab in RadTools for available tokens (read-only display).
 
 ## Card
 

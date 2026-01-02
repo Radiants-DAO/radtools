@@ -2,7 +2,13 @@
   "name": "radtools",
   "version": "0.1.0",
   "description": "Visual dev tools for Next.js + Tailwind v4 projects",
-  "keywords": ["nextjs", "tailwind", "devtools", "design-system", "visual-editor"],
+  "keywords": [
+    "nextjs",
+    "tailwind",
+    "devtools",
+    "design-system",
+    "visual-editor"
+  ],
   "author": "kemos4be",
   "license": "MIT",
   "repository": {
