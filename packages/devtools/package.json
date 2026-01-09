@@ -36,6 +36,7 @@
     "next": "^14.0.0 || ^15.0.0 || ^16.0.0"
   },
   "dependencies": {
+    "react-draggable": "^4.4.6",
     "zustand": "^5.0.0"
   },
   "devDependencies": {

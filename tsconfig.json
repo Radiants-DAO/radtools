@@ -19,7 +19,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@radflow/devtools": ["./packages/devtools/src/index.ts"],
+      "@radflow/devtools/*": ["./packages/devtools/src/*"],
+      "@radflow/ui": ["./packages/ui/src/index.ts"],
+      "@radflow/ui/*": ["./packages/ui/src/*"]
     }
   },
   "include": [

@@ -74,6 +74,16 @@ export type { BreadcrumbItem, BreadcrumbsProps } from './Breadcrumbs';
 export { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter, DialogClose } from './Dialog';
 export type { DialogProps, DialogTriggerProps, DialogContentProps } from './Dialog';
 
+export { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetBody, SheetFooter, SheetClose } from './Sheet';
+
+export { Popover, PopoverTrigger, PopoverContent } from './Popover';
+
+export { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from './DropdownMenu';
+
+export { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from './ContextMenu';
+
+export { HelpPanel } from './HelpPanel';
+
 // ============================================================================
 // Icons
 // ============================================================================
