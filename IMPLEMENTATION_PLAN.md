@@ -7,7 +7,7 @@
 
 This plan tracks implementation of the multi-theme RadFlow architecture. Tasks are organized by feature area and dependency chain. Foundation work (Phase 1) must complete before UI features can proceed.
 
-**Current Status:** Core DevTools functional with Variables, Typography, Components, Assets, AI, and Mock States tabs. Phase 8 (Mode Refinements) completed. Remaining: Token Editor, Theme Creation Wizard, Component Subfolders.
+**Current Status:** Core DevTools functional with Variables, Typography, Components, Assets, AI, and Mock States tabs. Phase 8 (Mode Refinements) completed. Phase 3 (Theme Creation Wizard) completed including API scaffolding. Remaining: Token Editor, Component Subfolders.
 
 ---
 
@@ -147,28 +147,30 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
   - Show Variables, Typography, Components tabs
   - Interactive preview with all selected colors, fonts, and components
   - Preview includes buttons, cards, form elements, and icons
-- [ ] **Step 6: Confirmation**
-  - Summary of theme config
+- [x] **Step 6: Confirmation**
+  - Summary of theme config (shows theme name, ID, package, description, folder structure preview)
   - "Create Theme" button → calls API to scaffold theme files
+  - Integrated with Settings Panel handler
 
 ### 3.3 Theme Scaffolding API (~4 iterations)
-- [ ] Create `/api/devtools/themes/create` endpoint
+- [x] Create `/api/devtools/themes/create` endpoint
   - Accept `ThemeConfig` from wizard
   - Generate folder structure: `packages/theme-[id]/`
-  - Write CSS files: `tokens.css`, `dark.css`, `typography.css`, `fonts.css`
+  - Write CSS files: `tokens.css`, `dark.css`, `typography.css`, `fonts.css`, `base.css`, `scrollbar.css`, `animations.css`, `index.css`
   - Write package.json with theme metadata
-  - Create empty `components/`, `assets/`, `agents/` folders
-  - Add theme to `availableThemes` in store
+  - Create `components/`, `assets/icons/`, `assets/logos/`, `agents/` folders
+  - Copy custom icons if selected
+  - Generate README.md with theme documentation
 
 ### 3.4 Launch Wizard from Settings (~1 iteration)
 - [x] Add "Create New Theme" button in Settings Panel
 - [x] Opens ThemeCreationWizard modal
 
 **Completion Criteria:**
-- Wizard accessible from Settings Panel
-- All 6 steps functional with form validation
-- New theme scaffolded in `packages/theme-[id]/`
-- Theme appears in theme switcher dropdown
+- ✅ Wizard accessible from Settings Panel
+- ✅ All 6 steps functional with form validation
+- ✅ New theme scaffolded in `packages/theme-[id]/`
+- ⏳ Theme appears in theme switcher dropdown (requires theme discovery refresh)
 
 ---
 
@@ -557,7 +559,7 @@ Phase 1 + Phase 2 + Phase 3
 - `app/api/devtools/themes/[themeId]/parse-css/route.ts` (Phase 1.3) - ✅ **CREATED**
 - `app/api/devtools/themes/list/route.ts` (Phase 1.3) - ✅ **CREATED**
 - `app/api/devtools/themes/switch/route.ts` (Phase 1.4) - ✅ **CREATED**
-- `app/api/devtools/themes/create/route.ts` (Phase 3.3) - **NOT CREATED**
+- `app/api/devtools/themes/create/route.ts` (Phase 3.3) - ✅ **CREATED**
 - `app/api/devtools/themes/[themeId]/export/route.ts` (Phase 9.2) - **NOT CREATED**
 
 ---

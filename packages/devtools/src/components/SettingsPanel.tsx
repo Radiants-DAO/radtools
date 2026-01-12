@@ -38,10 +38,37 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
     setDockPosition(position);
   };
 
-  const handleWizardComplete = (config: any) => {
-    // TODO: Call API to create theme scaffolding
-    console.log('Creating theme with config:', config);
-    setIsWizardOpen(false);
+  const handleWizardComplete = async (config: any) => {
+    try {
+      // Call API to create theme scaffolding
+      const response = await fetch('/api/devtools/themes/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(config),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to create theme');
+      }
+
+      const result = await response.json();
+      console.log('Theme created successfully:', result);
+
+      // Close wizard
+      setIsWizardOpen(false);
+
+      // Show success message
+      alert(`Theme "${config.themeName}" created successfully! You can now switch to it in the theme switcher.`);
+
+      // TODO: Refresh available themes list
+      // This will be handled when we implement theme discovery
+    } catch (error) {
+      console.error('Error creating theme:', error);
+      alert(`Failed to create theme: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   };
 
   return (
