@@ -26,9 +26,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 // Props display component matching DesignSystemTab style
 function PropsDisplay({ props }: { props: string }) {
   return (
-    <code className="font-mono text-xs text-content-primary/60 bg-surface-secondary/5 px-2 py-1 rounded-sm block mt-2">
-      {props}
-    </code>
+    <code>{props}</code>
   );
 }
 

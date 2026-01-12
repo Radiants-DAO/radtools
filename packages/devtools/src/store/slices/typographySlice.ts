@@ -209,7 +209,7 @@ const defaultTypographyStyles: TypographyStyle[] = [
     fontWeight: 'font-normal',
     baseColorId: 'black',
     displayName: 'Inline Code',
-    utilities: ['bg-surface-secondary/10', 'px-1', 'py-0.5', 'rounded-sm'],
+    utilities: ['bg-surface-secondary', 'text-content-inverted', 'px-1', 'py-0.5', 'rounded-sm'],
   },
   {
     id: 'pre',

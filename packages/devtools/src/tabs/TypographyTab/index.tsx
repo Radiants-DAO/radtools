@@ -88,12 +88,12 @@ export function TypographyTab({ searchQuery = '' }: TypographyTabProps) {
         <div className="border border-edge-primary rounded-sm bg-surface-elevated p-4 space-y-3">
           <h3>Proportional Fluid Scaling</h3>
           <p className="font-mondwest text-sm text-content-primary/70">
-            Everything scales proportionally using a single <code className="bg-surface-tertiary text-content-primary px-1 py-0.5 rounded" style={{ fontFamily: 'PixelCode' }}>clamp()</code> on the root HTML element. All rem-based measurements scale together, maintaining design ratios.
+            Everything scales proportionally using a single <code>clamp()</code> on the root HTML element. All rem-based measurements scale together, maintaining design ratios.
           </p>
           <div className="space-y-3 font-mondwest text-xs">
             <div>
               <div className="font-mono text-content-primary/60 mb-1">Root Scale (html):</div>
-              <code className="bg-surface-tertiary text-content-primary p-2 rounded block" style={{ fontFamily: 'PixelCode' }}>font-size: clamp(16px, 0.95rem + 0.25vw, 18px)</code>
+              <code className="block">font-size: clamp(16px, 0.95rem + 0.25vw, 18px)</code>
               <div className="text-content-primary/50 mt-1">Scales from 16px (mobile) to 18px (large screens)</div>
             </div>
             <div>

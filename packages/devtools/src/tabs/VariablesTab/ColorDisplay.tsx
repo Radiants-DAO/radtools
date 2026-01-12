@@ -38,10 +38,7 @@ export function ColorDisplay() {
             <span className="flex-1 min-w-0 font-mondwest text-base text-content-primary truncate">
               {color.displayName}
             </span>
-            <code 
-              className="text-sm bg-surface-tertiary text-content-primary uppercase flex-shrink-0 px-2 py-0.5 rounded-sm"
-              style={{ fontFamily: 'PixelCode' }}
-            >
+            <code className="uppercase flex-shrink-0">
               {color.value}
             </code>
           </div>
@@ -57,7 +54,7 @@ export function ColorDisplay() {
       {systemColors.length > 0 && <Section title="System Colors" colors={systemColors} />}
       
       <p className="text-sm text-content-primary/60">
-        Edit colors directly in <code className="bg-surface-tertiary text-content-primary px-1 py-0.5 rounded-sm" style={{ fontFamily: 'PixelCode' }}>globals.css</code> → <code className="bg-surface-tertiary text-content-primary px-1 py-0.5 rounded-sm" style={{ fontFamily: 'PixelCode' }}>@theme</code> block.
+        Edit colors directly in <code>globals.css</code> → <code>@theme</code> block.
       </p>
     </div>
   );

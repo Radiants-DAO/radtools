@@ -42,10 +42,7 @@ export function ShadowDisplay() {
             <span className="flex-1 min-w-0 font-mondwest text-base text-content-primary truncate">
               {shadow.displayName}
             </span>
-            <code 
-              className="text-sm bg-surface-tertiary text-content-primary flex-shrink-0 px-2 py-0.5 rounded-sm"
-              style={{ fontFamily: 'PixelCode' }}
-            >
+            <code className="flex-shrink-0">
               {shadow.cssVar}
             </code>
           </div>
@@ -53,7 +50,7 @@ export function ShadowDisplay() {
       </div>
       
       <p className="text-sm text-content-primary/60">
-        Edit shadows directly in <code className="bg-surface-tertiary text-content-primary px-1 py-0.5 rounded-sm" style={{ fontFamily: 'PixelCode' }}>globals.css</code> → <code className="bg-surface-tertiary text-content-primary px-1 py-0.5 rounded-sm" style={{ fontFamily: 'PixelCode' }}>@theme</code> block.
+        Edit shadows directly in <code>globals.css</code> → <code>@theme</code> block.
       </p>
     </div>
   );

@@ -63,7 +63,7 @@
   }
 
   code {
-    @apply text-sm font-normal leading-normal text-content-primary bg-surface-secondary/10 px-1 py-0.5 rounded-sm;
+    @apply text-sm font-normal leading-normal text-content-inverted bg-surface-secondary px-1 py-0.5 rounded-sm;
     font-family: "PixelCode";
   }
 

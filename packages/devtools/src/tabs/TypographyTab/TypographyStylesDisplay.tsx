@@ -80,12 +80,13 @@ export function TypographyStylesDisplay() {
     return (
       <div
         key={style.id}
-        className="p-4 bg-surface-secondary preview-light rounded flex flex-col gap-4 mb-4"
+        className="p-4 rounded flex flex-col gap-4 mb-4"
+        style={{ color: 'var(--color-surface-elevated)' }}
       >
         {/* Element name and preview */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-2">
-            <code className="px-2 py-0.5 bg-surface-tertiary text-content-primary rounded" style={{ fontFamily: 'PixelCode' }}>
+            <code>
               {`<${style.element}>`}
             </code>
             <span className="font-mondwest text-sm text-content-primary/60">
@@ -118,7 +119,7 @@ export function TypographyStylesDisplay() {
           {style.element === 'small' && <small data-edit-scope="layer-base">{SAMPLE_TEXT.small}</small>}
           {style.element === 'strong' && <strong data-edit-scope="layer-base">{SAMPLE_TEXT.strong}</strong>}
           {style.element === 'em' && <em data-edit-scope="layer-base">{SAMPLE_TEXT.em}</em>}
-          {style.element === 'code' && <code data-edit-scope="layer-base" className="bg-surface-tertiary text-content-primary" style={{ fontFamily: 'PixelCode' }}>{SAMPLE_TEXT.code}</code>}
+          {style.element === 'code' && <code data-edit-scope="layer-base">{SAMPLE_TEXT.code}</code>}
           {style.element === 'pre' && <pre data-edit-scope="layer-base">{SAMPLE_TEXT.pre}</pre>}
           {style.element === 'kbd' && <kbd data-edit-scope="layer-base">{SAMPLE_TEXT.kbd}</kbd>}
           {style.element === 'mark' && <mark data-edit-scope="layer-base">{SAMPLE_TEXT.mark}</mark>}
@@ -176,7 +177,7 @@ export function TypographyStylesDisplay() {
 
         {/* @apply classes (what will be written to CSS) */}
         <div className="pt-2 border-t border-edge-primary/10">
-          <code className="bg-surface-tertiary text-content-primary px-2 py-1 rounded-sm" style={{ fontFamily: 'PixelCode' }}>
+          <code>
             @apply {classes}
           </code>
         </div>

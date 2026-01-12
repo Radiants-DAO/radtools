@@ -84,6 +84,13 @@ import {
   SheetTrigger
 } from '@radflow/ui/Sheet';
 
+// DevTools internal components
+import { SearchableColorDropdown } from '../../components/SearchableColorDropdown';
+import { TokenDropdown } from '../../components/TokenDropdown';
+import { ColorPicker } from '../../components/ColorPicker';
+import { PropDisplay } from './PropDisplay';
+import { useDevToolsStore } from '../../store';
+
 // ============================================================================
 // Section Component
 // ============================================================================
@@ -109,7 +116,7 @@ function Section({
   const HeadingTag = variant === 'h4' ? 'h4' : 'h3';
   const hasMarginOverride = className?.includes('mb-');
   const isSubsection = variant === 'h4';
-  const subsectionClasses = isSubsection ? 'p-4 border border-edge-primary bg-surface-secondary preview-light' : '';
+  const subsectionClasses = isSubsection ? 'p-4 border border-edge-primary bg-surface-elevated' : '';
   const baseClasses = `${hasMarginOverride ? '' : 'mb-4'} ${subsectionClasses} rounded flex flex-col gap-4`.trim();
   return (
     <div
@@ -127,7 +134,7 @@ function Section({
 
 function PropsDisplay({ props }: { props: string }) {
   return (
-    <code className="bg-content-primary/5 px-2 py-1 rounded-sm block mt-2">{props}</code>
+    <code>{props}</code>
   );
 }
 
@@ -273,7 +280,13 @@ function NavigationContent() {
     <div className="space-y-6">
       <Section title="Tabs with Sub-components" variant="h4" subsectionId="tabs-compound">
         <Row props='TabList, TabTrigger, TabContent'>
-          <Tabs data-edit-scope="component-definition" data-component="Tabs">
+          <Tabs data-edit-scope="component-definition" data-component="Tabs" defaultValue="tab1">
+            <TabList>
+              <TabTrigger value="tab1">Tab 1</TabTrigger>
+              <TabTrigger value="tab2">Tab 2</TabTrigger>
+            </TabList>
+            <TabContent value="tab1">Content for tab 1</TabContent>
+            <TabContent value="tab2">Content for tab 2</TabContent>
           </Tabs>
         </Row>
       </Section>
@@ -282,6 +295,14 @@ function NavigationContent() {
       <Section title="Accordion with Sub-components" variant="h4" subsectionId="accordion-compound">
         <Row props='AccordionItem, AccordionTrigger, AccordionContent'>
           <Accordion data-edit-scope="component-definition" data-component="Accordion">
+            <AccordionItem value="item-1">
+              <AccordionTrigger>Section 1</AccordionTrigger>
+              <AccordionContent>Content for section 1</AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2">
+              <AccordionTrigger>Section 2</AccordionTrigger>
+              <AccordionContent>Content for section 2</AccordionContent>
+            </AccordionItem>
           </Accordion>
         </Row>
       </Section>
@@ -343,6 +364,12 @@ function OverlaysContent() {
       <Section title="Popover with Sub-components" variant="h4" subsectionId="popover-compound">
         <Row props='PopoverTrigger, PopoverContent'>
           <Popover data-edit-scope="component-definition" data-component="Popover">
+            <PopoverTrigger asChild>
+              <Button variant="primary" size="md">Open Popover</Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <p>Popover content goes here.</p>
+            </PopoverContent>
           </Popover>
         </Row>
       </Section>
@@ -350,6 +377,16 @@ function OverlaysContent() {
       <Section title="DropdownMenu with Sub-components" variant="h4" subsectionId="dropdown-menu-compound">
         <Row props='DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel'>
           <DropdownMenu data-edit-scope="component-definition" data-component="DropdownMenu">
+            <DropdownMenuTrigger asChild>
+              <Button variant="primary" size="md">Open Menu</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem>Item 1</DropdownMenuItem>
+              <DropdownMenuItem>Item 2</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Item 3</DropdownMenuItem>
+            </DropdownMenuContent>
           </DropdownMenu>
         </Row>
       </Section>
@@ -357,16 +394,91 @@ function OverlaysContent() {
       <Section title="ContextMenu with Sub-components" variant="h4" subsectionId="context-menu-compound">
         <Row props='ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuSeparator'>
           <ContextMenu data-edit-scope="component-definition" data-component="ContextMenu">
+            <ContextMenuTrigger>
+              <div className="p-4 border border-dashed border-edge-primary rounded-sm text-center">
+                Right-click here
+              </div>
+            </ContextMenuTrigger>
+            <ContextMenuContent>
+              <ContextMenuItem>Action 1</ContextMenuItem>
+              <ContextMenuItem>Action 2</ContextMenuItem>
+              <ContextMenuSeparator />
+              <ContextMenuItem>Action 3</ContextMenuItem>
+            </ContextMenuContent>
           </ContextMenu>
         </Row>
       </Section>
 
-      <Section title="HelpPanel" variant="h4" subsectionId="help-panel">
-        <Row>
-          <HelpPanel data-edit-scope="component-definition" data-component="HelpPanel">HelpPanel</HelpPanel>
+      {/* HelpPanel requires isOpen/onClose - omitting from preview */}
+
+    </div>
+  );
+}
+
+function DevToolsInternalContent() {
+  const baseColors = useDevToolsStore((state) => state.baseColors);
+  const [selectedColorId, setSelectedColorId] = useState<string>('');
+  const [tokenValue, setTokenValue] = useState<string>('');
+  const [pickerValue, setPickerValue] = useState<string>('#FCE184');
+
+  // Mock component for PropDisplay demo
+  const mockComponent = {
+    name: 'ExampleComponent',
+    path: 'components/Example.tsx',
+    props: [
+      { name: 'variant', type: "'primary' | 'secondary'", required: false, defaultValue: "'primary'" },
+      { name: 'size', type: "'sm' | 'md' | 'lg'", required: false, defaultValue: "'md'" },
+      { name: 'disabled', type: 'boolean', required: false, defaultValue: 'false' },
+      { name: 'children', type: 'ReactNode', required: true, defaultValue: undefined },
+    ],
+  };
+
+  return (
+    <div className="space-y-6">
+      <Section title="SearchableColorDropdown" variant="h4" subsectionId="searchable-color-dropdown">
+        <Row props="colors, value, placeholder, onChange, disabled">
+          <div className="w-64">
+            <SearchableColorDropdown
+              colors={baseColors}
+              value={selectedColorId}
+              onChange={setSelectedColorId}
+              placeholder="Select a color..."
+            />
+          </div>
         </Row>
       </Section>
 
+      <Section title="TokenDropdown" variant="h4" subsectionId="token-dropdown">
+        <Row props="value, onChange, label">
+          <div className="w-64">
+            <TokenDropdown
+              value={tokenValue}
+              onChange={setTokenValue}
+              label="Color"
+            />
+          </div>
+        </Row>
+      </Section>
+
+      <Section title="ColorPicker" variant="h4" subsectionId="color-picker">
+        <Row props="value, onChange, label">
+          <div className="w-64">
+            <ColorPicker
+              value={pickerValue}
+              onChange={setPickerValue}
+              label="Color"
+            />
+          </div>
+        </Row>
+      </Section>
+
+      <Section title="PropDisplay" variant="h4" subsectionId="prop-display">
+        <Row props="component">
+          <div className="w-full">
+            <PropDisplay component={mockComponent} />
+          </div>
+        </Row>
+      </Section>
     </div>
   );
 }
@@ -383,6 +495,7 @@ const COMPONENT_SECTIONS = [
   { id: 'data-display', title: 'Data display', content: <DatadisplayContent /> },
   { id: 'navigation', title: 'Navigation', content: <NavigationContent /> },
   { id: 'overlays', title: 'Overlays', content: <OverlaysContent /> },
+  { id: 'devtools-internal', title: 'DevTools Internal', content: <DevToolsInternalContent /> },
 ];
 
 interface UITabProps {
