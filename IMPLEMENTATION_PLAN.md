@@ -43,11 +43,13 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 - [x] Add theme discovery API: `/api/devtools/themes/list`
 
 ### 1.4 CSS Import Architecture (~3 iterations)
-- [ ] Update `app/globals.css` to support dynamic theme import
+- [x] Update `app/globals.css` to support dynamic theme import
   - Current: `@import "@radflow/theme-rad-os";`
   - Goal: DevTools can rewrite import line to switch themes
-- [ ] Create utility: `switchThemeImport(themePackageName: string)` in `packages/devtools/src/lib/themeUtils.ts`
-- [ ] Implement hot-reload verification after theme switch
+- [x] Create utility: `switchThemeImport(themePackageName: string)` in `packages/devtools/src/lib/themeUtils.ts`
+- [x] Implement hot-reload verification after theme switch
+- [x] Create API endpoint: `/api/devtools/themes/switch`
+- [x] Update `themeSlice.switchTheme()` to call API and reload page
 
 ### 1.5 Component Theme Targeting (~3 iterations)
 - [ ] Add `data-theme` attribute support to component scanner
@@ -529,7 +531,7 @@ Phase 1 + Phase 2 + Phase 3
 
 ### Utilities
 - `packages/devtools/src/lib/themeConfig.ts` (Phase 1.2) - ✅ **CREATED**
-- `packages/devtools/src/lib/themeUtils.ts` (Phase 1.4) - **NOT CREATED**
+- `packages/devtools/src/lib/themeUtils.ts` (Phase 1.4) - ✅ **CREATED**
 - `packages/devtools/src/lib/versionUtils.ts` (Phase 9.1) - **NOT CREATED**
 - `packages/devtools/src/lib/readmeGenerator.ts` (Phase 9.3) - **NOT CREATED**
 
@@ -538,6 +540,7 @@ Phase 1 + Phase 2 + Phase 3
 - `app/api/devtools/themes/[themeId]/write-css/route.ts` (Phase 1.3) - ✅ **CREATED**
 - `app/api/devtools/themes/[themeId]/parse-css/route.ts` (Phase 1.3) - ✅ **CREATED**
 - `app/api/devtools/themes/list/route.ts` (Phase 1.3) - ✅ **CREATED**
+- `app/api/devtools/themes/switch/route.ts` (Phase 1.4) - ✅ **CREATED**
 - `app/api/devtools/themes/create/route.ts` (Phase 3.3) - **NOT CREATED**
 - `app/api/devtools/themes/[themeId]/export/route.ts` (Phase 9.2) - **NOT CREATED**
 

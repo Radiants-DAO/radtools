@@ -18,7 +18,7 @@ export interface ThemeSlice {
   writeLockedThemes: string[]; // Non-active themes are read-only
 
   // Actions
-  switchTheme: (themeId: string) => void;
+  switchTheme: (themeId: string) => Promise<void>;
   addTheme: (theme: Theme) => void;
   deleteTheme: (themeId: string) => void;
   setAvailableThemes: (themes: Theme[]) => void;
@@ -39,7 +39,7 @@ export const createThemeSlice: StateCreator<ThemeSlice, [], [], ThemeSlice> = (s
   ],
   writeLockedThemes: [], // Non-active themes are write-locked
 
-  switchTheme: (themeId) => {
+  switchTheme: async (themeId) => {
     const { availableThemes } = get();
     const theme = availableThemes.find((t) => t.id === themeId);
 
@@ -48,27 +48,56 @@ export const createThemeSlice: StateCreator<ThemeSlice, [], [], ThemeSlice> = (s
       return;
     }
 
-    set((state) => {
-      // Update active theme
-      const newActiveTheme = themeId;
+    // Call API to switch CSS import
+    try {
+      const response = await fetch('/api/devtools/themes/switch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          themePackageName: theme.packageName,
+        }),
+      });
 
-      // Calculate new write-locked themes (all non-active themes)
-      const newWriteLockedThemes = state.availableThemes
-        .filter((t) => t.id !== themeId)
-        .map((t) => t.id);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Failed to switch theme:', errorData.message || errorData.error);
+        return;
+      }
 
-      // Update theme active status
-      const updatedThemes = state.availableThemes.map((t) => ({
-        ...t,
-        isActive: t.id === themeId,
-      }));
+      // Update store state on successful API call
+      set((state) => {
+        // Update active theme
+        const newActiveTheme = themeId;
 
-      return {
-        activeTheme: newActiveTheme,
-        writeLockedThemes: newWriteLockedThemes,
-        availableThemes: updatedThemes,
-      };
-    });
+        // Calculate new write-locked themes (all non-active themes)
+        const newWriteLockedThemes = state.availableThemes
+          .filter((t) => t.id !== themeId)
+          .map((t) => t.id);
+
+        // Update theme active status
+        const updatedThemes = state.availableThemes.map((t) => ({
+          ...t,
+          isActive: t.id === themeId,
+        }));
+
+        return {
+          activeTheme: newActiveTheme,
+          writeLockedThemes: newWriteLockedThemes,
+          availableThemes: updatedThemes,
+        };
+      });
+
+      // Trigger page reload to apply new CSS
+      // In Next.js dev mode, HMR will handle this automatically
+      // In production, this code won't run (API is dev-only)
+      if (typeof window !== 'undefined') {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Error switching theme:', error);
+    }
   },
 
   addTheme: (theme) => {
