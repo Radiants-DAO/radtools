@@ -46,29 +46,24 @@ export function HelpMode() {
   if (!helpItem) return null;
 
   return (
-    <div
-      className="w-full bg-surface-secondary border-b border-edge-primary px-4 py-2 flex items-center justify-between"
-      style={{
-        background: 'var(--color-surface-secondary)',
-      }}
-    >
+    <div className="w-full bg-surface-secondary border-b border-edge-primary px-4 py-2 flex items-center justify-between">
       {/* Left: Help content */}
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-cream font-joystix text-[10px] uppercase">?</span>
-          <h3 className="font-joystix text-xs uppercase text-cream font-bold">
+          <span className="text-content-inverse font-joystix text-[10px] uppercase">?</span>
+          <h3 className="font-joystix text-xs uppercase text-content-inverse font-bold">
             {helpItem.title}
           </h3>
         </div>
-        <span className="text-cream/60">—</span>
-        <p className="text-cream/90 text-sm font-mondwest">
+        <span className="text-content-inverse/60">—</span>
+        <p className="text-content-inverse/90 text-sm font-mondwest">
           {helpItem.description}
         </p>
       </div>
 
       {/* Right: Exit hint */}
-      <div className="text-cream/60 text-xs font-mondwest">
-        Press <span className="text-cream font-mono">ESC</span> to exit
+      <div className="text-content-inverse/60 text-xs font-mondwest">
+        Press <span className="text-content-inverse font-mono">ESC</span> to exit
       </div>
     </div>
   );

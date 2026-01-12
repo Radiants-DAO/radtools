@@ -102,8 +102,7 @@ export function TopBar({
           {/* Theme Dropdown */}
           {isDropdownOpen && (
             <div
-              className="absolute top-full left-0 mt-1 w-64 bg-surface-primary border border-edge-primary rounded-md shadow-lg z-50 overflow-hidden"
-              style={{ maxHeight: '300px', overflowY: 'auto' }}
+              className="absolute top-full left-0 mt-1 w-64 bg-surface-primary border border-edge-primary rounded-sm shadow-card z-50 overflow-hidden max-h-[300px] overflow-y-auto"
             >
               {availableThemes.map((theme) => (
                 <button

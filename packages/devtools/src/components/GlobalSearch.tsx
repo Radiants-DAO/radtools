@@ -261,7 +261,7 @@ export function GlobalSearch() {
         {searchQuery.trim() && (
           <div className="max-h-[60vh] overflow-y-auto">
             {searchResults.length > 0 ? (
-              <div className="divide-y divide-black/10">
+              <div className="divide-y divide-edge-primary/10">
                 {searchResults.map((result, index) => (
                   <button
                     key={`${result.tabId}-${result.text}-${index}`}
@@ -277,13 +277,13 @@ export function GlobalSearch() {
                     <div className="flex items-center justify-between gap-4">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="font-joystix text-xs uppercase text-content-primary/60">
+                          <span className="font-joystix text-xs uppercase text-content-secondary">
                             {getTypeLabel(result.type)}
                           </span>
                           {result.sectionId && (
                             <>
-                              <span className="text-content-primary/40">·</span>
-                              <span className="text-xs text-content-primary/60 font-mono">
+                              <span className="text-content-tertiary">·</span>
+                              <span className="text-xs text-content-secondary font-mono">
                                 {result.sectionId}
                               </span>
                             </>
@@ -293,18 +293,18 @@ export function GlobalSearch() {
                           {highlightText(result.text, searchQuery)}
                         </div>
                         {typeof result.metadata?.componentName === 'string' && (
-                          <div className="text-xs text-content-primary/50 mt-1 font-mono">
+                          <div className="text-xs text-content-tertiary mt-1 font-mono">
                             {result.metadata.componentName}
                           </div>
                         )}
                       </div>
-                      <Icon name="go-forward" size="sm" className="text-content-primary/40 flex-shrink-0" />
+                      <Icon name="go-forward" size="sm" className="text-content-tertiary flex-shrink-0" />
                     </div>
                   </button>
                 ))}
               </div>
             ) : (
-              <div className="px-4 py-8 text-center text-content-primary/60 font-mondwest text-sm">
+              <div className="px-4 py-8 text-center text-content-secondary font-mondwest text-sm">
                 No results found for "{searchQuery}"
               </div>
             )}
@@ -313,7 +313,7 @@ export function GlobalSearch() {
 
         {/* Footer */}
         {searchQuery.trim() && searchResults.length > 0 && (
-          <div className="px-4 py-2 border-t border-edge-primary/20 bg-surface-secondary/5 text-xs text-content-primary/60 font-mondwest flex items-center justify-between">
+          <div className="px-4 py-2 border-t border-edge-primary/20 bg-surface-secondary/5 text-xs text-content-secondary font-mondwest flex items-center justify-between">
             <span>
               {searchResults.length} result{searchResults.length !== 1 ? 's' : ''}
             </span>

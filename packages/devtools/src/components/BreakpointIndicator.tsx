@@ -178,17 +178,17 @@ export function BreakpointIndicator() {
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         <button
-          className="flex items-center gap-1.5 font-mono text-[10px] text-content-primary/60 hover:text-content-primary transition-colors cursor-pointer px-1.5 py-0.5 rounded-sm hover:bg-surface-secondary/5"
+          className="flex items-center gap-1.5 font-mono text-[10px] text-content-secondary hover:text-content-primary transition-colors cursor-pointer px-1.5 py-0.5 rounded-sm hover:bg-surface-secondary/5"
           title="Click to switch breakpoints"
         >
           <span className="font-bold uppercase">{currentBreakpoint.label}</span>
-          <span className="opacity-50">·</span>
-          <span className="opacity-50">{currentBreakpoint.width}px</span>
+          <span className="text-content-tertiary">·</span>
+          <span className="text-content-tertiary">{currentBreakpoint.width}px</span>
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-[160px]">
         {/* Dock side controls */}
-        <DropdownMenuLabel className="text-[10px] text-content-primary/50 font-normal px-2 py-1">
+        <DropdownMenuLabel className="text-[10px] text-content-tertiary font-normal px-2 py-1">
           Dock side
         </DropdownMenuLabel>
         <div className="flex items-center gap-1 px-2 pb-2">
@@ -199,10 +199,10 @@ export function BreakpointIndicator() {
                 key={pos.id}
                 onClick={() => setDockPosition(pos.id)}
                 title={pos.title}
-                className={`p-1.5 rounded transition-colors ${
-                  isActive 
-                    ? 'bg-surface-tertiary text-content-primary' 
-                    : 'text-content-primary/50 hover:text-content-primary hover:bg-surface-secondary/10'
+                className={`p-1.5 rounded-sm transition-colors ${
+                  isActive
+                    ? 'bg-surface-tertiary text-content-primary'
+                    : 'text-content-secondary hover:text-content-primary hover:bg-surface-secondary/10'
                 }`}
               >
                 {DockIcons[pos.id](isActive)}
@@ -210,11 +210,11 @@ export function BreakpointIndicator() {
             );
           })}
         </div>
-        
+
         <DropdownMenuSeparator />
-        
+
         {/* Breakpoint controls */}
-        <DropdownMenuLabel className="text-[10px] text-content-primary/50 font-normal px-2 py-1">
+        <DropdownMenuLabel className="text-[10px] text-content-tertiary font-normal px-2 py-1">
           Breakpoints
         </DropdownMenuLabel>
         {sortedBreakpoints.map((bp) => {
@@ -227,7 +227,7 @@ export function BreakpointIndicator() {
             >
               <div className="flex items-center justify-between w-full">
                 <span className="font-mono text-xs font-bold uppercase">{bp.label}</span>
-                <span className="font-mono text-xs text-content-primary/50 ml-2">
+                <span className="font-mono text-xs text-content-tertiary ml-2">
                   {bp.width}px
                 </span>
               </div>

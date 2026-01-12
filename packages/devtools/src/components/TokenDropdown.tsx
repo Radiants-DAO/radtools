@@ -19,7 +19,7 @@ export function TokenDropdown({ value, onChange, label }: TokenDropdownProps) {
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="flex-1 px-2 py-1.5 font-mondwest text-base bg-surface-primary border border-edge-primary rounded-sm text-content-primary focus:outline-none focus:ring-2 focus:ring-tertiary cursor-pointer"
+        className="flex-1 px-2 py-1.5 font-mondwest text-base bg-surface-primary border border-edge-primary rounded-sm text-content-primary focus:outline-none focus:ring-2 focus:ring-edge-focus cursor-pointer"
       >
         <option value="">Select a color...</option>
         <optgroup label="Brand Colors">

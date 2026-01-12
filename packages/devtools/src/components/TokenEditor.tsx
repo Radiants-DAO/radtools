@@ -29,7 +29,7 @@ export function TokenEditor({ open, onClose }: TokenEditorProps) {
   const [editedTokens, setEditedTokens] = useState<Map<string, string>>(new Map());
   const [isSaving, setIsSaving] = useState(false);
 
-  const { baseColors, semanticTokens, borderRadius, shadows } = useDevToolsStore();
+  const { baseColors, semanticTokens, borderRadius, shadows, activeTheme, loadFromCSS } = useDevToolsStore();
 
   useEffect(() => {
     setMounted(true);
@@ -153,14 +153,52 @@ export function TokenEditor({ open, onClose }: TokenEditorProps) {
 
     setIsSaving(true);
     try {
-      // TODO: Implement API call to save changes to CSS
-      // For now, just close the modal
-      console.log('Saving changes:', Object.fromEntries(editedTokens));
-      alert(`Would save ${modifiedCount} token changes. API integration pending.`);
+      // Prepare updated baseColors array with edited values
+      const updatedBaseColors = baseColors.map((color) => {
+        const editedValue = editedTokens.get(color.name);
+        if (editedValue && editedValue !== color.value) {
+          return { ...color, value: editedValue };
+        }
+        return color;
+      });
+
+      // Prepare updated borderRadius object with edited values
+      const updatedBorderRadius = { ...borderRadius };
+      Object.keys(borderRadius).forEach((key) => {
+        const tokenName = `radius-${key}`;
+        const editedValue = editedTokens.get(tokenName);
+        if (editedValue && editedValue !== borderRadius[key]) {
+          updatedBorderRadius[key] = editedValue;
+        }
+      });
+
+      // Call theme-scoped write-css API
+      const response = await fetch(`/api/devtools/themes/${activeTheme}/write-css`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          baseColors: updatedBaseColors,
+          borderRadius: updatedBorderRadius,
+          activeTheme,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to save changes');
+      }
+
+      // Reload Variables tab data to reflect changes
+      await loadFromCSS();
+
+      // Reset edited tokens and close modal
+      setEditedTokens(new Map());
       onClose();
     } catch (error) {
       console.error('Failed to save changes:', error);
-      alert('Failed to save changes. Please try again.');
+      alert(`Failed to save changes: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsSaving(false);
     }

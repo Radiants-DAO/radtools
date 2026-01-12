@@ -71,8 +71,8 @@ export function TypographyTab({ searchQuery = '' }: TypographyTabProps) {
         <div
           className={`px-4 py-2 text-sm font-mondwest ${
             message.type === 'success'
-              ? 'bg-success-green/30 text-content-primary'
-              : 'bg-error-red/30 text-content-primary'
+              ? 'bg-success/30 text-content-primary'
+              : 'bg-error/30 text-content-primary'
           }`}
         >
           {message.text}

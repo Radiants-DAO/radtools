@@ -65,7 +65,7 @@ export function AITab() {
             placeholder="Search prompts and styles..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-3 py-2 bg-surface-primary border border-edge-primary/20 rounded-md text-content-primary placeholder:text-content-tertiary focus:outline-none focus:ring-2 focus:ring-interactive-primary"
+            className="w-full px-3 py-2 bg-surface-primary border border-edge-primary/20 rounded-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:ring-2 focus:ring-edge-focus"
           />
         </div>
       </div>

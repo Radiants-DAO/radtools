@@ -11,6 +11,26 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 
 ---
 
+## Phase 0: Cleanup (PRIORITY - DO FIRST)
+
+**Priority:** HIGH - Simplification before further development
+**Dependencies:** None
+
+### 0.1 Remove Panel Position Options (~2 iterations)
+- [ ] Remove all panel position functionality (left/right/undocked) - panel will ONLY dock on right
+- [ ] Update `packages/devtools/src/store/slices/panelSlice.ts` - remove `position` state and related actions
+- [ ] Update `packages/devtools/src/DevToolsPanel.tsx` - remove position switching logic, hardcode right-dock
+- [ ] Update `packages/devtools/src/components/SettingsPanel.tsx` - remove panel position settings section
+- [ ] Remove any CSS/styles related to left/undocked positioning
+- [ ] Clean up any position-related props or context
+
+**Completion Criteria:**
+- Panel always docks on right side
+- No position-related state, actions, or UI controls remain
+- Code is simpler and more maintainable
+
+---
+
 ## Phase 1: Foundation (Theme Architecture)
 
 **Priority:** CRITICAL - Blocks all multi-theme features

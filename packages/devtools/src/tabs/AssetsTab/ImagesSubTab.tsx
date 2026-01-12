@@ -169,9 +169,9 @@ export function ImagesSubTab({ searchQuery }: ImagesSubTabProps) {
           {filteredImages.map((image) => (
             <div
               key={image.path}
-              className={`relative group border rounded-md overflow-hidden hover:border-interactive-primary transition-all cursor-pointer ${
+              className={`relative group border rounded-md overflow-hidden hover:border-edge-focus transition-all cursor-pointer ${
                 selectedImages.includes(image.path)
-                  ? 'border-interactive-primary ring-2 ring-interactive-primary/30'
+                  ? 'border-edge-focus ring-2 ring-edge-focus/30'
                   : 'border-edge-primary/20'
               }`}
               onClick={(e) => handleSelectImage(image.path, e.metaKey || e.ctrlKey)}

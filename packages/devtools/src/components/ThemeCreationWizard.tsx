@@ -382,7 +382,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                 key={step}
                 className={`h-1 flex-1 rounded transition-colors ${
                   step <= currentStep
-                    ? 'bg-accent-primary'
+                    ? 'bg-surface-tertiary'
                     : 'bg-surface-secondary/20'
                 }`}
               />
@@ -396,7 +396,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
             <div className="space-y-4">
               <div>
                 <label className="block font-mondwest text-sm text-content-primary mb-2">
-                  Theme Name <span className="text-accent-primary">*</span>
+                  Theme Name <span className="text-content-primary">*</span>
                 </label>
                 <Input
                   type="text"
@@ -412,7 +412,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
 
               <div>
                 <label className="block font-mondwest text-sm text-content-primary mb-2">
-                  Theme ID <span className="text-accent-primary">*</span>
+                  Theme ID <span className="text-content-primary">*</span>
                 </label>
                 <Input
                   type="text"
@@ -434,7 +434,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
 
               <div>
                 <label className="block font-mondwest text-sm text-content-primary mb-2">
-                  Package Name <span className="text-accent-primary">*</span>
+                  Package Name <span className="text-content-primary">*</span>
                 </label>
                 <Input
                   type="text"
@@ -460,7 +460,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                     setFormData((prev) => ({ ...prev, description: e.target.value }))
                   }
                   placeholder="Describe your theme's style and purpose..."
-                  className="w-full min-h-[100px] px-3 py-2 bg-surface-primary border border-edge-primary rounded font-mondwest text-sm text-content-primary placeholder:text-content-primary/30 focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                  className="w-full min-h-[100px] px-3 py-2 bg-surface-primary border border-edge-primary rounded-sm font-mondwest text-sm text-content-primary placeholder:text-content-primary/30 focus:outline-none focus:ring-2 focus:ring-edge-focus"
                 />
                 <p className="font-mondwest text-xs text-content-primary/50 mt-1">
                   Optional description of your theme
@@ -483,10 +483,10 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                       key={preset.id}
                       type="button"
                       onClick={() => handleApplyPreset(preset)}
-                      className={`p-3 border rounded text-left transition-all hover:shadow-md ${
+                      className={`p-3 border rounded-sm text-left transition-all hover:shadow-card ${
                         formData.colorPreset === preset.id
-                          ? 'border-accent-primary bg-accent-primary/5'
-                          : 'border-edge-primary bg-surface-primary hover:border-accent-primary/50'
+                          ? 'border-edge-focus bg-surface-tertiary/20'
+                          : 'border-edge-primary bg-surface-primary hover:border-edge-focus/50'
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-2">
@@ -547,7 +547,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                     </div>
                     <div className="flex flex-col gap-2 pt-7">
                       <div
-                        className="w-16 h-16 rounded border-2 border-edge-primary shadow-sm"
+                        className="w-16 h-16 rounded-sm border-2 border-edge-primary shadow-btn"
                         style={{ backgroundColor: formData.primaryColor }}
                       />
                       <input
@@ -590,7 +590,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                     </div>
                     <div className="flex flex-col gap-2 pt-7">
                       <div
-                        className="w-16 h-16 rounded border-2 border-edge-primary shadow-sm"
+                        className="w-16 h-16 rounded-sm border-2 border-edge-primary shadow-btn"
                         style={{ backgroundColor: formData.secondaryColor }}
                       />
                       <input
@@ -633,7 +633,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                     </div>
                     <div className="flex flex-col gap-2 pt-7">
                       <div
-                        className="w-16 h-16 rounded border-2 border-edge-primary shadow-sm"
+                        className="w-16 h-16 rounded-sm border-2 border-edge-primary shadow-btn"
                         style={{ backgroundColor: formData.accentColor }}
                       />
                       <input
@@ -676,7 +676,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                     </div>
                     <div className="flex flex-col gap-2 pt-7">
                       <div
-                        className="w-16 h-16 rounded border-2 border-edge-primary shadow-sm"
+                        className="w-16 h-16 rounded-sm border-2 border-edge-primary shadow-btn"
                         style={{ backgroundColor: formData.surfaceColor }}
                       />
                       <input
@@ -719,7 +719,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                     </div>
                     <div className="flex flex-col gap-2 pt-7">
                       <div
-                        className="w-16 h-16 rounded border-2 border-edge-primary shadow-sm"
+                        className="w-16 h-16 rounded-sm border-2 border-edge-primary shadow-btn"
                         style={{ backgroundColor: formData.textColor }}
                       />
                       <input
@@ -812,10 +812,10 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                       key={preset.id}
                       type="button"
                       onClick={() => handleApplyFontPreset(preset)}
-                      className={`p-3 border rounded text-left transition-all hover:shadow-md ${
+                      className={`p-3 border rounded-sm text-left transition-all hover:shadow-card ${
                         formData.fontPreset === preset.id
-                          ? 'border-accent-primary bg-accent-primary/5'
-                          : 'border-edge-primary bg-surface-primary hover:border-accent-primary/50'
+                          ? 'border-edge-focus bg-surface-tertiary/20'
+                          : 'border-edge-primary bg-surface-primary hover:border-edge-focus/50'
                       }`}
                     >
                       <p className="font-mondwest font-semibold text-sm text-content-primary mb-1">
@@ -852,7 +852,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                   {/* Heading Font */}
                   <div>
                     <label className="block font-mondwest text-sm text-content-primary mb-2">
-                      Heading Font <span className="text-accent-primary">*</span>
+                      Heading Font <span className="text-content-primary">*</span>
                     </label>
                     <select
                       value={formData.headingFont}
@@ -863,7 +863,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                           fontPreset: undefined,
                         }))
                       }
-                      className="w-full px-3 py-2 bg-surface-primary border border-edge-primary rounded font-mondwest text-sm text-content-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                      className="w-full px-3 py-2 bg-surface-primary border border-edge-primary rounded font-mondwest text-sm text-content-primary focus:outline-none focus:ring-2 focus:ring-edge-focus"
                     >
                       <option value="">Select a font...</option>
                       {availableFonts.map((font) => (
@@ -888,7 +888,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                   {/* Body Font */}
                   <div>
                     <label className="block font-mondwest text-sm text-content-primary mb-2">
-                      Body Font <span className="text-accent-primary">*</span>
+                      Body Font <span className="text-content-primary">*</span>
                     </label>
                     <select
                       value={formData.bodyFont}
@@ -899,7 +899,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                           fontPreset: undefined,
                         }))
                       }
-                      className="w-full px-3 py-2 bg-surface-primary border border-edge-primary rounded font-mondwest text-sm text-content-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                      className="w-full px-3 py-2 bg-surface-primary border border-edge-primary rounded font-mondwest text-sm text-content-primary focus:outline-none focus:ring-2 focus:ring-edge-focus"
                     >
                       <option value="">Select a font...</option>
                       {availableFonts.map((font) => (
@@ -924,7 +924,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                   {/* Monospace Font */}
                   <div>
                     <label className="block font-mondwest text-sm text-content-primary mb-2">
-                      Monospace Font <span className="text-accent-primary">*</span>
+                      Monospace Font <span className="text-content-primary">*</span>
                     </label>
                     <select
                       value={formData.monoFont}
@@ -935,7 +935,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                           fontPreset: undefined,
                         }))
                       }
-                      className="w-full px-3 py-2 bg-surface-primary border border-edge-primary rounded font-mondwest text-sm text-content-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                      className="w-full px-3 py-2 bg-surface-primary border border-edge-primary rounded font-mondwest text-sm text-content-primary focus:outline-none focus:ring-2 focus:ring-edge-focus"
                     >
                       <option value="">Select a font...</option>
                       {availableFonts.map((font) => (
@@ -1019,10 +1019,10 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                         customIcons: undefined,
                       }))
                     }
-                    className={`p-4 border rounded text-left transition-all hover:shadow-md ${
+                    className={`p-4 border rounded-sm text-left transition-all hover:shadow-card ${
                       formData.iconSet === 'rad-os'
-                        ? 'border-accent-primary bg-accent-primary/5'
-                        : 'border-edge-primary bg-surface-primary hover:border-accent-primary/50'
+                        ? 'border-edge-focus bg-surface-tertiary/20'
+                        : 'border-edge-primary bg-surface-primary hover:border-edge-focus/50'
                     }`}
                   >
                     <p className="font-mondwest font-semibold text-sm text-content-primary mb-1">
@@ -1059,10 +1059,10 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                         customIcons: selectedIcons,
                       }))
                     }
-                    className={`p-4 border rounded text-left transition-all hover:shadow-md ${
+                    className={`p-4 border rounded-sm text-left transition-all hover:shadow-card ${
                       formData.iconSet === 'custom'
-                        ? 'border-accent-primary bg-accent-primary/5'
-                        : 'border-edge-primary bg-surface-primary hover:border-accent-primary/50'
+                        ? 'border-edge-focus bg-surface-tertiary/20'
+                        : 'border-edge-primary bg-surface-primary hover:border-edge-focus/50'
                     }`}
                   >
                     <p className="font-mondwest font-semibold text-sm text-content-primary mb-1">
@@ -1071,7 +1071,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                     <p className="font-mondwest text-xs text-content-primary/60 mb-3">
                       Choose specific icons for your theme
                     </p>
-                    <p className="font-mondwest text-xs text-accent-primary">
+                    <p className="font-mondwest text-xs text-content-primary">
                       {selectedIcons.length} icons selected
                     </p>
                   </button>
@@ -1089,7 +1089,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                       <button
                         type="button"
                         onClick={() => setSelectedIcons(availableIcons)}
-                        className="px-3 py-1 text-xs font-mondwest text-accent-primary hover:underline"
+                        className="px-3 py-1 text-xs font-mondwest text-content-primary hover:underline"
                       >
                         Select All
                       </button>
@@ -1118,10 +1118,10 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                                 setSelectedIcons([...selectedIcons, icon]);
                               }
                             }}
-                            className={`p-3 border rounded transition-all hover:shadow-sm group ${
+                            className={`p-3 border rounded-sm transition-all hover:shadow-btn group ${
                               isSelected
-                                ? 'border-accent-primary bg-accent-primary/10'
-                                : 'border-edge-primary/20 bg-surface-primary hover:border-accent-primary/50'
+                                ? 'border-edge-focus bg-surface-tertiary/20'
+                                : 'border-edge-primary/20 bg-surface-primary hover:border-edge-focus/50'
                             }`}
                             title={icon}
                           >
@@ -1190,7 +1190,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
 
               {/* Preview Container with Theme Applied */}
               <div
-                className="border-2 border-edge-primary rounded-lg overflow-hidden"
+                className="border-2 border-edge-primary rounded-md overflow-hidden"
                 style={{
                   backgroundColor: formData.surfaceColor,
                   color: formData.textColor,
@@ -1208,7 +1208,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                     {/* Primary Color */}
                     <div className="space-y-2">
                       <div
-                        className="w-full h-20 rounded border border-edge-primary/20 shadow-sm"
+                        className="w-full h-20 rounded border border-edge-primary/20 shadow-btn"
                         style={{ backgroundColor: formData.primaryColor }}
                       />
                       <p
@@ -1228,7 +1228,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                     {/* Secondary Color */}
                     <div className="space-y-2">
                       <div
-                        className="w-full h-20 rounded border border-edge-primary/20 shadow-sm"
+                        className="w-full h-20 rounded border border-edge-primary/20 shadow-btn"
                         style={{ backgroundColor: formData.secondaryColor }}
                       />
                       <p
@@ -1248,7 +1248,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                     {/* Accent Color */}
                     <div className="space-y-2">
                       <div
-                        className="w-full h-20 rounded border border-edge-primary/20 shadow-sm"
+                        className="w-full h-20 rounded border border-edge-primary/20 shadow-btn"
                         style={{ backgroundColor: formData.accentColor }}
                       />
                       <p
@@ -1268,7 +1268,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                     {/* Surface Color */}
                     <div className="space-y-2">
                       <div
-                        className="w-full h-20 rounded border border-edge-primary/20 shadow-sm"
+                        className="w-full h-20 rounded border border-edge-primary/20 shadow-btn"
                         style={{ backgroundColor: formData.surfaceColor }}
                       />
                       <p
@@ -1288,7 +1288,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                     {/* Text Color */}
                     <div className="space-y-2">
                       <div
-                        className="w-full h-20 rounded border border-edge-primary/20 shadow-sm"
+                        className="w-full h-20 rounded border border-edge-primary/20 shadow-btn"
                         style={{ backgroundColor: formData.textColor }}
                       />
                       <p
@@ -1625,7 +1625,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                 </dl>
               </div>
 
-              <div className="p-4 bg-accent-primary/10 border border-accent-primary/20 rounded">
+              <div className="p-4 bg-surface-tertiary/20 border border-edge-focus/20 rounded-sm">
                 <p className="font-mondwest text-sm text-content-primary">
                   Clicking "Create Theme" will scaffold a new theme package with the
                   following structure:

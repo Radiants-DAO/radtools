@@ -120,7 +120,7 @@ export function IconsSubTab({ searchQuery }: IconsSubTabProps) {
               <button
                 key={icon.name}
                 onClick={() => handleCopyIcon(icon.name)}
-                className="group relative flex flex-col items-center justify-center p-3 bg-surface-secondary border border-edge-primary/20 rounded-md hover:border-interactive-primary hover:bg-surface-tertiary transition-all"
+                className="group relative flex flex-col items-center justify-center p-3 bg-surface-secondary border border-edge-primary/20 rounded-md hover:border-edge-focus hover:bg-surface-tertiary transition-all"
                 title={icon.name}
               >
                 <div className="flex items-center justify-center" style={{ width: selectedSize, height: selectedSize }}>
@@ -153,7 +153,7 @@ export function IconsSubTab({ searchQuery }: IconsSubTabProps) {
               <button
                 key={icon.name}
                 onClick={() => handleCopyIcon(icon.name)}
-                className="group relative flex flex-col items-center justify-center p-3 bg-surface-secondary border border-edge-primary/20 rounded-md hover:border-interactive-primary hover:bg-surface-tertiary transition-all"
+                className="group relative flex flex-col items-center justify-center p-3 bg-surface-secondary border border-edge-primary/20 rounded-md hover:border-edge-focus hover:bg-surface-tertiary transition-all"
                 title={icon.name}
               >
                 <div className="flex items-center justify-center" style={{ width: selectedSize, height: selectedSize }}>

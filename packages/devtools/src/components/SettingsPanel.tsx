@@ -98,7 +98,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
               {availableThemes.map((theme) => (
                 <div
                   key={theme.id}
-                  className="flex items-center justify-between p-3 border border-edge-primary/20 rounded bg-surface-secondary/5"
+                  className="flex items-center justify-between p-3 border border-edge-primary/20 rounded-sm bg-surface-secondary/5"
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
@@ -106,17 +106,17 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
                         {theme.name}
                       </span>
                       {theme.isActive && (
-                        <span className="px-2 py-0.5 text-xs font-joystix uppercase bg-accent-primary/20 text-accent-primary border border-accent-primary/30 rounded">
+                        <span className="px-2 py-0.5 text-xs font-joystix uppercase bg-surface-tertiary/50 text-content-primary border border-edge-primary rounded-xs">
                           Active
                         </span>
                       )}
                     </div>
                     {theme.description && (
-                      <p className="font-mondwest text-sm text-content-primary/70 mt-1">
+                      <p className="font-mondwest text-sm text-content-secondary mt-1">
                         {theme.description}
                       </p>
                     )}
-                    <p className="font-mondwest text-xs text-content-primary/50 mt-1">
+                    <p className="font-mondwest text-xs text-content-tertiary mt-1">
                       {theme.packageName} {theme.version && `v${theme.version}`}
                     </p>
                   </div>
@@ -186,22 +186,22 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
               <label className="block font-mondwest text-sm text-content-primary mb-2">
                 Keyboard Shortcuts
               </label>
-              <div className="space-y-1 text-sm font-mondwest text-content-primary/70">
+              <div className="space-y-1 text-sm font-mondwest text-content-secondary">
                 <div className="flex justify-between">
                   <span>Toggle Panel</span>
-                  <kbd className="px-2 py-0.5 bg-surface-secondary/20 border border-edge-primary/20 rounded font-mono text-xs">
+                  <kbd className="px-2 py-0.5 bg-surface-secondary border border-edge-primary rounded-xs font-mono text-xs">
                     ⌘⇧K
                   </kbd>
                 </div>
                 <div className="flex justify-between">
                   <span>Switch Tabs</span>
-                  <kbd className="px-2 py-0.5 bg-surface-secondary/20 border border-edge-primary/20 rounded font-mono text-xs">
+                  <kbd className="px-2 py-0.5 bg-surface-secondary border border-edge-primary rounded-xs font-mono text-xs">
                     1-5
                   </kbd>
                 </div>
                 <div className="flex justify-between">
                   <span>Exit Mode</span>
-                  <kbd className="px-2 py-0.5 bg-surface-secondary/20 border border-edge-primary/20 rounded font-mono text-xs">
+                  <kbd className="px-2 py-0.5 bg-surface-secondary border border-edge-primary rounded-xs font-mono text-xs">
                     Esc
                   </kbd>
                 </div>

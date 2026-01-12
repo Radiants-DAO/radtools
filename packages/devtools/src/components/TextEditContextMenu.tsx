@@ -136,7 +136,7 @@ export function TextEditContextMenu({ element, position, onClose }: TextEditCont
     <div
       ref={menuRef}
       data-text-edit-context-menu
-      className="fixed bg-surface-elevated border border-edge-primary/20 shadow-lg rounded py-1 z-[60] min-w-[160px]"
+      className="fixed bg-surface-elevated border border-edge-primary/20 shadow-card rounded-sm py-1 z-[60] min-w-[160px]"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,

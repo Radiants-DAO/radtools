@@ -80,7 +80,7 @@ export function StylesSubTab({ codes, searchQuery }: StylesSubTabProps) {
               <div className="p-4">
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="flex-1">
-                    <code className="text-sm font-mono text-interactive-primary bg-surface-secondary/20 px-2 py-1 rounded">
+                    <code className="text-sm font-mono text-content-primary bg-surface-secondary/20 px-2 py-1 rounded">
                       --sref {srefCode.code}
                     </code>
                     {srefCode.description && (

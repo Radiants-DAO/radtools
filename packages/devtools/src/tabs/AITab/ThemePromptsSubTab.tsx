@@ -125,7 +125,7 @@ export function ThemePromptsSubTab({ prompts, searchQuery }: ThemePromptsSubTabP
 
       {/* Add/Edit Prompt Form */}
       {(isAddingPrompt || editingPromptId) && (
-        <div className="bg-surface-secondary/10 border border-edge-primary/10 rounded-lg p-4 mb-4">
+        <div className="bg-surface-secondary/10 border border-edge-primary/10 rounded-md p-4 mb-4">
           <h3 className="text-lg font-semibold text-content-primary mb-3">
             {editingPromptId ? 'Edit Prompt' : 'Add Custom Prompt'}
           </h3>
@@ -136,7 +136,7 @@ export function ThemePromptsSubTab({ prompts, searchQuery }: ThemePromptsSubTabP
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-3 py-2 bg-surface-primary border border-edge-primary/20 rounded-md text-content-primary focus:outline-none focus:ring-2 focus:ring-interactive-primary"
+                className="w-full px-3 py-2 bg-surface-primary border border-edge-primary/20 rounded-sm text-content-primary focus:outline-none focus:ring-2 focus:ring-edge-focus"
                 placeholder="e.g., Create Theme-Specific Component"
               />
             </div>
@@ -148,7 +148,7 @@ export function ThemePromptsSubTab({ prompts, searchQuery }: ThemePromptsSubTabP
                 type="text"
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-3 py-2 bg-surface-primary border border-edge-primary/20 rounded-md text-content-primary focus:outline-none focus:ring-2 focus:ring-interactive-primary"
+                className="w-full px-3 py-2 bg-surface-primary border border-edge-primary/20 rounded-sm text-content-primary focus:outline-none focus:ring-2 focus:ring-edge-focus"
                 placeholder="e.g., Components, Styling, Layout"
               />
             </div>
@@ -160,7 +160,7 @@ export function ThemePromptsSubTab({ prompts, searchQuery }: ThemePromptsSubTabP
                 value={formData.content}
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                 rows={6}
-                className="w-full px-3 py-2 bg-surface-primary border border-edge-primary/20 rounded-md text-content-primary focus:outline-none focus:ring-2 focus:ring-interactive-primary font-mono text-sm"
+                className="w-full px-3 py-2 bg-surface-primary border border-edge-primary/20 rounded-sm text-content-primary focus:outline-none focus:ring-2 focus:ring-edge-focus font-mono text-sm"
                 placeholder="Enter your prompt instructions..."
               />
             </div>
@@ -172,7 +172,7 @@ export function ThemePromptsSubTab({ prompts, searchQuery }: ThemePromptsSubTabP
                 type="text"
                 value={formData.tags}
                 onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                className="w-full px-3 py-2 bg-surface-primary border border-edge-primary/20 rounded-md text-content-primary focus:outline-none focus:ring-2 focus:ring-interactive-primary"
+                className="w-full px-3 py-2 bg-surface-primary border border-edge-primary/20 rounded-sm text-content-primary focus:outline-none focus:ring-2 focus:ring-edge-focus"
                 placeholder="e.g., component, custom, theme"
               />
             </div>
@@ -215,13 +215,13 @@ export function ThemePromptsSubTab({ prompts, searchQuery }: ThemePromptsSubTabP
             return (
               <div
                 key={prompt.id}
-                className="bg-surface-secondary/10 border border-edge-primary/10 rounded-lg p-4 hover:border-edge-primary/20 transition-colors"
+                className="bg-surface-secondary/10 border border-edge-primary/10 rounded-md p-4 hover:border-edge-primary/20 transition-colors"
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h4 className="font-medium text-content-primary">{prompt.title}</h4>
-                      <span className="px-2 py-0.5 text-xs bg-interactive-primary/20 text-interactive-primary rounded">
+                      <span className="px-2 py-0.5 text-xs bg-surface-tertiary text-content-primary rounded">
                         {prompt.category}
                       </span>
                     </div>

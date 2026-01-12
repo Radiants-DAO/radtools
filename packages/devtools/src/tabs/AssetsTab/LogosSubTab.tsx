@@ -125,7 +125,7 @@ export function LogosSubTab({ searchQuery }: LogosSubTabProps) {
             {variantLogos.map((logo) => (
               <div
                 key={logo.name}
-                className="relative group border border-edge-primary/20 rounded-md overflow-hidden hover:border-interactive-primary transition-all"
+                className="relative group border border-edge-primary/20 rounded-md overflow-hidden hover:border-edge-focus transition-all"
               >
                 {/* Logo preview */}
                 <div
