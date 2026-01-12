@@ -27,7 +27,7 @@ These rules are **absolute** and must never be violated. Claude must self-audit 
 <button onClick={...} className="...">Click</button>
 
 // ✅ REQUIRED
-import { Button } from '@radflow/ui/Button';
+import { Button } from '@radflow/ui';
 <Button onClick={...} variant="outline">Click</Button>
 ```
 

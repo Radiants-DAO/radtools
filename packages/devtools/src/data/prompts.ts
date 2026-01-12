@@ -184,4 +184,311 @@ export const radflowPrompts: PromptTemplate[] = [
     tags: ['accessibility', 'screen-reader', 'aria'],
     isThemeSpecific: false,
   },
+
+  // Component Preview Generation
+  {
+    id: 'generate-component-preview',
+    title: 'Generate Component Preview (Full Guide)',
+    category: 'DevTools',
+    content: `# RadFlow Component Preview Generator
+
+Generate comprehensive, interactive component previews for the RadFlow DevTools UI tab.
+
+## Context
+
+The Components tab in RadFlow DevTools displays visual previews of theme components. Each theme package (e.g., \`@radflow/theme-rad-os\`, \`@radflow/theme-phase\`) has its own preview files in \`/preview/\`. Each section showcases variants, sizes, states, and interactive demos.
+
+## Before Starting
+
+Read these files to understand the patterns:
+1. \`/packages/theme-rad-os/preview/core.tsx\` or \`/packages/theme-phase/preview/core.tsx\` - See existing preview implementations
+2. \`/packages/theme-{name}/components/core/{ComponentName}.tsx\` - Read the component's props and variants
+3. \`/packages/devtools/src/lib/searchIndex.ts\` - Search index structure
+
+## Preview Structure
+
+### Section & Row Pattern
+
+Every preview uses this structure:
+
+\`\`\`tsx
+function {SectionName}Content() {
+  return (
+    <div className="space-y-6">
+      <Section title="Feature Name" variant="h4" subsectionId="feature-kebab-case">
+        <Row props='prop="value1" | "value2"'>
+          {/* Components side-by-side */}
+        </Row>
+      </Section>
+    </div>
+  );
+}
+\`\`\`
+
+### Data Attributes (Required for RadFlow Editing)
+
+\`\`\`tsx
+// Base component (default variant)
+<Button
+  variant="primary"
+  data-edit-scope="component-definition"
+  data-component="Button"
+>
+  Primary
+</Button>
+
+// Non-default variant - add data-edit-variant
+<Button
+  variant="secondary"
+  data-edit-scope="component-definition"
+  data-component="Button"
+  data-edit-variant="secondary"
+>
+  Secondary
+</Button>
+\`\`\`
+
+## Real Examples
+
+### Variants + Disabled States
+
+\`\`\`tsx
+<Section title="Button Variants" variant="h4" subsectionId="button-variants">
+  <Row props='variant="primary" | "secondary" | "outline" | "ghost"'>
+    <Button variant="primary" data-edit-scope="component-definition" data-component="Button">Primary</Button>
+    <Button variant="primary" disabled data-edit-scope="component-definition" data-component="Button">Disabled</Button>
+  </Row>
+  <Row props='variant="secondary"'>
+    <Button variant="secondary" data-edit-scope="component-definition" data-component="Button" data-edit-variant="secondary">Secondary</Button>
+    <Button variant="secondary" disabled data-edit-scope="component-definition" data-component="Button" data-edit-variant="secondary">Disabled</Button>
+  </Row>
+</Section>
+\`\`\`
+
+### Interactive Demo (Loading State)
+
+\`\`\`tsx
+function LoadingButtonDemo() {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = () => {
+    setLoading(true);
+    setTimeout(() => setLoading(false), 2000);
+  };
+
+  return (
+    <Button
+      variant="primary"
+      iconName="refresh"
+      loading={loading}
+      onClick={handleClick}
+      data-edit-scope="component-definition"
+      data-component="Button"
+    >
+      Click to Load
+    </Button>
+  );
+}
+\`\`\`
+
+### Compound Components (Card)
+
+\`\`\`tsx
+<Section title="Card with Sub-components" variant="h4" subsectionId="card-compound">
+  <Row props='CardHeader, CardBody, CardFooter'>
+    <Card noPadding className="w-80" data-edit-scope="component-definition" data-component="Card">
+      <CardHeader><h4>Card Header</h4></CardHeader>
+      <CardBody><p>This is the card body content.</p></CardBody>
+      <CardFooter className="flex justify-end gap-2">
+        <Button variant="ghost" size="md">Cancel</Button>
+        <Button variant="primary" size="md">Confirm</Button>
+      </CardFooter>
+    </Card>
+  </Row>
+</Section>
+\`\`\`
+
+## Checklist
+
+For each component, include:
+- [ ] All variants with data-edit-variant for non-defaults
+- [ ] All sizes (sm, md, lg)
+- [ ] Disabled state
+- [ ] Error state (form components)
+- [ ] Loading state (if applicable)
+- [ ] With icon (if applicable)
+- [ ] Compound sub-components
+- [ ] Interactive demo for stateful props
+- [ ] Width constraints (w-64, w-80, max-w-md as needed)
+- [ ] Search index entries
+
+## Output
+
+When generating a preview, provide:
+1. The \`{ComponentName}Content()\` function
+2. Any interactive demo functions (e.g., \`LoadingDemo\`, \`ToastDemo\`)
+3. Updates to \`COMPONENT_SECTIONS\` array
+4. Search index entries for \`UITabSearchIndex.ts\`
+5. Required imports`,
+    tags: ['devtools', 'preview', 'component', 'ui-tab'],
+    isThemeSpecific: false,
+  },
+  {
+    id: 'component-preview-template',
+    title: 'Component Preview Template (Boilerplate)',
+    category: 'DevTools',
+    content: `# Component Preview Template
+
+Copy this template and fill in the blanks to create a preview for your component.
+
+## Step 1: Read the Component
+
+First, read your component file to understand its props:
+
+\`\`\`
+Read /packages/theme-{name}/components/core/{YourComponent}.tsx
+\`\`\`
+
+Look for:
+- \`type {YourComponent}Props\`
+- Variants (e.g., \`variant?: 'primary' | 'secondary'\`)
+- Sizes (e.g., \`size?: 'sm' | 'md' | 'lg'\`)
+- States (disabled, error, loading)
+- Sub-components (Header, Body, Footer, etc.)
+
+## Step 2: Create the Content Function
+
+\`\`\`tsx
+// Add to UITab.tsx
+
+function {YourComponent}Content() {
+  return (
+    <div className="space-y-6">
+      {/* VARIANTS */}
+      <Section title="{YourComponent} Variants" variant="h4" subsectionId="{your-component}-variants">
+        <Row props='variant="default" | "variant2" | "variant3"'>
+          <{YourComponent}
+            variant="default"
+            data-edit-scope="component-definition"
+            data-component="{YourComponent}"
+          >
+            Default
+          </{YourComponent}>
+          <{YourComponent}
+            variant="variant2"
+            data-edit-scope="component-definition"
+            data-component="{YourComponent}"
+            data-edit-variant="variant2"
+          >
+            Variant 2
+          </{YourComponent}>
+          {/* Add disabled state */}
+          <{YourComponent}
+            variant="default"
+            disabled
+            data-edit-scope="component-definition"
+            data-component="{YourComponent}"
+          >
+            Disabled
+          </{YourComponent}>
+        </Row>
+      </Section>
+
+      {/* SIZES */}
+      <Section title="{YourComponent} Sizes" variant="h4" subsectionId="{your-component}-sizes">
+        <Row props='size="sm" | "md" | "lg"'>
+          <{YourComponent} size="sm" data-edit-scope="component-definition" data-component="{YourComponent}">
+            Small
+          </{YourComponent}>
+        </Row>
+        <Row props='size="md"'>
+          <{YourComponent} size="md" data-edit-scope="component-definition" data-component="{YourComponent}">
+            Medium
+          </{YourComponent}>
+        </Row>
+        <Row props='size="lg"'>
+          <{YourComponent} size="lg" data-edit-scope="component-definition" data-component="{YourComponent}">
+            Large
+          </{YourComponent}>
+        </Row>
+      </Section>
+
+      {/* STATES (if applicable) */}
+      <Section title="{YourComponent} States" variant="h4" subsectionId="{your-component}-states">
+        <Row props='error={true}'>
+          <{YourComponent} error data-edit-scope="component-definition" data-component="{YourComponent}">
+            Error State
+          </{YourComponent}>
+        </Row>
+        <Row props='loading={true}'>
+          <{YourComponent} loading data-edit-scope="component-definition" data-component="{YourComponent}">
+            Loading
+          </{YourComponent}>
+        </Row>
+      </Section>
+    </div>
+  );
+}
+\`\`\`
+
+## Step 3: Add Interactive Demo (if needed)
+
+For components with state that users should interact with:
+
+\`\`\`tsx
+function {YourComponent}Demo() {
+  const [value, setValue] = useState(initialValue);
+
+  return (
+    <{YourComponent}
+      value={value}
+      onChange={setValue}
+      data-edit-scope="component-definition"
+      data-component="{YourComponent}"
+    />
+  );
+}
+\`\`\`
+
+## Step 4: Register the Section
+
+Add to \`COMPONENT_SECTIONS\` array in UITab.tsx:
+
+\`\`\`tsx
+const COMPONENT_SECTIONS = [
+  // ... existing sections
+  { id: '{your-section-id}', title: '{Section Title}', content: <{YourComponent}Content /> },
+];
+\`\`\`
+
+## Step 5: Add Search Index Entries
+
+Add to \`UITabSearchIndex.ts\`:
+
+\`\`\`tsx
+// Section
+{ text: '{Section Title}', sectionId: '{your-section-id}', type: 'section' },
+
+// Component
+{ text: '{YourComponent}', sectionId: '{your-section-id}', type: 'component' },
+
+// Subsections
+{ text: '{YourComponent} Variants', sectionId: '{your-section-id}', subsectionTitle: '{YourComponent} Variants', type: 'subsection' },
+{ text: '{YourComponent} Sizes', sectionId: '{your-section-id}', subsectionTitle: '{YourComponent} Sizes', type: 'subsection' },
+{ text: '{YourComponent} States', sectionId: '{your-section-id}', subsectionTitle: '{YourComponent} States', type: 'subsection' },
+\`\`\`
+
+## Quick Reference: Data Attributes
+
+\`\`\`tsx
+// Always required on editable components:
+data-edit-scope="component-definition"
+data-component="{ComponentName}"  // Exact component name
+
+// Only for non-default variants:
+data-edit-variant="{variant}"     // e.g., "secondary", "outline"
+\`\`\``,
+    tags: ['devtools', 'preview', 'template', 'boilerplate'],
+    isThemeSpecific: false,
+  },
 ];

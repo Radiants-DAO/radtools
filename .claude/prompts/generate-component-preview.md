@@ -4,14 +4,14 @@ Generate comprehensive, interactive component previews for the RadFlow DevTools 
 
 ## Context
 
-The UI tab in RadFlow DevTools (`/packages/devtools/src/tabs/ComponentsTab/UITab.tsx`) contains visual previews of all `@radflow/ui` components. Each section showcases variants, sizes, states, and interactive demos.
+The Components tab in RadFlow DevTools displays visual previews of theme components. Each theme package (e.g., `@radflow/theme-rad-os`, `@radflow/theme-phase`) has its own preview files in `/preview/`. Each section showcases variants, sizes, states, and interactive demos.
 
 ## Before Starting
 
 Read these files to understand the patterns:
-1. `/packages/devtools/src/tabs/ComponentsTab/UITab.tsx` - See existing preview implementations
-2. `/packages/ui/src/{ComponentName}.tsx` - Read the component's props and variants
-3. `/packages/devtools/src/tabs/ComponentsTab/UITabSearchIndex.ts` - Search index structure
+1. `/packages/theme-rad-os/preview/core.tsx` or `/packages/theme-phase/preview/core.tsx` - See existing preview implementations
+2. `/packages/theme-{name}/components/core/{ComponentName}.tsx` - Read the component's props and variants
+3. `/packages/devtools/src/lib/searchIndex.ts` - Search index structure
 
 ## Preview Structure
 

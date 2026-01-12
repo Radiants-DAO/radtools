@@ -100,7 +100,8 @@ export default function Card({ title = '', children }: CardProps) {
 
 | Location | Purpose |
 |----------|---------|
-| `packages/ui/src/` | Core design system primitives (Button, Card, Input) |
+| `packages/theme-{name}/components/core/` | Core design system primitives (Button, Card, Input) per theme |
+| `packages/theme-{name}/preview/` | Component preview files for DevTools |
 | `packages/devtools/src/components/` | DevTools-specific components |
 
 **For consumer projects:**
