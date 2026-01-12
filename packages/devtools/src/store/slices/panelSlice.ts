@@ -4,6 +4,7 @@ import type { Tab, DockPosition } from '../../types';
 export interface PanelSlice {
   // Panel state
   isOpen: boolean;
+  isMinimized: boolean; // Panel minimized (LeftRail only) vs expanded (full panel)
   activeTab: Tab;
   panelPosition: { x: number; y: number };
   panelSize: { width: number; height: number };
@@ -14,6 +15,9 @@ export interface PanelSlice {
 
   // Actions
   togglePanel: () => void;
+  toggleMinimized: () => void;
+  expandPanel: () => void;
+  minimizePanel: () => void;
   setActiveTab: (tab: Tab) => void;
   setPanelPosition: (position: { x: number; y: number }) => void;
   setPanelSize: (size: { width: number; height: number }) => void;
@@ -27,6 +31,7 @@ export interface PanelSlice {
 
 export const createPanelSlice: StateCreator<PanelSlice, [], [], PanelSlice> = (set) => ({
   isOpen: false,
+  isMinimized: false,
   activeTab: 'variables' as Tab,
   panelPosition: { x: 20, y: 20 },
   panelSize: { width: 420, height: 600 },
@@ -36,6 +41,9 @@ export const createPanelSlice: StateCreator<PanelSlice, [], [], PanelSlice> = (s
   isSettingsOpen: false,
 
   togglePanel: () => set((state) => ({ isOpen: !state.isOpen })),
+  toggleMinimized: () => set((state) => ({ isMinimized: !state.isMinimized })),
+  expandPanel: () => set({ isMinimized: false }),
+  minimizePanel: () => set({ isMinimized: true }),
   setActiveTab: (tab) => set({ activeTab: tab }),
   setPanelPosition: (position) => set({ panelPosition: position }),
   setPanelSize: (size) => set({ panelSize: size }),

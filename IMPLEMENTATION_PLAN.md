@@ -7,7 +7,7 @@
 
 This plan tracks implementation of the multi-theme RadFlow architecture. Tasks are organized by feature area and dependency chain. Foundation work (Phase 1) must complete before UI features can proceed.
 
-**Current Status:** Core DevTools functional with Variables, Typography, Components, Assets, and Mock States tabs. Recent cleanup removed 27 stub files. Missing: AI Tab, Theme Management system, and mode refinements.
+**Current Status:** Core DevTools functional with Variables, Typography, Components, Assets, AI, and Mock States tabs. Phase 8.2 (Minimized Panel State) completed. Remaining: Token Editor, Theme Creation Wizard, Component Subfolders, and remaining mode refinements.
 
 ---
 
@@ -389,15 +389,15 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 - [x] Update `packages/devtools/src/lib/helpRegistry.ts` - removed shortcut references
 
 ### 8.2 Minimized Panel State (~3 iterations)
-- [ ] Update `packages/devtools/src/store/slices/panelSlice.ts`
+- [x] Update `packages/devtools/src/store/slices/panelSlice.ts`
   - Add `isMinimized: boolean` state
   - Add `expandPanel()` action (sets `isMinimized: false`)
   - Add `minimizePanel()` action (sets `isMinimized: true`)
   - Add `toggleMinimized()` action
-- [ ] Update `packages/devtools/src/DevToolsPanel.tsx`
+- [x] Update `packages/devtools/src/DevToolsPanel.tsx`
   - Conditional render: If minimized, show only LeftRail (slim mode)
   - If expanded, show full panel (LeftRail + content area)
-- [ ] Wire `Cmd+Shift+K` to `toggleMinimized()`
+- [x] Wire `Cmd+Shift+K` to `toggleMinimized()`
 
 ### 8.3 Help Mode Refactor (~3 iterations)
 - [ ] Update `packages/devtools/src/components/HelpMode.tsx`

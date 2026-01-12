@@ -27,6 +27,8 @@ export function DevToolsPanel() {
     togglePanel,
     isFullscreen,
     toggleFullscreen,
+    isMinimized,
+    toggleMinimized,
     isTextEditActive,
     isComponentIdActive,
     isHelpActive,
@@ -73,11 +75,22 @@ export function DevToolsPanel() {
     const base: React.CSSProperties = {
       background: 'linear-gradient(0deg, var(--color-surface-tertiary) 0%, var(--color-surface-primary) 100%)',
     };
-    
+
     if (isFullscreen) {
       return { ...base, width: '100%' };
     }
-    
+
+    // Minimized panel: only LeftRail width (60px)
+    if (isMinimized) {
+      return {
+        ...base,
+        width: '60px',
+        borderLeft: dockPosition === 'right' ? '1px solid var(--color-edge-primary)' : undefined,
+        borderRight: dockPosition === 'left' ? '1px solid var(--color-edge-primary)' : undefined,
+        border: dockPosition === 'undocked' ? '1px solid var(--color-edge-primary)' : undefined,
+      };
+    }
+
     if (dockPosition === 'undocked') {
       return {
         ...base,
@@ -85,7 +98,7 @@ export function DevToolsPanel() {
         border: '1px solid var(--color-edge-primary)',
       };
     }
-    
+
     if (dockPosition === 'left') {
       return {
         ...base,
@@ -93,7 +106,7 @@ export function DevToolsPanel() {
         borderRight: '1px solid var(--color-edge-primary)',
       };
     }
-    
+
     // right (default)
     return {
       ...base,
@@ -111,9 +124,9 @@ export function DevToolsPanel() {
       className={`fixed flex z-[40] ${getPositionClasses()}`}
       style={getPositionStyles()}
     >
-      {/* Resize Handle - position based on dock side */}
-      {!isFullscreen && resizeHandlePosition === 'left' && (
-        <ResizeHandle 
+      {/* Resize Handle - position based on dock side (hidden when minimized) */}
+      {!isFullscreen && !isMinimized && resizeHandlePosition === 'left' && (
+        <ResizeHandle
           onResize={setPanelWidth}
           minWidth={300}
           maxWidth={typeof window !== 'undefined' ? window.innerWidth * 0.8 : 1200}
@@ -129,8 +142,9 @@ export function DevToolsPanel() {
         onSettingsClick={openSettings}
       />
 
-      {/* Main Content */}
-      <div className="flex-1 overflow-hidden flex flex-col">
+      {/* Main Content - hidden when minimized */}
+      {!isMinimized && (
+        <div className="flex-1 overflow-hidden flex flex-col">
         {/* Header */}
         <TopBar
           title="RADTOOLS"
@@ -185,10 +199,11 @@ export function DevToolsPanel() {
             </div>
           )}
         </div>
-      </div>
+        </div>
+      )}
 
-      {/* Resize Handle - for left dock, handle goes on the right edge */}
-      {!isFullscreen && resizeHandlePosition === 'right' && (
+      {/* Resize Handle - for left dock, handle goes on the right edge (hidden when minimized) */}
+      {!isFullscreen && !isMinimized && resizeHandlePosition === 'right' && (
         <ResizeHandle
           onResize={setPanelWidth}
           minWidth={300}

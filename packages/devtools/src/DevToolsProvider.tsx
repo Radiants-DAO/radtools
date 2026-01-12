@@ -17,7 +17,9 @@ interface DevToolsProviderProps {
 export function DevToolsProvider({ children }: DevToolsProviderProps) {
   const {
     isOpen,
+    isMinimized,
     togglePanel,
+    toggleMinimized,
     panelWidth,
     setActiveTab,
     setSearchOpen,
@@ -26,10 +28,14 @@ export function DevToolsProvider({ children }: DevToolsProviderProps) {
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Toggle panel: Shift+Cmd+K or Shift+Ctrl+K (always works)
+      // Toggle minimized: Shift+Cmd+K or Shift+Ctrl+K (always works when panel is open)
       if (e.shiftKey && (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        togglePanel();
+        if (isOpen) {
+          toggleMinimized();
+        } else {
+          togglePanel();
+        }
         return;
       }
 
@@ -60,6 +66,7 @@ export function DevToolsProvider({ children }: DevToolsProviderProps) {
   }, [
     isOpen,
     togglePanel,
+    toggleMinimized,
     setActiveTab,
     setSearchOpen,
   ]);
@@ -73,9 +80,11 @@ export function DevToolsProvider({ children }: DevToolsProviderProps) {
 
     const style = document.createElement('style');
     style.id = 'devtools-body-padding';
+    // Use 60px for minimized panel (LeftRail width), full panelWidth when expanded
+    const padding = isMinimized ? 60 : panelWidth;
     style.textContent = `
       body {
-        padding-right: ${panelWidth}px !important;
+        padding-right: ${padding}px !important;
       }
     `;
     document.head.appendChild(style);
@@ -87,7 +96,7 @@ export function DevToolsProvider({ children }: DevToolsProviderProps) {
       }
       document.body.style.paddingRight = '';
     };
-  }, [isOpen, panelWidth]);
+  }, [isOpen, isMinimized, panelWidth]);
 
   // Production: render only children
   if (process.env.NODE_ENV === 'production') {
