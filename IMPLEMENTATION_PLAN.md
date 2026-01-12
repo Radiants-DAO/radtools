@@ -636,19 +636,22 @@ All planned features are complete. Code quality improvements completed:
    - Fixed DropdownMenu.tsx - Use callback ref pattern + useLayoutEffect for positioning
    - Fixed HelpPanel.tsx - Changed to useLayoutEffect for hydration and animation
    - Fixed Popover.tsx - Use callback ref pattern + useLayoutEffect for positioning
+4. **Add eslint directive comments** - Added explanatory comments for DevTools DOM manipulation (2026-01-12)
+   - Fixed TextEditOverlay.tsx - Added comments explaining intentional direct DOM manipulation for overlay functionality
 
 ### Remaining (Non-Critical)
-1. **Linting warnings** - ~81 warnings (unused variables, missing dependencies, img tags)
+1. **Linting warnings** - ~62 warnings (unused variables, missing dependencies, img tags)
 2. **React hooks false positives** - 9 linting errors (legitimate use of useLayoutEffect for DOM measurements)
    - These are false positives where useLayoutEffect is the correct pattern
    - Build passes all TypeScript checks ✅
+   - React compiler experimental rules are overly strict for these patterns
 3. **Add .eslintignore** - Exclude dist/ and build artifacts from linting (nice to have)
 
 **Status:** Build passes successfully. All critical errors fixed. Remaining issues are non-critical linting warnings and false positives.
 
 ---
 
-**Last Updated:** 2026-01-11
+**Last Updated:** 2026-01-12
 **Total Tasks:** ~90 individual tasks across 9 phases
 **Total Iterations:** ~100-130 Ralph loops
 
