@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, DialogBody, DialogFooter, DialogClose } from '@radflow/ui';
 import { useDevToolsStore } from '../store';
-import type { DockPosition } from '../types';
 import { ThemeCreationWizard } from './ThemeCreationWizard';
 
 interface SettingsPanelProps {
@@ -18,8 +17,6 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
     switchTheme,
     deleteTheme,
     fetchAvailableThemes,
-    dockPosition,
-    setDockPosition,
   } = useDevToolsStore();
 
   const [isWizardOpen, setIsWizardOpen] = useState(false);
@@ -33,10 +30,6 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
     if (confirm(`Are you sure you want to delete the "${themeId}" theme? This action cannot be undone.`)) {
       deleteTheme(themeId);
     }
-  };
-
-  const handleDockPositionChange = (position: DockPosition) => {
-    setDockPosition(position);
   };
 
   const handleWizardComplete = async (config: any) => {
@@ -154,36 +147,6 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
             <h3 className="font-joystix text-sm uppercase text-content-primary mb-3">
               DevTools Settings
             </h3>
-
-            {/* Panel Position */}
-            <div className="mb-4">
-              <label className="block font-mondwest text-sm text-content-primary mb-2">
-                Panel Position
-              </label>
-              <div className="flex gap-2">
-                <Button
-                  size="sm"
-                  variant={dockPosition === 'right' ? 'secondary' : 'outline'}
-                  onClick={() => handleDockPositionChange('right')}
-                >
-                  Right
-                </Button>
-                <Button
-                  size="sm"
-                  variant={dockPosition === 'left' ? 'secondary' : 'outline'}
-                  onClick={() => handleDockPositionChange('left')}
-                >
-                  Left
-                </Button>
-                <Button
-                  size="sm"
-                  variant={dockPosition === 'undocked' ? 'secondary' : 'outline'}
-                  onClick={() => handleDockPositionChange('undocked')}
-                >
-                  Undocked
-                </Button>
-              </div>
-            </div>
 
             {/* Keyboard Shortcuts Reference */}
             <div>

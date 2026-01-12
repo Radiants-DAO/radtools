@@ -141,11 +141,11 @@ export function LogosSubTab({ searchQuery }: LogosSubTabProps) {
                 </div>
 
                 {/* Logo info */}
-                <div className="px-3 py-2 bg-surface-secondary border-t border-edge-primary/20">
+                <div className="px-3 py-2 bg-surface-tertiary border-t border-edge-primary/20">
                   <p className="text-xs text-content-primary font-mondwest truncate" title={logo.name}>
                     {logo.name}
                   </p>
-                  <p className="text-xs text-content-tertiary capitalize">{logo.color}</p>
+                  <p className="text-xs text-content-secondary capitalize">{logo.color}</p>
                 </div>
 
                 {/* Action buttons */}

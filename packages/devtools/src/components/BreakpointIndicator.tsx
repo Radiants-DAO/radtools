@@ -1,36 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from '@radflow/ui';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel } from '@radflow/ui';
 import { useDevToolsStore } from '../store';
-import type { DockPosition } from '../types';
 
 interface Breakpoint {
   label: string;
   width: number;
 }
-
-// Dock position icons (matching Chrome DevTools style)
-const DockIcons = {
-  undocked: (active: boolean) => (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="1.5" y="1.5" width="13" height="13" rx="1" stroke="currentColor" strokeWidth="1.5" opacity={active ? 1 : 0.5} />
-      <rect x="4" y="4" width="8" height="8" rx="0.5" fill="currentColor" opacity={active ? 1 : 0.5} />
-    </svg>
-  ),
-  left: (active: boolean) => (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="1.5" y="1.5" width="13" height="13" rx="1" stroke="currentColor" strokeWidth="1.5" opacity={active ? 1 : 0.5} />
-      <rect x="1.5" y="1.5" width="5" height="13" fill="currentColor" opacity={active ? 1 : 0.5} />
-    </svg>
-  ),
-  right: (active: boolean) => (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="1.5" y="1.5" width="13" height="13" rx="1" stroke="currentColor" strokeWidth="1.5" opacity={active ? 1 : 0.5} />
-      <rect x="9.5" y="1.5" width="5" height="13" fill="currentColor" opacity={active ? 1 : 0.5} />
-    </svg>
-  ),
-};
 
 // Minimum panel width to ensure usability
 const MIN_PANEL_WIDTH = 300;
@@ -103,19 +80,12 @@ function getCurrentBreakpoint(breakpoints: Record<string, number>, width: number
 /**
  * Breakpoint indicator dropdown component
  * Shows current breakpoint and allows switching between breakpoints
- * Also includes dock position controls
  */
 export function BreakpointIndicator() {
-  const { setPanelWidth, panelWidth, dockPosition, setDockPosition } = useDevToolsStore();
+  const { setPanelWidth, panelWidth } = useDevToolsStore();
   const [breakpoints, setBreakpoints] = useState<Record<string, number>>({});
   const [currentBreakpoint, setCurrentBreakpoint] = useState<Breakpoint>({ label: '', width: 0 });
   const [isOpen, setIsOpen] = useState(false);
-
-  const dockPositions: { id: DockPosition; title: string }[] = [
-    { id: 'undocked', title: 'Undock into separate window' },
-    { id: 'left', title: 'Dock to left' },
-    { id: 'right', title: 'Dock to right' },
-  ];
 
   useEffect(() => {
     // Load breakpoints from CSS
@@ -187,33 +157,6 @@ export function BreakpointIndicator() {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-[160px]">
-        {/* Dock side controls */}
-        <DropdownMenuLabel className="text-[10px] text-content-tertiary font-normal px-2 py-1">
-          Dock side
-        </DropdownMenuLabel>
-        <div className="flex items-center gap-1 px-2 pb-2">
-          {dockPositions.map((pos) => {
-            const isActive = pos.id === dockPosition;
-            return (
-              <button
-                key={pos.id}
-                onClick={() => setDockPosition(pos.id)}
-                title={pos.title}
-                className={`p-1.5 rounded-sm transition-colors ${
-                  isActive
-                    ? 'bg-surface-tertiary text-content-primary'
-                    : 'text-content-secondary hover:text-content-primary hover:bg-surface-secondary/10'
-                }`}
-              >
-                {DockIcons[pos.id](isActive)}
-              </button>
-            );
-          })}
-        </div>
-
-        <DropdownMenuSeparator />
-
-        {/* Breakpoint controls */}
         <DropdownMenuLabel className="text-[10px] text-content-tertiary font-normal px-2 py-1">
           Breakpoints
         </DropdownMenuLabel>

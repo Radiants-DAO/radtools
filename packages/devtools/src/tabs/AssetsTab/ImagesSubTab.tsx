@@ -177,7 +177,7 @@ export function ImagesSubTab({ searchQuery }: ImagesSubTabProps) {
               onClick={(e) => handleSelectImage(image.path, e.metaKey || e.ctrlKey)}
             >
               {/* Image preview */}
-              <div className="aspect-square bg-surface-secondary flex items-center justify-center overflow-hidden">
+              <div className="aspect-square bg-surface-elevated flex items-center justify-center overflow-hidden">
                 <img
                   src={image.path}
                   alt={image.name}
@@ -186,7 +186,7 @@ export function ImagesSubTab({ searchQuery }: ImagesSubTabProps) {
               </div>
 
               {/* Image info */}
-              <div className="px-3 py-2 bg-surface-secondary border-t border-edge-primary/20">
+              <div className="px-3 py-2 bg-surface-tertiary border-t border-edge-primary/20">
                 <p className="text-xs text-content-primary font-mondwest truncate" title={image.name}>
                   {image.name}
                 </p>

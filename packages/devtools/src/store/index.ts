@@ -46,10 +46,7 @@ export const useDevToolsStore = create<DevToolsState>()(
       {
         name: 'devtools-storage',
         partialize: (state) => ({
-          panelPosition: state.panelPosition,
-          panelSize: state.panelSize,
           panelWidth: state.panelWidth,
-          dockPosition: state.dockPosition,
           activeTab: state.activeTab,
           mockStates: state.mockStates,
           activeTheme: state.activeTheme,

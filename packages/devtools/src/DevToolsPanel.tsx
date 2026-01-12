@@ -36,7 +36,6 @@ export function DevToolsPanel() {
     toggleTextEditMode,
     toggleComponentIdMode,
     toggleHelpMode,
-    dockPosition,
     isSettingsOpen,
     openSettings,
     closeSettings,
@@ -64,12 +63,10 @@ export function DevToolsPanel() {
     setActiveTab(value as Tab);
   };
 
-  // Determine panel position classes based on dock position
+  // Panel always docked on right
   const getPositionClasses = () => {
     if (isFullscreen) return 'inset-0';
-    if (dockPosition === 'undocked') return 'top-4 left-1/2 -translate-x-1/2 h-[80vh] rounded-lg shadow-2xl';
-    if (dockPosition === 'left') return 'top-0 left-0 h-screen';
-    return 'top-0 right-0 h-screen'; // default: right
+    return 'top-0 right-0 h-screen';
   };
 
   const getPositionStyles = (): React.CSSProperties => {
@@ -86,29 +83,11 @@ export function DevToolsPanel() {
       return {
         ...base,
         width: '60px',
-        borderLeft: dockPosition === 'right' ? '1px solid var(--color-edge-primary)' : undefined,
-        borderRight: dockPosition === 'left' ? '1px solid var(--color-edge-primary)' : undefined,
-        border: dockPosition === 'undocked' ? '1px solid var(--color-edge-primary)' : undefined,
+        borderLeft: '1px solid var(--color-edge-primary)',
       };
     }
 
-    if (dockPosition === 'undocked') {
-      return {
-        ...base,
-        width: `${panelWidth}px`,
-        border: '1px solid var(--color-edge-primary)',
-      };
-    }
-
-    if (dockPosition === 'left') {
-      return {
-        ...base,
-        width: `${panelWidth}px`,
-        borderRight: '1px solid var(--color-edge-primary)',
-      };
-    }
-
-    // right (default)
+    // Expanded panel: user-defined width (right-docked)
     return {
       ...base,
       width: `${panelWidth}px`,
@@ -116,17 +95,14 @@ export function DevToolsPanel() {
     };
   };
 
-  // Resize handle position based on dock
-  const resizeHandlePosition = dockPosition === 'left' ? 'right' : 'left';
-
   return (
     <div
       data-radtools-panel
       className={`fixed flex z-[40] ${getPositionClasses()}`}
       style={getPositionStyles()}
     >
-      {/* Resize Handle - position based on dock side (hidden when minimized) */}
-      {!isFullscreen && !isMinimized && resizeHandlePosition === 'left' && (
+      {/* Resize Handle - left side of right-docked panel (hidden when minimized) */}
+      {!isFullscreen && !isMinimized && (
         <ResizeHandle
           onResize={setPanelWidth}
           minWidth={300}
@@ -206,15 +182,6 @@ export function DevToolsPanel() {
         </div>
       )}
 
-      {/* Resize Handle - for left dock, handle goes on the right edge (hidden when minimized) */}
-      {!isFullscreen && !isMinimized && resizeHandlePosition === 'right' && (
-        <ResizeHandle
-          onResize={setPanelWidth}
-          minWidth={300}
-          maxWidth={typeof window !== 'undefined' ? window.innerWidth * 0.8 : 1200}
-          position="right"
-        />
-      )}
 
       {/* Settings Panel */}
       <SettingsPanel open={isSettingsOpen} onClose={closeSettings} />
