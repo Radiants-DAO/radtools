@@ -1525,13 +1525,6 @@ export function DesignSystemTab({
     }
   }, [selectedComponentName, onComponentFocused]);
 
-  // Get matching suggestions (for autocomplete in footer)
-  const suggestions = searchQuery
-    ? SEARCH_INDEX.filter((item) =>
-        item.text.toLowerCase().includes(searchQuery.toLowerCase())
-      ).slice(0, 10)
-    : [];
-
   // Filter sections based on search query
   const filteredSections = searchQuery
     ? (() => {

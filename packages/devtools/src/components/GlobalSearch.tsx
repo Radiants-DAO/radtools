@@ -7,7 +7,22 @@ import type { SearchResult, Tab } from '../types';
 import { Input } from '@radflow/ui/Input';
 import { Icon } from '@radflow/ui';
 
-export function GlobalSearch() {
+const TYPOGRAPHY_SECTIONS = ['headings', 'text', 'lists', 'code'];
+
+function getTabIdFromSearchItem(itemTabId: string): Tab {
+  if (itemTabId === 'design-system' || itemTabId.startsWith('folder-')) {
+    return 'components';
+  }
+  return itemTabId as Tab;
+}
+
+function getTypeFromSectionId(sectionId: string | undefined): SearchResult['type'] {
+  if (sectionId === 'tokens') return 'token';
+  if (sectionId && TYPOGRAPHY_SECTIONS.includes(sectionId)) return 'typography';
+  return 'component';
+}
+
+export function GlobalSearch(): React.ReactElement | null {
   const {
     isSearchOpen,
     searchQuery,
@@ -46,38 +61,19 @@ export function GlobalSearch() {
     }
 
     const results = searchIndex(searchIndexData, searchQuery);
-    // Convert ExtendedSearchableItem to SearchResult
-    const searchResults: SearchResult[] = results.map((item) => {
-      // Determine tab ID - design-system maps to components tab
-      let tabId: Tab = 'components';
-      if (item.tabId === 'design-system') {
-        tabId = 'components';
-      } else if (item.tabId.startsWith('folder-')) {
-        tabId = 'components'; // Folder tabs are sub-tabs of components
-      } else {
-        tabId = item.tabId as Tab;
-      }
+    const mappedResults: SearchResult[] = results.map((item) => ({
+      text: item.text,
+      type: getTypeFromSectionId(item.sectionId),
+      tabId: getTabIdFromSearchItem(item.tabId),
+      sectionId: item.sectionId,
+      metadata: {
+        componentName: item.componentName,
+        subsectionTitle: item.subsectionTitle,
+        subsectionId: item.subsectionTitle?.toLowerCase().replace(/\s+/g, '-'),
+      },
+    }));
 
-      // Determine type based on sectionId
-      let type: SearchResult['type'] = 'component';
-      if (item.sectionId === 'tokens') type = 'token';
-      else if (item.sectionId && ['headings', 'text', 'lists', 'code'].includes(item.sectionId)) type = 'typography';
-      else type = 'component';
-
-      return {
-        text: item.text,
-        type,
-        tabId,
-        sectionId: item.sectionId,
-        metadata: {
-          componentName: item.componentName,
-          subsectionTitle: item.subsectionTitle,
-          subsectionId: item.subsectionTitle?.toLowerCase().replace(/\s+/g, '-'),
-        },
-      };
-    });
-
-    setSearchResults(searchResults);
+    setSearchResults(mappedResults);
   }, [searchQuery, searchIndexData, setSearchResults]);
 
   // Focus input when search opens

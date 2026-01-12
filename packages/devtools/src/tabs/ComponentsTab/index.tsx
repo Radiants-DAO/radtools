@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
-import { Tabs, TabList, TabTrigger, TabContent, useToast } from '@radflow/ui';
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useToast } from '@radflow/ui';
 import { DesignSystemTab } from './DesignSystemTab';
 import { UITab } from './UITab';
 import { DynamicFolderTab } from './DynamicFolderTab';
@@ -117,7 +117,7 @@ export function ComponentsTab({
     }
   }, [tabsForParent, onTabsChange]);
 
-  const handleAddFolder = async (folderName: string) => {
+  const handleAddFolder = useCallback(async (folderName: string) => {
     // Validate folder name
     if (!folderName || !/^[a-zA-Z0-9_-]+$/.test(folderName)) {
       addToast({
@@ -161,8 +161,6 @@ export function ComponentsTab({
       const updatedTabs = [...dynamicTabs, newTab];
       setDynamicTabs(updatedTabs);
       saveDynamicTabs(updatedTabs);
-
-      // Tabs will be updated via useEffect that calls onTabsChange
     } catch (error) {
       console.error('Failed to create folder:', error);
       addToast({
@@ -171,15 +169,16 @@ export function ComponentsTab({
         variant: 'error',
       });
     }
-  };
+  }, [dynamicTabs, addToast]);
 
   // Expose handleAddFolder for footer access
   useEffect(() => {
-    (window as Window & { __componentsTabAddFolder?: (folderName: string) => Promise<void> }).__componentsTabAddFolder = handleAddFolder;
+    const windowWithHandler = window as Window & { __componentsTabAddFolder?: (folderName: string) => Promise<void> };
+    windowWithHandler.__componentsTabAddFolder = handleAddFolder;
     return () => {
-      delete (window as Window & { __componentsTabAddFolder?: (folderName: string) => Promise<void> }).__componentsTabAddFolder;
+      delete windowWithHandler.__componentsTabAddFolder;
     };
-  }, [dynamicTabs]);
+  }, [handleAddFolder]);
 
   return (
     <div className="flex flex-col h-full">

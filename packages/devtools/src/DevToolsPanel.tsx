@@ -32,11 +32,9 @@ export function DevToolsPanel() {
     isTextEditActive,
     isComponentIdActive,
     isHelpActive,
-    isSearchOpen,
     toggleTextEditMode,
     toggleComponentIdMode,
     toggleHelpMode,
-    setSearchOpen,
     isSettingsOpen,
     openSettings,
     closeSettings,
@@ -48,16 +46,14 @@ export function DevToolsPanel() {
   const [componentTabs, setComponentTabs] = useState<Array<{ id: string; label: string }>>([]);
 
   // Determine active tool
-  const activeTool: Tool | null =
-    isSearchOpen ? 'search' :
+  const activeTool: Tool | null = 
     isComponentIdActive ? 'componentId' :
     isTextEditActive ? 'textEdit' :
     isHelpActive ? 'help' :
     null;
 
   const handleToolToggle = (tool: Tool) => {
-    if (tool === 'search') setSearchOpen(!isSearchOpen);
-    else if (tool === 'componentId') toggleComponentIdMode();
+    if (tool === 'componentId') toggleComponentIdMode();
     else if (tool === 'textEdit') toggleTextEditMode();
     else if (tool === 'help') toggleHelpMode();
   };
@@ -106,17 +102,18 @@ export function DevToolsPanel() {
     >
       {/* TopBar - spans full width above LeftRail */}
       {!isMinimized && (
-        <TopBar
-          title="RADTOOLS"
-          onClose={togglePanel}
-          onFullscreen={toggleFullscreen}
-          showCloseButton={true}
-          showFullscreenButton={true}
-          onSettingsClick={openSettings}
-        />
+        <div className="p-2">
+          <TopBar
+            onClose={togglePanel}
+            onFullscreen={toggleFullscreen}
+            showCloseButton
+            showFullscreenButton
+            onSettingsClick={openSettings}
+          />
+        </div>
       )}
 
-      {/* Wrapper for ResizeHandle, LeftRail, and Content */}
+      {/* Bottom section: ResizeHandle, LeftRail, and Content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Resize Handle - left side of right-docked panel (hidden when minimized) */}
         {!isFullscreen && !isMinimized && (

@@ -18,12 +18,12 @@ export function AITab() {
     srefCodes: storeSrefCodes,
     loadRadflowPrompts,
     loadSrefCodes,
-    searchQuery,
   } = useDevToolsStore();
 
   const [activeSubTab, setActiveSubTab] = useState<AISubTab>('radflow-prompts');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Load data on mount
+  // Load data on mount - only runs once since store functions are stable
   useEffect(() => {
     if (storeRadflowPrompts.length === 0) {
       loadRadflowPrompts(radflowPrompts);
@@ -31,7 +31,7 @@ export function AITab() {
     if (storeSrefCodes.length === 0) {
       loadSrefCodes(srefCodes);
     }
-  }, []);
+  }, [storeRadflowPrompts.length, storeSrefCodes.length, loadRadflowPrompts, loadSrefCodes]);
 
   const subTabs: Array<{ id: AISubTab; label: string; count: number }> = [
     { id: 'radflow-prompts', label: 'RadFlow Prompts', count: storeRadflowPrompts.length },
@@ -41,8 +41,8 @@ export function AITab() {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header with sub-tabs */}
-      <div className="flex-shrink-0 border-b border-edge-primary/20">
+      {/* Header with sub-tabs and search */}
+      <div className="flex-shrink-0 border-b border-edge-primary/10">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex gap-2">
             {subTabs.map((tab) => (
@@ -56,6 +56,17 @@ export function AITab() {
               </Button>
             ))}
           </div>
+        </div>
+
+        {/* Search bar */}
+        <div className="px-4 pb-3">
+          <input
+            type="text"
+            placeholder="Search prompts and styles..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full px-3 py-2 bg-surface-primary border border-edge-primary/20 rounded-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:ring-2 focus:ring-edge-focus"
+          />
         </div>
       </div>
 

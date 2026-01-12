@@ -1,12 +1,10 @@
 'use client';
 
-import { Button } from '@radflow/ui';
+import { Button, DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@radflow/ui';
 import { useDevToolsStore } from '../store';
 import { BreakpointIndicator } from './BreakpointIndicator';
-import { useState, useRef, useEffect } from 'react';
 
 interface TopBarProps {
-  title?: string;
   onClose?: () => void;
   onFullscreen?: () => void;
   showCloseButton?: boolean;
@@ -26,30 +24,11 @@ export function TopBar({
   onSettingsClick,
 }: TopBarProps) {
   const { activeTheme, availableThemes, switchTheme } = useDevToolsStore();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Get current theme data
   const currentTheme = availableThemes.find((t) => t.id === activeTheme);
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-    }
-
-    if (isDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }
-  }, [isDropdownOpen]);
-
   const handleThemeSelect = async (themeId: string) => {
-    setIsDropdownOpen(false);
     if (themeId !== activeTheme) {
       await switchTheme(themeId);
     }
@@ -57,111 +36,87 @@ export function TopBar({
 
   return (
     <div
-      className="flex items-center justify-between px-3 py-2 select-none w-full"
+      className="flex items-center justify-between p-1 select-none w-full bg-surface-elevated border border-edge-primary rounded-sm"
     >
       {/* Left: Theme Indicator + Dropdown */}
       <div className="flex items-center gap-2">
-        <div className="relative" ref={dropdownRef}>
-          <button
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2 px-2 py-1 rounded-sm hover:bg-surface-tertiary/50 transition-colors"
-            title="Switch theme"
-          >
-            {/* Theme Icon/Logo */}
+        <DropdownMenu position="bottom-start">
+          <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               size="sm"
-              iconOnly
               iconName="plug"
-              className="pointer-events-none"
-            />
-            {/* Theme Name */}
-            <span className="font-joystix text-xs uppercase tracking-wider text-content-primary">
-              {currentTheme?.name || 'RadOS'}
-            </span>
-            {/* Dropdown Arrow */}
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="none"
-              className={`transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+              title="Switch theme"
+              className="gap-2"
             >
-              <path
-                d="M3 5L6 8L9 5"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-
-          {/* Theme Dropdown */}
-          {isDropdownOpen && (
-            <div
-              className="absolute top-full left-0 mt-1 w-64 bg-surface-primary border border-edge-primary rounded-sm shadow-card z-50 overflow-hidden max-h-[300px] overflow-y-auto"
-            >
-              {availableThemes.map((theme) => (
-                <button
-                  key={theme.id}
-                  onClick={() => handleThemeSelect(theme.id)}
-                  className={`w-full flex items-center justify-between px-3 py-2 text-left hover:bg-surface-tertiary/50 transition-colors ${
-                    theme.id === activeTheme ? 'bg-surface-tertiary' : ''
-                  }`}
-                >
-                  <div className="flex flex-col gap-0.5">
-                    <span className="font-joystix text-xs text-content-primary">
-                      {theme.name}
+              {/* Theme Name */}
+              <span className="font-joystix text-xs uppercase tracking-wider text-content-primary">
+                {currentTheme?.name || 'RadOS'}
+              </span>
+              {/* Dropdown Arrow */}
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                fill="none"
+              >
+                <path
+                  d="M3 5L6 8L9 5"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-64 max-h-[300px]">
+            {availableThemes.map((theme) => (
+              <DropdownMenuItem
+                key={theme.id}
+                onClick={() => handleThemeSelect(theme.id)}
+                className={`flex items-center justify-between ${
+                  theme.id === activeTheme ? 'bg-surface-tertiary' : ''
+                }`}
+              >
+                <div className="flex flex-col gap-0.5">
+                  <span className="font-joystix text-xs text-content-primary">
+                    {theme.name}
+                  </span>
+                  {theme.description && (
+                    <span className="text-[10px] text-content-secondary">
+                      {theme.description}
                     </span>
-                    {theme.description && (
-                      <span className="text-[10px] text-content-secondary">
-                        {theme.description}
-                      </span>
-                    )}
-                  </div>
-                  {theme.id === activeTheme && (
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      className="text-content-primary flex-shrink-0"
-                    >
-                      <path
-                        d="M13 4L6 11L3 8"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
                   )}
-                </button>
-              ))}
-
-              {/* Create/Manage Themes Footer */}
-              <div className="border-t border-edge-primary mt-1">
-                <button
-                  onClick={() => {
-                    setIsDropdownOpen(false);
-                    onSettingsClick?.();
-                  }}
-                  className="w-full px-3 py-2 text-left hover:bg-surface-tertiary/50 transition-colors flex items-center gap-2"
-                >
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    iconOnly
-                    iconName="settings"
-                    className="pointer-events-none"
-                  />
-                  <span className="text-xs text-content-secondary">Manage Themes</span>
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+                </div>
+                {theme.id === activeTheme && (
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    className="text-content-primary flex-shrink-0"
+                  >
+                    <path
+                      d="M13 4L6 11L3 8"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                )}
+              </DropdownMenuItem>
+            ))}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => onSettingsClick?.()}
+              iconName="settings"
+            >
+              <span className="text-xs">Manage Themes</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* Center: Breakpoint Indicator */}
