@@ -132,9 +132,11 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
   - 6 color presets (RadOS, Midnight, Forest, Ocean, Sunset, Monochrome)
   - Custom color inputs with native color pickers
   - Live preview panel with buttons and text
-- [ ] **Step 3: Fonts**
-  - Upload custom fonts or select from Google Fonts
-  - Define typography scale (h1-h6, body, caption)
+- [x] **Step 3: Fonts**
+  - 5 font presets (RadOS, Modern Sans, Classic Serif, Tech Mono, Playful)
+  - Select fonts for headings, body, and monospace
+  - Font selection from available fonts in /public/fonts/ and system fonts
+  - Live preview panel showing headings, body text, and code blocks
 - [ ] **Step 4: Icons**
   - Upload icon set or use default
   - Preview icons in grid

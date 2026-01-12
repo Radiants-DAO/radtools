@@ -24,9 +24,11 @@ interface WizardFormData {
   textColor: string;
   colorPreset?: string;
 
-  // Step 3: Fonts (to be implemented)
-  headingFont?: string;
-  bodyFont?: string;
+  // Step 3: Fonts
+  headingFont: string;
+  bodyFont: string;
+  monoFont: string;
+  fontPreset?: string;
 
   // Step 4: Icons (to be implemented)
   iconSet?: string;
@@ -58,6 +60,70 @@ interface ColorPreset {
     text: string;
   };
 }
+
+interface FontPreset {
+  id: string;
+  name: string;
+  description: string;
+  fonts: {
+    heading: string;
+    body: string;
+    mono: string;
+  };
+}
+
+const FONT_PRESETS: FontPreset[] = [
+  {
+    id: 'rad-os',
+    name: 'RadOS (Default)',
+    description: 'Joystix for headings, Mondwest for body, PixelCode for mono',
+    fonts: {
+      heading: 'Joystix',
+      body: 'Mondwest',
+      mono: 'PixelCode',
+    },
+  },
+  {
+    id: 'modern-sans',
+    name: 'Modern Sans',
+    description: 'Clean, contemporary sans-serif throughout',
+    fonts: {
+      heading: 'Inter',
+      body: 'Inter',
+      mono: 'JetBrains Mono',
+    },
+  },
+  {
+    id: 'classic-serif',
+    name: 'Classic Serif',
+    description: 'Traditional serif for body, sans for headings',
+    fonts: {
+      heading: 'Helvetica',
+      body: 'Georgia',
+      mono: 'Courier New',
+    },
+  },
+  {
+    id: 'tech-mono',
+    name: 'Tech Monospace',
+    description: 'Monospace fonts throughout for tech aesthetic',
+    fonts: {
+      heading: 'JetBrains Mono',
+      body: 'JetBrains Mono',
+      mono: 'JetBrains Mono',
+    },
+  },
+  {
+    id: 'playful',
+    name: 'Playful',
+    description: 'Fun, rounded fonts for creative projects',
+    fonts: {
+      heading: 'Comic Sans MS',
+      body: 'Arial Rounded MT',
+      mono: 'Consolas',
+    },
+  },
+];
 
 const COLOR_PRESETS: ColorPreset[] = [
   {
@@ -146,7 +212,27 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
     accentColor: '#87CEEB',
     surfaceColor: '#FFFFFF',
     textColor: '#1A1A1A',
+    headingFont: 'Joystix',
+    bodyFont: 'Mondwest',
+    monoFont: 'PixelCode',
   });
+  const [availableFonts, setAvailableFonts] = useState<Array<{ family: string; files: Array<{ filename: string; path: string; format: string }> }>>([]);
+
+  // Fetch available fonts when dialog opens
+  React.useEffect(() => {
+    if (open) {
+      fetch('/api/devtools/fonts')
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.fonts) {
+            setAvailableFonts(data.fonts);
+          }
+        })
+        .catch((err) => {
+          console.error('Failed to fetch fonts:', err);
+        });
+    }
+  }, [open]);
 
   const handleNext = () => {
     if (currentStep < 6) {
@@ -172,6 +258,9 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
       accentColor: '#87CEEB',
       surfaceColor: '#FFFFFF',
       textColor: '#1A1A1A',
+      headingFont: 'Joystix',
+      bodyFont: 'Mondwest',
+      monoFont: 'PixelCode',
     });
     setCurrentStep(1);
     onClose();
@@ -207,6 +296,17 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
     }));
   };
 
+  // Apply font preset
+  const handleApplyFontPreset = (preset: FontPreset) => {
+    setFormData((prev) => ({
+      ...prev,
+      headingFont: preset.fonts.heading,
+      bodyFont: preset.fonts.body,
+      monoFont: preset.fonts.mono,
+      fontPreset: preset.id,
+    }));
+  };
+
   // Validate current step
   const canProceed = (): boolean => {
     switch (currentStep) {
@@ -225,6 +325,11 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
           formData.textColor
         );
       case 3:
+        return !!(
+          formData.headingFont &&
+          formData.bodyFont &&
+          formData.monoFont
+        );
       case 4:
       case 5:
       case 6:
@@ -669,14 +774,202 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
 
           {/* Step 3: Typography */}
           {currentStep === 3 && (
-            <div className="space-y-4">
-              <p className="font-mondwest text-sm text-content-primary/60">
-                Typography configuration will be implemented in the next iteration.
-              </p>
-              <div className="p-8 border-2 border-dashed border-edge-primary/20 rounded text-center">
-                <p className="font-joystix text-sm uppercase text-content-primary/40">
-                  Coming Soon
-                </p>
+            <div className="space-y-6">
+              {/* Font Presets */}
+              <div>
+                <h4 className="font-joystix text-sm uppercase text-content-primary mb-3">
+                  Choose a Font Preset
+                </h4>
+                <div className="grid grid-cols-2 gap-3">
+                  {FONT_PRESETS.map((preset) => (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => handleApplyFontPreset(preset)}
+                      className={`p-3 border rounded text-left transition-all hover:shadow-md ${
+                        formData.fontPreset === preset.id
+                          ? 'border-accent-primary bg-accent-primary/5'
+                          : 'border-edge-primary bg-surface-primary hover:border-accent-primary/50'
+                      }`}
+                    >
+                      <p className="font-mondwest font-semibold text-sm text-content-primary mb-1">
+                        {preset.name}
+                      </p>
+                      <p className="font-mondwest text-xs text-content-primary/60 mb-2">
+                        {preset.description}
+                      </p>
+                      <div className="flex flex-col gap-1 text-xs">
+                        <div className="flex items-center gap-1">
+                          <span className="text-content-primary/50 w-12">H:</span>
+                          <span className="font-mondwest text-content-primary">{preset.fonts.heading}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-content-primary/50 w-12">Body:</span>
+                          <span className="font-mondwest text-content-primary">{preset.fonts.body}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-content-primary/50 w-12">Mono:</span>
+                          <span className="font-mondwest text-content-primary">{preset.fonts.mono}</span>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Custom Font Selection */}
+              <div>
+                <h4 className="font-joystix text-sm uppercase text-content-primary mb-3">
+                  Customize Fonts
+                </h4>
+                <div className="space-y-4">
+                  {/* Heading Font */}
+                  <div>
+                    <label className="block font-mondwest text-sm text-content-primary mb-2">
+                      Heading Font <span className="text-accent-primary">*</span>
+                    </label>
+                    <select
+                      value={formData.headingFont}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          headingFont: e.target.value,
+                          fontPreset: undefined,
+                        }))
+                      }
+                      className="w-full px-3 py-2 bg-surface-primary border border-edge-primary rounded font-mondwest text-sm text-content-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                    >
+                      <option value="">Select a font...</option>
+                      {availableFonts.map((font) => (
+                        <option key={font.family} value={font.family}>
+                          {font.family}
+                        </option>
+                      ))}
+                      {/* System fonts */}
+                      <optgroup label="System Fonts">
+                        <option value="Inter">Inter</option>
+                        <option value="Helvetica">Helvetica</option>
+                        <option value="Arial">Arial</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                      </optgroup>
+                    </select>
+                    <p className="font-mondwest text-xs text-content-primary/50 mt-1">
+                      Used for h1-h6 headings
+                    </p>
+                  </div>
+
+                  {/* Body Font */}
+                  <div>
+                    <label className="block font-mondwest text-sm text-content-primary mb-2">
+                      Body Font <span className="text-accent-primary">*</span>
+                    </label>
+                    <select
+                      value={formData.bodyFont}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          bodyFont: e.target.value,
+                          fontPreset: undefined,
+                        }))
+                      }
+                      className="w-full px-3 py-2 bg-surface-primary border border-edge-primary rounded font-mondwest text-sm text-content-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                    >
+                      <option value="">Select a font...</option>
+                      {availableFonts.map((font) => (
+                        <option key={font.family} value={font.family}>
+                          {font.family}
+                        </option>
+                      ))}
+                      {/* System fonts */}
+                      <optgroup label="System Fonts">
+                        <option value="Inter">Inter</option>
+                        <option value="Helvetica">Helvetica</option>
+                        <option value="Arial">Arial</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                      </optgroup>
+                    </select>
+                    <p className="font-mondwest text-xs text-content-primary/50 mt-1">
+                      Used for paragraphs and body text
+                    </p>
+                  </div>
+
+                  {/* Monospace Font */}
+                  <div>
+                    <label className="block font-mondwest text-sm text-content-primary mb-2">
+                      Monospace Font <span className="text-accent-primary">*</span>
+                    </label>
+                    <select
+                      value={formData.monoFont}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          monoFont: e.target.value,
+                          fontPreset: undefined,
+                        }))
+                      }
+                      className="w-full px-3 py-2 bg-surface-primary border border-edge-primary rounded font-mondwest text-sm text-content-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                    >
+                      <option value="">Select a font...</option>
+                      {availableFonts.map((font) => (
+                        <option key={font.family} value={font.family}>
+                          {font.family}
+                        </option>
+                      ))}
+                      {/* System fonts */}
+                      <optgroup label="System Fonts">
+                        <option value="JetBrains Mono">JetBrains Mono</option>
+                        <option value="Courier New">Courier New</option>
+                        <option value="Consolas">Consolas</option>
+                        <option value="Monaco">Monaco</option>
+                      </optgroup>
+                    </select>
+                    <p className="font-mondwest text-xs text-content-primary/50 mt-1">
+                      Used for code blocks and pre-formatted text
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Live Preview */}
+              <div>
+                <h4 className="font-joystix text-sm uppercase text-content-primary mb-3">
+                  Preview
+                </h4>
+                <div
+                  className="p-6 rounded border-2 border-edge-primary space-y-4"
+                  style={{ backgroundColor: formData.surfaceColor }}
+                >
+                  <h2
+                    className="text-2xl font-bold"
+                    style={{ fontFamily: formData.headingFont, color: formData.textColor }}
+                  >
+                    Sample Heading
+                  </h2>
+                  <h3
+                    className="text-xl font-semibold"
+                    style={{ fontFamily: formData.headingFont, color: formData.textColor }}
+                  >
+                    Subheading Example
+                  </h3>
+                  <p
+                    className="text-base"
+                    style={{ fontFamily: formData.bodyFont, color: formData.textColor }}
+                  >
+                    This is a sample paragraph demonstrating how your body text will look with the
+                    selected font. The body font is used throughout most of your content, so choose
+                    one that is readable and matches your theme's personality.
+                  </p>
+                  <pre
+                    className="p-3 bg-surface-secondary/10 rounded text-sm overflow-x-auto"
+                    style={{ fontFamily: formData.monoFont, color: formData.textColor }}
+                  >
+{`function example() {
+  return "Monospace font";
+}`}
+                  </pre>
+                </div>
               </div>
             </div>
           )}
