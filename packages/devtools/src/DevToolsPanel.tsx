@@ -32,9 +32,11 @@ export function DevToolsPanel() {
     isTextEditActive,
     isComponentIdActive,
     isHelpActive,
+    isSearchOpen,
     toggleTextEditMode,
     toggleComponentIdMode,
     toggleHelpMode,
+    setSearchOpen,
     isSettingsOpen,
     openSettings,
     closeSettings,
@@ -46,17 +48,31 @@ export function DevToolsPanel() {
   const [componentTabs, setComponentTabs] = useState<Array<{ id: string; label: string }>>([]);
 
   // Determine active tool
-  const activeTool: Tool | null = 
-    isComponentIdActive ? 'componentId' :
-    isTextEditActive ? 'textEdit' :
-    isHelpActive ? 'help' :
-    null;
+  function getActiveTool(): Tool | null {
+    if (isSearchOpen) return 'search';
+    if (isComponentIdActive) return 'componentId';
+    if (isTextEditActive) return 'textEdit';
+    if (isHelpActive) return 'help';
+    return null;
+  }
+  const activeTool = getActiveTool();
 
-  const handleToolToggle = (tool: Tool) => {
-    if (tool === 'componentId') toggleComponentIdMode();
-    else if (tool === 'textEdit') toggleTextEditMode();
-    else if (tool === 'help') toggleHelpMode();
-  };
+  function handleToolToggle(tool: Tool): void {
+    switch (tool) {
+      case 'search':
+        setSearchOpen(!isSearchOpen);
+        break;
+      case 'componentId':
+        toggleComponentIdMode();
+        break;
+      case 'textEdit':
+        toggleTextEditMode();
+        break;
+      case 'help':
+        toggleHelpMode();
+        break;
+    }
+  }
 
   const handleTabChange = (value: string) => {
     setActiveTab(value as Tab);
@@ -102,7 +118,7 @@ export function DevToolsPanel() {
     >
       {/* TopBar - spans full width above LeftRail */}
       {!isMinimized && (
-        <div className="p-2 pb-0">
+        <div className="p-2 pb-2">
           <TopBar
             onClose={togglePanel}
             onFullscreen={toggleFullscreen}

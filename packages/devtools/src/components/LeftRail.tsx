@@ -33,7 +33,7 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onS
   const pendingChangeCount = pendingChanges.length;
 
   return (
-    <div className="flex flex-col items-center py-2 px-0 h-full">
+    <div className="flex flex-col items-center py-0 px-0 h-full">
       {/* Top Section */}
       <div className="flex flex-col">
         {/* Tools Section */}
