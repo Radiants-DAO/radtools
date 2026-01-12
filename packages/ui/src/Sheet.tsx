@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { Icon } from './Icon';
 import { useEscapeKey, useLockBodyScroll } from './hooks/useModalBehavior';
 
 // ============================================================================
@@ -103,26 +104,30 @@ export function SheetTrigger({ children, asChild }: SheetTriggerProps) {
 // Sheet Content
 // ============================================================================
 
-const sideStyles: Record<SheetSide, { container: string; open: string; closed: string }> = {
+const sideStyles: Record<SheetSide, { container: string; open: string; closed: string; border: string }> = {
   left: {
     container: 'inset-y-0 left-0 h-full w-80 max-w-[90vw]',
     open: 'translate-x-0',
     closed: '-translate-x-full',
+    border: 'border-r',
   },
   right: {
     container: 'inset-y-0 right-0 h-full w-80 max-w-[90vw]',
     open: 'translate-x-0',
     closed: 'translate-x-full',
+    border: 'border-l',
   },
   top: {
     container: 'inset-x-0 top-0 w-full h-80 max-h-[90vh]',
     open: 'translate-y-0',
     closed: '-translate-y-full',
+    border: 'border-b',
   },
   bottom: {
     container: 'inset-x-0 bottom-0 w-full h-80 max-h-[90vh]',
     open: 'translate-y-0',
     closed: 'translate-y-full',
+    border: 'border-t',
   },
 };
 
@@ -185,13 +190,10 @@ export function SheetContent({ className = '', children }: SheetContentProps) {
           fixed
           ${styles.container}
           bg-surface-primary
-          border-edge-primary
-          ${side === 'left' ? 'border-r-2' : ''}
-          ${side === 'right' ? 'border-l-2' : ''}
-          ${side === 'top' ? 'border-b-2' : ''}
-          ${side === 'bottom' ? 'border-t-2' : ''}
-          shadow-[4px_4px_0_0_var(--color-black)]
+          ${styles.border} border-edge-primary
+          shadow-[2px_2px_0_0_var(--color-black)]
           transform transition-transform duration-200 ease-out
+          flex flex-col
           ${open ? styles.open : styles.closed}
           ${className}
         `.trim()}
@@ -212,12 +214,27 @@ interface SheetHeaderProps {
   className?: string;
   /** Children */
   children: React.ReactNode;
+  /** Show close button */
+  showClose?: boolean;
 }
 
-export function SheetHeader({ className = '', children }: SheetHeaderProps) {
+export function SheetHeader({ className = '', children, showClose = true }: SheetHeaderProps) {
+  const { setOpen } = useSheetContext();
+
   return (
-    <div className={`px-6 pt-6 pb-4 border-b border-edge-primary/20 ${className}`.trim()}>
-      {children}
+    <div className={`px-6 pt-6 pb-4 border-b border-edge-primary/20 flex items-start justify-between gap-4 ${className}`.trim()}>
+      <div className="flex-1 min-w-0">
+        {children}
+      </div>
+      {showClose && (
+        <button
+          type="button"
+          onClick={() => setOpen(false)}
+          className="flex-shrink-0 p-1 hover:bg-surface-tertiary rounded-sm transition-colors"
+        >
+          <Icon name="close" size={16} className="text-content-primary" />
+        </button>
+      )}
     </div>
   );
 }
@@ -231,7 +248,7 @@ interface SheetTitleProps {
 
 export function SheetTitle({ className = '', children }: SheetTitleProps) {
   return (
-    <h2 className={`font-joystix text-base uppercase text-content-primary ${className}`.trim()}>
+    <h2 className={`font-joystix text-sm uppercase text-content-primary ${className}`.trim()}>
       {children}
     </h2>
   );
@@ -265,7 +282,7 @@ interface SheetBodyProps {
 
 export function SheetBody({ className = '', children }: SheetBodyProps) {
   return (
-    <div className={`px-6 py-4 flex-1 overflow-auto ${className}`.trim()}>
+    <div className={`px-6 py-4 flex-1 overflow-auto font-mondwest text-base text-content-primary ${className}`.trim()}>
       {children}
     </div>
   );

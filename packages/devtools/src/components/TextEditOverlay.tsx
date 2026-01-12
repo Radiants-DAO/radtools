@@ -194,7 +194,7 @@ export function TextEditOverlay({ onContextMenu }: TextEditOverlayProps) {
             newTag: newTag !== originalState.tag ? newTag : undefined,
             reactComponent,
             isRadToolsChange: false,
-            radToolsType: null as const,
+            radToolsType: null,
           };
           
           addChange(change);
@@ -219,7 +219,7 @@ export function TextEditOverlay({ onContextMenu }: TextEditOverlayProps) {
         // Make non-editable and blur
         currentElement.contentEditable = 'false';
         currentElement.blur();
-        setCurrentElement(null, null);
+        setCurrentElement(null);
       } else if (e.key === 'Escape') {
         e.preventDefault();
         
@@ -234,7 +234,7 @@ export function TextEditOverlay({ onContextMenu }: TextEditOverlayProps) {
         
         currentElement.contentEditable = 'false';
         currentElement.blur();
-        setCurrentElement(null, null);
+        setCurrentElement(null);
         
         // Exit mode entirely
         store.toggleTextEditMode();

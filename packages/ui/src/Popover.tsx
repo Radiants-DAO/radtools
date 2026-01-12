@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import { Icon } from './Icon';
 import { useEscapeKey, useClickOutside } from './hooks/useModalBehavior';
 
 // ============================================================================
@@ -192,11 +193,12 @@ export function PopoverContent({ className = '', children, align = 'center' }: P
       ref={contentRef}
       className={`
         fixed z-50
+        min-w-[200px]
         bg-surface-primary
-        border-2 border-edge-primary
+        border border-edge-primary
         rounded-sm
         shadow-[2px_2px_0_0_var(--color-black)]
-        p-4
+        overflow-hidden
         animate-fadeIn
         ${className}
       `.trim()}
@@ -205,6 +207,87 @@ export function PopoverContent({ className = '', children, align = 'center' }: P
       {children}
     </div>,
     document.body
+  );
+}
+
+// ============================================================================
+// Popover Header, Body, Footer
+// ============================================================================
+
+interface PopoverHeaderProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function PopoverHeader({ children, className = '' }: PopoverHeaderProps) {
+  return (
+    <div className={`px-4 pt-4 pb-2 border-b border-edge-primary/20 ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+interface PopoverTitleProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function PopoverTitle({ children, className = '' }: PopoverTitleProps) {
+  return (
+    <h3 className={`font-joystix text-xs uppercase text-content-primary ${className}`}>
+      {children}
+    </h3>
+  );
+}
+
+interface PopoverBodyProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function PopoverBody({ children, className = '' }: PopoverBodyProps) {
+  return (
+    <div className={`p-4 font-mondwest text-base text-content-primary ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+interface PopoverFooterProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function PopoverFooter({ children, className = '' }: PopoverFooterProps) {
+  return (
+    <div className={`px-4 pb-4 pt-2 border-t border-edge-primary/20 flex justify-end gap-2 ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+// ============================================================================
+// Popover Close
+// ============================================================================
+
+interface PopoverCloseProps {
+  children: React.ReactElement;
+  asChild?: boolean;
+}
+
+export function PopoverClose({ children, asChild }: PopoverCloseProps) {
+  const { setOpen } = usePopoverContext();
+
+  if (asChild && React.isValidElement(children)) {
+    return React.cloneElement(children as React.ReactElement<{ onClick?: () => void }>, {
+      onClick: () => setOpen(false),
+    });
+  }
+
+  return (
+    <button type="button" onClick={() => setOpen(false)}>
+      {children}
+    </button>
   );
 }
 

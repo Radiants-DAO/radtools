@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import { Button } from './Button';
+import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { Icon } from './Icon';
 
 // ============================================================================
 // Types
@@ -27,6 +28,7 @@ interface HelpPanelProps {
 /**
  * Slide-in help panel that appears from the right side of the window.
  * Used to display contextual help content within app windows.
+ * Redesigned to match SearchableColorDropdown style patterns.
  */
 export function HelpPanel({
   isOpen,
@@ -36,6 +38,24 @@ export function HelpPanel({
   className = '',
 }: HelpPanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Handle animation states
+  useEffect(() => {
+    if (isOpen) {
+      setIsVisible(true);
+    } else {
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   // Handle escape key to close
   useEffect(() => {
@@ -68,40 +88,50 @@ export function HelpPanel({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!mounted || !isVisible) return null;
 
-  return (
-    <div 
-      className={`
-        absolute inset-0 z-50 
-        bg-surface-secondary/20 
-        flex justify-end
-      `}
-    >
+  return createPortal(
+    <div className="fixed inset-0 z-50">
+      {/* Overlay */}
+      <div
+        className={`
+          absolute inset-0 bg-surface-secondary/50
+          transition-opacity duration-200
+          ${isOpen ? 'opacity-100' : 'opacity-0'}
+        `.trim()}
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      {/* Panel */}
       <div
         ref={panelRef}
+        role="dialog"
+        aria-modal="true"
         className={`
-          h-full w-72 max-w-[80%]
+          fixed inset-y-0 right-0
+          h-full w-80 max-w-[90vw]
           bg-surface-primary
           border-l border-edge-primary
-          shadow-[-4px_0_0_0_var(--color-black)]
+          shadow-[2px_2px_0_0_var(--color-black)]
           flex flex-col
-          animate-slide-in-right
+          transform transition-transform duration-200 ease-out
+          ${isOpen ? 'translate-x-0' : 'translate-x-full'}
           ${className}
-        `}
+        `.trim()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-edge-primary">
-          <span className="font-joystix text-xs text-content-primary uppercase">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-edge-primary/20">
+          <span className="font-joystix text-xs text-content-primary uppercase tracking-wider">
             {title}
           </span>
-          <Button
-            variant="ghost"
-            size="md"
-            iconOnly={true}
-            iconName="close"
+          <button
+            type="button"
             onClick={onClose}
-          />
+            className="p-1 hover:bg-surface-tertiary rounded-sm transition-colors"
+          >
+            <Icon name="close" size={16} className="text-content-primary" />
+          </button>
         </div>
 
         {/* Content */}
@@ -111,9 +141,75 @@ export function HelpPanel({
           </div>
         </div>
       </div>
+    </div>,
+    document.body
+  );
+}
+
+// ============================================================================
+// Help Panel Sub-components
+// ============================================================================
+
+interface HelpSectionProps {
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function HelpSection({ title, children, className = '' }: HelpSectionProps) {
+  return (
+    <div className={`space-y-2 ${className}`}>
+      <h4 className="font-joystix text-xs uppercase text-content-primary/60 tracking-wider">
+        {title}
+      </h4>
+      <div className="space-y-2">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+interface HelpItemProps {
+  icon?: string;
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function HelpItem({ icon, children, className = '' }: HelpItemProps) {
+  return (
+    <div className={`flex items-start gap-2 ${className}`}>
+      {icon && (
+        <Icon name={icon} size={16} className="flex-shrink-0 text-content-primary/60 mt-0.5" />
+      )}
+      <div className="flex-1 font-mondwest text-base text-content-primary">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+interface HelpShortcutProps {
+  keys: string[];
+  description: string;
+  className?: string;
+}
+
+export function HelpShortcut({ keys, description, className = '' }: HelpShortcutProps) {
+  return (
+    <div className={`flex items-center justify-between gap-4 py-1 ${className}`}>
+      <span className="font-mondwest text-base text-content-primary">{description}</span>
+      <div className="flex items-center gap-1">
+        {keys.map((key, index) => (
+          <kbd
+            key={index}
+            className="px-1.5 py-0.5 font-mono text-xs bg-surface-secondary/20 border border-edge-primary/30 rounded-xs text-content-primary"
+          >
+            {key}
+          </kbd>
+        ))}
+      </div>
     </div>
   );
 }
 
 export default HelpPanel;
-

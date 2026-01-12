@@ -167,12 +167,18 @@ export function Slider({ value, onChange, min = 0, max = 100, step = 1, size = '
         className={`
           relative w-full
           ${styles.track}
-          bg-surface-primary
           border border-edge-primary
           rounded-sm
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
           focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
         `.trim()}
+        style={{
+          backgroundColor: 'var(--color-surface-sunken)',
+          backgroundImage: 'var(--pattern-surface-sunken)',
+          backgroundSize: 'var(--pattern-surface-sunken-size)',
+          backgroundPosition: 'var(--pattern-surface-sunken-position)',
+          backgroundRepeat: 'repeat',
+        }}
       >
         {/* Filled Track */}
         <div

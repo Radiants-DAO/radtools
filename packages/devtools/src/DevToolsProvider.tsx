@@ -15,15 +15,12 @@ interface DevToolsProviderProps {
 }
 
 export function DevToolsProvider({ children }: DevToolsProviderProps) {
-  const { 
-    isOpen, 
+  const {
+    isOpen,
     togglePanel,
     panelWidth,
     setActiveTab,
     setSearchOpen,
-    toggleComponentIdMode,
-    toggleTextEditMode,
-    toggleHelpMode,
   } = useDevToolsStore();
 
   // Keyboard shortcuts
@@ -36,38 +33,10 @@ export function DevToolsProvider({ children }: DevToolsProviderProps) {
         return;
       }
 
-      // Text Edit mode: Cmd+Shift+T or Ctrl+Shift+T (works independently of panel)
-      if (e.shiftKey && (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 't') {
-        e.preventDefault();
-        toggleTextEditMode();
-        return;
-      }
-
       // Only handle panel-specific shortcuts when panel is open
       if (!isOpen) return;
 
-      // Global search: Cmd+E or Ctrl+E
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'e') {
-        e.preventDefault();
-        setSearchOpen(true);
-        return;
-      }
-
-      // Component ID mode: Cmd+Shift+I or Ctrl+Shift+I
-      if (e.shiftKey && (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'i') {
-        e.preventDefault();
-        toggleComponentIdMode();
-        return;
-      }
-
-      // Help mode: Cmd+Shift+? or Ctrl+Shift+?
-      if (e.shiftKey && (e.metaKey || e.ctrlKey) && e.key === '?') {
-        e.preventDefault();
-        toggleHelpMode();
-        return;
-      }
-
-      // Tab switching: 1-5
+      // Tab switching: 1-5 (only when panel is focused)
       if (e.key >= '1' && e.key <= '5' && !e.metaKey && !e.ctrlKey && !e.altKey) {
         e.preventDefault();
         const tabs: Tab[] = ['variables', 'typography', 'components', 'assets', 'mockStates'];
@@ -93,9 +62,6 @@ export function DevToolsProvider({ children }: DevToolsProviderProps) {
     togglePanel,
     setActiveTab,
     setSearchOpen,
-    toggleComponentIdMode,
-    toggleTextEditMode,
-    toggleHelpMode,
   ]);
 
   // Inject body padding when panel is open

@@ -99,8 +99,8 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio({ l
     : checked;
   const effectiveOnChange = groupContext?.onChange
     ? (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.checked && value) {
-          groupContext.onChange?.(value);
+        if (e.target.checked && value !== undefined) {
+          groupContext.onChange?.(String(value));
         }
       }
     : onChange;

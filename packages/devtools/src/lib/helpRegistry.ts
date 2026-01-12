@@ -40,7 +40,6 @@ export const helpRegistry: Record<string, HelpItem> = {
   'tool-component-id': {
     title: 'Component ID Mode',
     description: 'Click any element to identify its React component and source file.',
-    shortcut: 'Cmd+Shift+I',
     tips: [
       'Hover over elements to see component info',
       'Click to copy component name and path',
@@ -50,7 +49,6 @@ export const helpRegistry: Record<string, HelpItem> = {
   'tool-text-edit': {
     title: 'Text Edit Mode',
     description: 'Click any text to edit inline. Changes accumulate for AI editing.',
-    shortcut: 'Cmd+Shift+T',
     tips: [
       'Press Enter after each edit',
       'Escape to copy all changes to clipboard',
@@ -60,7 +58,6 @@ export const helpRegistry: Record<string, HelpItem> = {
   'tool-help': {
     title: 'Help Mode',
     description: 'Hover over DevTools elements to see contextual help.',
-    shortcut: 'Cmd+Shift+?',
     tips: [
       'Hover over tabs, tools, and buttons',
       'Help tooltips show shortcuts and tips',
@@ -79,7 +76,6 @@ export const helpRegistry: Record<string, HelpItem> = {
   'panel-search': {
     title: 'Global Search',
     description: 'Search across components, icons, tokens, and typography.',
-    shortcut: 'Cmd+E',
     tips: [
       'Search results jump to the relevant tab',
       'Use arrow keys to navigate results',

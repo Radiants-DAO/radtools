@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { Icon } from '@radflow/ui';
 import type { BaseColor } from '../types';
 
 interface SearchableColorDropdownProps {
@@ -122,7 +123,11 @@ export function SearchableColorDropdown({
             {selectedColor?.displayName || placeholder}
           </span>
         </div>
-        <span className={`text-content-primary flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}>▼</span>
+        <Icon
+          name="chevron-down"
+          size={16}
+          className={`text-content-primary flex-shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+        />
       </button>
 
       {/* Dropdown Menu */}

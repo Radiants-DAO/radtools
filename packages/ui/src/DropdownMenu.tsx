@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import { Icon } from './Icon';
 import { useEscapeKey, useClickOutside } from './hooks/useModalBehavior';
 
 // ============================================================================
@@ -184,18 +185,22 @@ export function DropdownMenuContent({ className = '', children }: DropdownMenuCo
       role="menu"
       className={`
         fixed z-50
-        min-w-[8rem]
+        min-w-[160px]
         bg-surface-primary
-        border-2 border-edge-primary
+        border border-edge-primary
         rounded-sm
         shadow-[2px_2px_0_0_var(--color-black)]
         py-1
+        overflow-hidden
+        max-h-[300px] flex flex-col
         animate-fadeIn
         ${className}
       `.trim()}
       style={{ top: coords.top, left: coords.left }}
     >
-      {children}
+      <div className="overflow-y-auto flex-1">
+        {children}
+      </div>
     </div>,
     document.body
   );
@@ -214,6 +219,8 @@ interface DropdownMenuItemProps {
   disabled?: boolean;
   /** Destructive styling */
   destructive?: boolean;
+  /** Icon name (filename without .svg extension) */
+  iconName?: string;
   /** Additional className */
   className?: string;
 }
@@ -223,6 +230,7 @@ export function DropdownMenuItem({
   onClick,
   disabled = false,
   destructive = false,
+  iconName,
   className = '',
 }: DropdownMenuItemProps) {
   const { setOpen } = useDropdownContext();
@@ -240,16 +248,18 @@ export function DropdownMenuItem({
       onClick={handleClick}
       disabled={disabled}
       className={`
-        w-full px-4 py-2
-        text-left
-        font-mondwest text-base
+        w-full px-3 py-2
+        flex items-center gap-2
+        font-mondwest text-base text-left
         ${destructive ? 'text-content-error' : 'text-content-primary'}
-        ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-surface-secondary/5 cursor-pointer'}
-        transition-colors
+        ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-surface-tertiary cursor-pointer'}
         ${className}
       `.trim()}
     >
-      {children}
+      {iconName && (
+        <Icon name={iconName} size={16} className="flex-shrink-0 text-content-primary/60" />
+      )}
+      <span className="flex-1">{children}</span>
     </button>
   );
 }
@@ -267,7 +277,7 @@ export function DropdownMenuSeparator({ className = '' }: DropdownMenuSeparatorP
   return (
     <div
       role="separator"
-      className={`h-px bg-surface-primary/20 my-1 ${className}`.trim()}
+      className={`my-1 border-t border-edge-primary/20 ${className}`.trim()}
     />
   );
 }
@@ -287,9 +297,10 @@ export function DropdownMenuLabel({ children, className = '' }: DropdownMenuLabe
   return (
     <div
       className={`
-        px-4 py-1
-        font-joystix text-2xs uppercase
+        px-3 py-1.5
+        font-joystix text-xs uppercase tracking-wider
         text-content-primary/50
+        bg-surface-secondary/10
         ${className}
       `.trim()}
     >

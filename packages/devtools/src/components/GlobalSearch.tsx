@@ -57,10 +57,9 @@ export function GlobalSearch() {
         tabId = item.tabId as Tab;
       }
 
-      // Determine type based on item type
+      // Determine type based on sectionId
       let type: SearchResult['type'] = 'component';
-      if (item.type === 'icon') type = 'icon';
-      else if (item.type === 'token' || item.sectionId === 'tokens') type = 'token';
+      if (item.sectionId === 'tokens') type = 'token';
       else if (item.sectionId && ['headings', 'text', 'lists', 'code'].includes(item.sectionId)) type = 'typography';
       else type = 'component';
 
@@ -293,7 +292,7 @@ export function GlobalSearch() {
                         <div className="font-mondwest text-sm">
                           {highlightText(result.text, searchQuery)}
                         </div>
-                        {result.metadata?.componentName && (
+                        {typeof result.metadata?.componentName === 'string' && (
                           <div className="text-xs text-content-primary/50 mt-1 font-mono">
                             {result.metadata.componentName}
                           </div>

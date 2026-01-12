@@ -125,12 +125,14 @@ export function ComponentIdMode() {
       const componentInfo = findReactComponent(target);
       setClickedComponent(componentInfo);
 
-      // Copy to clipboard
-      const text = `${componentInfo.name} (${componentInfo.path})`;
-      navigator.clipboard.writeText(text).then(() => {
-        // Show feedback (could use toast here)
-        setTimeout(() => setClickedComponent(null), 2000);
-      });
+      // Copy to clipboard if component found
+      if (componentInfo) {
+        const text = `${componentInfo.name} (${componentInfo.path})`;
+        navigator.clipboard.writeText(text).then(() => {
+          // Show feedback (could use toast here)
+          setTimeout(() => setClickedComponent(null), 2000);
+        });
+      }
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {

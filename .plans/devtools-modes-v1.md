@@ -1,8 +1,9 @@
 # DevTools Modes - Implementation Plan
 
 **Created:** 2026-01-10
-**Updated:** 2026-01-10
+**Updated:** 2026-01-11
 **Status:** Planning
+**Related:** devtools-tabs-v1.md, theme-architecture-plan-v3.md
 
 ---
 
@@ -16,8 +17,23 @@ This document defines the focused feature sets for DevTools interactive modes. E
 | **Component ID Mode** | Browser page | Identify components, open in DevTools |
 | **Text Edit Mode** | Browser page | Collect text changes for AI |
 | **Minimized Panel** | DevTools | Always-accessible tool sidebar |
+| **Settings Panel** | DevTools | Theme management, global settings |
 
 **Target Audience:** Figma-familiar designers (no complexity toggles)
+
+---
+
+## Theme Integration
+
+**DevTools is styled by the active theme.** When you switch themes, the DevTools panel updates to use:
+- Theme's colors for backgrounds, borders, accents
+- Theme's typography (if applicable)
+- Theme logo in the top bar indicator
+
+This provides:
+- Clear visual feedback of which theme is active
+- Dogfooding the theme (see if colors work in a real UI)
+- Immersive editing experience
 
 ---
 
@@ -56,7 +72,29 @@ All modes are activated via **LeftRail buttons only**:
 │🔍│  ← Click to toggle Component ID mode
 │✏️│  ← Click to toggle Text Edit mode
 │❓│  ← Click to toggle Help mode
+├──┤
+│📊│  ← Variables tab
+│🔤│  ← Typography tab
+│🧩│  ← Components tab
+│📁│  ← Assets tab
+│🤖│  ← AI tab
+│⚙️│  ← Mock States tab
+├──┤
+│⚙️│  ← Settings (theme management, global settings)
 └──┘
+```
+
+### Top Bar (Theme Indicator)
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│ Theme: [☀️|RadOS ▾]   [Breakpoint ▾]  [Position ▾]  [◐/◑]               │
+└──────────────────────────────────────────────────────────────────────────┘
+         ↑
+         Theme quick-switcher dropdown
+         - Shows: Logo + Theme Name
+         - Click to switch themes
+         - Dropdown includes: Create Theme, Manage Themes
 ```
 
 ---
@@ -73,10 +111,13 @@ Component ID Mode needs to open DevTools to show component details. A minimized 
 - Only LeftRail visible (slim vertical sidebar)
 - All tools accessible (Component ID, Text Edit, Help)
 - All tabs accessible (click expands panel)
+- Theme indicator visible in slim top bar
 
 **Layout:**
 ```
-┌──┐
+┌──────────────────┐
+│ [☀️|RadOS]       │  ← Theme indicator (slim)
+├──┬───────────────┘
 │🔍│  ← Component ID tool
 │✏️│  ← Text Edit tool
 │❓│  ← Help tool
@@ -87,6 +128,8 @@ Component ID Mode needs to open DevTools to show component details. A minimized 
 │📁│  ← Assets tab
 │🤖│  ← AI tab
 │⚙️│  ← Mock States tab
+├──┤
+│⚙️│  ← Settings (click → expand to settings)
 └──┘
 ```
 
@@ -201,14 +244,19 @@ Browser page only (not DevTools panel)
 
 **Hover:**
 - Blue outline on RadFlow components
-- Floating label shows component name + source
+- Floating label shows component name + source + theme
 
 ```
 ┌─────────────────┐
 │ Button          │
 │ @radflow/ui     │
+│ theme: rad-os   │  ← Shows data-theme attribute
 └─────────────────┘
 ```
+
+The `data-theme` attribute identifies which theme owns the component. This is important for:
+- Verifying you're editing the right theme's component
+- Understanding component source when using multiple themes
 
 **Click:**
 - Opens DevTools (expands if minimized)
@@ -285,7 +333,63 @@ When text edit is active and changes exist, show badge on tool button:
 
 ---
 
-## 5. Components Tab
+## 5. Settings Panel (New)
+
+### Purpose
+
+Theme management and global DevTools settings. Accessed via Settings cog (⚙️) at bottom of LeftRail.
+
+### Activation
+
+- **Open:** Click Settings button (⚙️) at bottom of LeftRail
+- **Close:** Click X or click outside panel
+
+### Layout
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ SETTINGS                                              [✕]   │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│ THEME MANAGEMENT                                             │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │ ☀️ RadOS                                      ✓ Active  │ │
+│ │    Author: Radiants                                     │ │
+│ │    [GitHub] [Twitter]                      [Delete]     │ │
+│ ├─────────────────────────────────────────────────────────┤ │
+│ │ 🌙 Phase                                                │ │
+│ │    Author: Phase Labs                                   │ │
+│ │    [GitHub]                    [Activate] [Delete]      │ │
+│ └─────────────────────────────────────────────────────────┘ │
+│                                                              │
+│ [+ Create New Theme]                                         │
+│                                                              │
+├─────────────────────────────────────────────────────────────┤
+│ EXPORT THEME                                                 │
+│ [📋 Copy Export Prompt]                                      │
+├─────────────────────────────────────────────────────────────┤
+│ DEVTOOLS SETTINGS                                            │
+│ Panel position: [Right ▾]                                   │
+│ Default state: [Minimized ▾]                                │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Features
+
+| Feature | Description |
+|---------|-------------|
+| Theme list | All installed themes with active indicator |
+| Activate | Switch to different theme |
+| Delete | Remove theme (with confirmation) |
+| Create | Opens Theme Creation Wizard |
+| Export | Copy prompt for publishing theme |
+| DevTools settings | Panel position, default state |
+
+See `theme-architecture-plan-v3.md` for full Theme Creation Wizard flow.
+
+---
+
+## 6. Components Tab
 
 ### Decision: No Copy Buttons
 
@@ -297,9 +401,11 @@ When text edit is active and changes exist, show badge on tool button:
 ### Keep Current Behavior
 
 - Component name and source path
+- `data-theme` attribute (identifies owning theme)
 - Props table (type, required, default)
 - Visual preview of variants
 - Search functionality
+- Soft convention warnings if props differ from recommendations
 
 ---
 
@@ -328,9 +434,14 @@ When text edit is active and changes exist, show badge on tool button:
 
 1. **Remove keyboard shortcuts for modes** - Clean up DevToolsProvider.tsx
 2. **Minimized Panel State** - Foundation for Component ID click behavior
-3. **Help Mode Refactor** - Replace tooltip with static bar
-4. **Component ID Click Handler** - Navigate to Components tab
-5. **Text Edit Badge** - Show pending change count
+3. **Theme Infrastructure** - Add themeSlice, theme discovery, config parsing
+4. **Top Bar + Theme Switcher** - Theme indicator with dropdown
+5. **Settings Panel** - Theme management, create button
+6. **DevTools Theme Styling** - Panel uses active theme's colors
+7. **Help Mode Refactor** - Replace tooltip with static bar
+8. **Component ID Click Handler** - Navigate to Components tab, show data-theme
+9. **Text Edit Badge** - Show pending change count
+10. **Theme Creation Wizard** - 6-step wizard (can be phased separately)
 
 ---
 
@@ -340,11 +451,16 @@ When text edit is active and changes exist, show badge on tool button:
 |------|---------|
 | `DevToolsProvider.tsx` | Remove mode shortcuts, keep only Cmd+Shift+K and ESC |
 | `store/slices/panelSlice.ts` | Add `isMinimized`, `expandPanel()` |
-| `DevToolsPanel.tsx` | Conditional render for minimized state |
+| `store/slices/themeSlice.ts` | **NEW:** Theme management state |
+| `DevToolsPanel.tsx` | Conditional render for minimized state, theme styling |
 | `components/HelpMode.tsx` | Replace tooltip with static bar |
-| `components/LeftRail.tsx` | Add badge support for text edit |
-| `components/ComponentIdMode.tsx` | Add click → navigate, remove keyboard listener |
+| `components/LeftRail.tsx` | Add badge support, Settings button at bottom |
+| `components/TopBar.tsx` | **NEW:** Theme indicator with switcher dropdown |
+| `components/SettingsPanel.tsx` | **NEW:** Theme management, DevTools settings |
+| `components/ThemeCreationWizard.tsx` | **NEW:** 6-step theme wizard |
+| `components/ComponentIdMode.tsx` | Add click → navigate, show `data-theme` in overlay |
 | `lib/helpRegistry.ts` | Simplify to title + description |
+| `lib/themeUtils.ts` | **NEW:** Theme discovery, switching utilities |
 
 ---
 

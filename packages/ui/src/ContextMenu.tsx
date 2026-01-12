@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, createContext, useContext } from 'react';
+import { createPortal } from 'react-dom';
 import { Icon } from './Icon';
 
 // ============================================================================
@@ -52,6 +53,20 @@ interface ContextMenuSeparatorProps {
   className?: string;
 }
 
+interface ContextMenuTriggerProps {
+  /** Content that triggers context menu on right-click */
+  children: React.ReactNode;
+  /** Additional classes */
+  className?: string;
+}
+
+interface ContextMenuLabelProps {
+  /** Label content */
+  children: React.ReactNode;
+  /** Additional classes */
+  className?: string;
+}
+
 // ============================================================================
 // Context
 // ============================================================================
@@ -76,7 +91,6 @@ function useContextMenu() {
 export function ContextMenu({ children, className = '' }: ContextMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const open = (pos: Position) => {
     setPosition(pos);
@@ -93,10 +107,53 @@ export function ContextMenu({ children, className = '' }: ContextMenuProps) {
     open({ x: e.clientX, y: e.clientY });
   };
 
+  return (
+    <ContextMenuContext.Provider value={{ isOpen, position, open, close }}>
+      <div onContextMenu={handleContextMenu} className={className}>
+        {children}
+      </div>
+    </ContextMenuContext.Provider>
+  );
+}
+
+/**
+ * Context menu dropdown content
+ */
+export function ContextMenuContent({ children, className = '' }: ContextMenuContentProps) {
+  const { isOpen, position, close } = useContextMenu();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+  const [coords, setCoords] = useState({ top: 0, left: 0 });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Calculate position and keep within viewport
+  useEffect(() => {
+    if (!isOpen || !contentRef.current) return;
+
+    const content = contentRef.current.getBoundingClientRect();
+    let top = position.y;
+    let left = position.x;
+
+    // Keep within viewport
+    if (top + content.height > window.innerHeight - 8) {
+      top = window.innerHeight - content.height - 8;
+    }
+    if (left + content.width > window.innerWidth - 8) {
+      left = window.innerWidth - content.width - 8;
+    }
+    top = Math.max(8, top);
+    left = Math.max(8, left);
+
+    setCoords({ top, left });
+  }, [isOpen, position]);
+
   // Close on click outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (contentRef.current && !contentRef.current.contains(e.target as Node)) {
         close();
       }
     };
@@ -114,31 +171,14 @@ export function ContextMenu({ children, className = '' }: ContextMenuProps) {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [isOpen]);
+  }, [isOpen, close]);
 
-  return (
-    <ContextMenuContext.Provider value={{ isOpen, position, open, close }}>
-      <div
-        ref={containerRef}
-        onContextMenu={handleContextMenu}
-        className={className}
-      >
-        {children}
-      </div>
-    </ContextMenuContext.Provider>
-  );
-}
+  if (!mounted || !isOpen) return null;
 
-/**
- * Context menu dropdown content
- */
-export function ContextMenuContent({ children, className = '' }: ContextMenuContentProps) {
-  const { isOpen, position, close } = useContextMenu();
-
-  if (!isOpen) return null;
-
-  return (
+  return createPortal(
     <div
+      ref={contentRef}
+      role="menu"
       className={`
         fixed z-[1000]
         min-w-[160px]
@@ -147,16 +187,18 @@ export function ContextMenuContent({ children, className = '' }: ContextMenuCont
         rounded-sm
         shadow-[2px_2px_0_0_var(--color-black)]
         py-1
+        overflow-hidden
+        max-h-[300px] flex flex-col
+        animate-fadeIn
         ${className}
       `}
-      style={{
-        left: position.x,
-        top: position.y,
-      }}
-      onClick={close}
+      style={{ top: coords.top, left: coords.left }}
     >
-      {children}
-    </div>
+      <div className="overflow-y-auto flex-1">
+        {children}
+      </div>
+    </div>,
+    document.body
   );
 }
 
@@ -174,8 +216,8 @@ export function ContextMenuItem({
   const { close } = useContextMenu();
 
   const handleClick = () => {
-    if (!disabled && onClick) {
-      onClick();
+    if (!disabled) {
+      onClick?.();
       close();
     }
   };
@@ -183,11 +225,12 @@ export function ContextMenuItem({
   return (
     <button
       type="button"
+      role="menuitem"
       onClick={handleClick}
       disabled={disabled}
       className={`
-        w-full flex items-center gap-2
-        px-3 py-1.5
+        w-full px-3 py-2
+        flex items-center gap-2
         font-mondwest text-base text-left
         ${destructive ? 'text-content-error' : 'text-content-primary'}
         ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-surface-tertiary cursor-pointer'}
@@ -195,11 +238,9 @@ export function ContextMenuItem({
       `}
     >
       {iconName && (
-        <span className="w-4 h-4 flex items-center justify-center">
-          <Icon name={iconName} size={16} />
-        </span>
+        <Icon name={iconName} size={16} className="flex-shrink-0 text-content-primary/60" />
       )}
-      <span>{children}</span>
+      <span className="flex-1">{children}</span>
     </button>
   );
 }
@@ -209,11 +250,39 @@ export function ContextMenuItem({
  */
 export function ContextMenuSeparator({ className = '' }: ContextMenuSeparatorProps) {
   return (
-    <div 
+    <div
+      role="separator"
       className={`my-1 border-t border-edge-primary/20 ${className}`}
     />
   );
 }
 
-export default ContextMenu;
+/**
+ * Context menu label
+ */
+export function ContextMenuLabel({ children, className = '' }: ContextMenuLabelProps) {
+  return (
+    <div
+      className={`
+        px-3 py-1.5
+        font-joystix text-xs uppercase tracking-wider
+        text-content-primary/50
+        bg-surface-secondary/10
+        ${className}
+      `}
+    >
+      {children}
+    </div>
+  );
+}
 
+/**
+ * Context menu trigger - wraps content that triggers context menu
+ * Note: This is a pass-through component for API consistency with other menu components.
+ * The actual right-click handling is done by the parent ContextMenu component.
+ */
+export function ContextMenuTrigger({ children, className = '' }: ContextMenuTriggerProps) {
+  return <div className={className}>{children}</div>;
+}
+
+export default ContextMenu;

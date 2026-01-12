@@ -235,9 +235,17 @@ body {
   --color-surface-secondary: var(--color-black);
   --color-surface-tertiary: var(--color-sun-yellow);
   --color-surface-elevated: var(--color-white);
+  --color-surface-sunken: transparent;
   --color-surface-success: var(--color-green);
   --color-surface-warning: var(--color-sun-yellow);
   --color-surface-error: var(--color-sun-red);
+  
+  /* Dot pattern background for sunken surfaces */
+  --pattern-surface-sunken: 
+    radial-gradient(circle, var(--color-black) 0.5px, transparent 0.5px),
+    radial-gradient(circle, var(--color-black) 0.5px, transparent 0.5px);
+  --pattern-surface-sunken-size: 2px 4px, 2px 4px;
+  --pattern-surface-sunken-position: 0 0, 1px 2px;
 
   /* ─────────────────────────────────────────────
      CONTENT TOKENS (text/icons)
@@ -477,7 +485,11 @@ body {
 
 /* For elements that need a dark-themed scrollbar */
 .custom-scrollbar-dark::-webkit-scrollbar-track {
-  background: var(--color-black);
+  background-color: var(--color-surface-sunken);
+  background-image: var(--pattern-surface-sunken);
+  background-size: var(--pattern-surface-sunken-size);
+  background-position: var(--pattern-surface-sunken-position);
+  background-repeat: repeat;
 }
 
 .custom-scrollbar-dark::-webkit-scrollbar-thumb {
@@ -547,7 +559,7 @@ body {
   }
 
   code {
-    @apply text-sm font-normal leading-normal text-content-inverted bg-surface-secondary px-1 py-0.5 rounded-sm;
+    @apply text-xs font-normal leading-normal text-content-primary bg-warm-cloud px-1 py-0.5 rounded-sm mt-2;
     font-family: "PixelCode";
   }
 
@@ -668,7 +680,7 @@ body {
   }
 
   code {
-    @apply text-sm font-normal leading-normal text-content-inverted bg-surface-secondary px-1 py-0.5 rounded-sm;
+    @apply text-xs font-normal leading-normal text-content-primary bg-warm-cloud px-1 py-0.5 rounded-sm mt-2;
     font-family: "PixelCode";
   }
 

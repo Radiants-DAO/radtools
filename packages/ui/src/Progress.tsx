@@ -62,12 +62,18 @@ export function Progress({
       <div
         className={`
           w-full
-          bg-surface-primary
           border border-edge-primary
           rounded-sm
           overflow-hidden
           ${sizeStyles[size]}
         `}
+        style={{
+          backgroundColor: 'var(--color-surface-sunken)',
+          backgroundImage: 'var(--pattern-surface-sunken)',
+          backgroundSize: 'var(--pattern-surface-sunken-size)',
+          backgroundPosition: 'var(--pattern-surface-sunken-position)',
+          backgroundRepeat: 'repeat',
+        }}
         role="progressbar"
         aria-valuenow={value}
         aria-valuemin={0}

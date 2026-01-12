@@ -1,8 +1,9 @@
 # DevTools Tabs - Implementation Plan
 
 **Created:** 2026-01-10
+**Updated:** 2026-01-11
 **Status:** Planning
-**Related:** devtools-modes-v1.md
+**Related:** devtools-modes-v1.md, theme-architecture-plan-v3.md
 
 ---
 
@@ -10,35 +11,123 @@
 
 This document defines the tab structure for DevTools. The focus is on designer-friendly workflows with AI integration.
 
+**Theme Context:** All tabs display data from the **active theme**. Switching themes refreshes all tab content. See `theme-architecture-plan-v3.md` for full theme architecture.
+
 ### Tab Structure
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│ RADTOOLS                                                    │
-├──┬──┬──┬──┬──┬──┬──────────────────────────────────────────┤
-│📊│🔤│🧩│📁│🤖│⚙️│                                           │
-│ V│ T│ C│ A│AI│ M│                                           │
-└──┴──┴──┴──┴──┴──┴──────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Theme: [☀️|RadOS]  [Breakpoint ▾]  [Position ▾]  [◐/◑]                      │
+├──┬──┬──┬──┬──┬──┬───────────────────────────────────────────────────────────┤
+│📊│🔤│🧩│📁│🤖│⚙️│                                                            │
+│ V│ T│ C│ A│AI│ M│                                                            │
+└──┴──┴──┴──┴──┴──┴───────────────────────────────────────────────────────────┘
 
-V = Variables    (existing)
-T = Typography   (existing)
-C = Components   (existing)
-A = Assets       (3 sub-tabs: Icons, Logos, Images)
-AI = AI          (NEW - prompts, Midjourney styles)
-M = Mock States  (existing)
+V = Variables    (active theme's tokens)
+T = Typography   (active theme's fonts/typography)
+C = Components   (active theme's components - with subfolders as subtabs)
+A = Assets       (active theme's icons, logos, images)
+AI = AI          (RadFlow Prompts + Theme Prompts + Styles)
+M = Mock States  (active theme's mock state presets)
 ```
+
+### Theme Behavior
+
+| Event | Tab Response |
+|-------|--------------|
+| Theme switch | All tabs refresh with new theme's data |
+| Theme edit | Only active theme's files are modified |
+| Non-active theme | Read-only (write-lock enforced) |
+
+---
+
+## Variables Tab
+
+### Theme Context
+
+Variables tab shows the **active theme's** color tokens, semantic mappings, shadows, and border radius.
+
+### Token Editor (Full-Page Mode)
+
+A full-page popup for comprehensive token editing with live preview.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ TOKEN EDITOR                                                         [✕]   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  ┌─────────────────────────────────────┐  ┌───────────────────────────────┐│
+│  │ BRAND COLORS                        │  │ PREVIEW                       ││
+│  │                                     │  │                               ││
+│  │ Name         Hex       Mappings     │  │ ┌─────────┐ ┌─────────┐      ││
+│  │ ─────────────────────────────────── │  │ │ Button  │ │ Card    │      ││
+│  │ sun-yellow   #FCE184   surface-     │  │ │         │ │         │      ││
+│  │              [edit]    tertiary     │  │ └─────────┘ └─────────┘      ││
+│  │                        [edit]       │  │                               ││
+│  │                                     │  │ [Toggle: Light / Dark]       ││
+│  │ [+ Add Color]                       │  └───────────────────────────────┘│
+│  └─────────────────────────────────────┘                                   │
+│                                                                             │
+│  [📋 Copy Save Prompt] ← AI will update CSS files and commit               │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Features:**
+- Editable fields: Color name, hex value, semantic token mappings
+- Live preview: Right panel shows components updating in real-time
+- Mode toggle: Switch between light/dark to verify both work
+- Prompt-based save: Generates comprehensive prompt for AI to update CSS files
+
+---
+
+## Components Tab
+
+### Theme Context
+
+Components tab shows the **active theme's** component library. Components are organized in subfolders that become subtabs.
+
+### Subfolder → Subtab Mapping
+
+```
+Components Tab
+├── [Core]         → /components/core/       (Button, Card, Input...)
+├── [Solarium]     → /components/solarium/   (SolariumCard, SunDial...)
+├── [Auctions]     → /components/auctions/   (AuctionBid, BidCard...)
+└── [Rad Radio]    → /components/rad-radio/  (Player, TrackList...)
+```
+
+Each theme defines its own component folder structure. Subtabs are auto-discovered from subfolders.
+
+### Component Display
+
+Each component shows:
+- Component name and source path
+- `data-theme` attribute (identifies owning theme)
+- Props table (type, required, default)
+- Visual preview of variants
+- Soft convention warnings if props differ from recommendations
 
 ---
 
 ## Assets Tab
 
+### Theme Context
+
+Assets tab shows the **active theme's** icons, logos, and images. Each theme has its own asset library.
+
+### Asset Updates (Post-Creation)
+
+New assets can be added after initial theme creation:
+1. Drop files in `packages/theme-{name}/assets/`
+2. Open Assets tab - new files shown with "New" badge
+3. Click "Register Assets" or use prompt to commit
+
 ### Sub-tabs
 
 | Sub-tab | Purpose |
 |---------|---------|
-| **Icons** | Browse 143+ icons, copy as JSX |
-| **Logos** | Brand logos with variants, copy/download |
-| **Images** | Media library with upload |
+| **Icons** | Browse theme's icon library, copy as JSX |
+| **Logos** | Theme's brand logos with variants, copy/download |
+| **Images** | Theme's media library with upload |
 
 ---
 
@@ -164,18 +253,25 @@ M = Mock States  (existing)
 
 AI-powered workflows for designers. Includes prompt templates and Midjourney style references.
 
+### Theme Context
+
+- **RadFlow Prompts:** Core prompts maintained by RadFlow team (shared across all themes)
+- **Theme Prompts:** Custom prompts specific to the active theme
+- **Styles:** Midjourney SREF codes (theme-specific)
+
 ### Sub-tabs
 
-| Sub-tab | Purpose |
-|---------|---------|
-| **Prompts** | RadTools prompt templates for common tasks |
-| **Styles** | Midjourney SREF codes with preview images |
+| Sub-tab | Purpose | Source |
+|---------|---------|--------|
+| **RadFlow Prompts** | Core prompt templates for common tasks | `@radflow/devtools/prompts/` |
+| **Theme Prompts** | Theme-specific prompt templates | `packages/theme-{name}/prompts/` |
+| **Styles** | Midjourney SREF codes with preview images | Theme-specific |
 
 ---
 
-### Prompts Sub-tab
+### RadFlow Prompts Sub-tab
 
-**Purpose:** Pre-built prompts for AI-assisted design/dev workflows
+**Purpose:** Core prompts maintained by RadFlow team, available to all themes.
 
 **Categories:**
 
@@ -183,52 +279,74 @@ AI-powered workflows for designers. Includes prompt templates and Midjourney sty
 |----------|-----------------|
 | **Components** | "Create a card with image, title, and CTA" |
 | **Layout** | "Add a hero section with headline and signup form" |
-| **Styling** | "Make this more retro/pixel-art styled" |
-| **Refactoring** | "Convert this to use semantic tokens" |
+| **Styling** | "Convert this to use semantic tokens" |
+| **Refactoring** | "Migrate component to new prop pattern" |
 | **Accessibility** | "Add proper ARIA labels to this form" |
+
+**Layout:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│ [RadFlow Prompts] [Theme Prompts] [Styles]                  │
+├─────────────────────────────────────────────────────────────┤
+│ 🔍 Search prompts...                                        │
+├─────────────────────────────────────────────────────────────┤
+│ RADFLOW PROMPTS                                             │
+│ Core prompts maintained by RadFlow team                     │
+│                                                             │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │ Create Component                                   [📋] │ │
+│ │ Generate a new component following RadFlow patterns     │ │
+│ └─────────────────────────────────────────────────────────┘ │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │ Migrate to Semantic Tokens                         [📋] │ │
+│ │ Update component to use semantic tokens                 │ │
+│ └─────────────────────────────────────────────────────────┘ │
+│ ...                                                         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Theme Prompts Sub-tab
+
+**Purpose:** Custom prompts specific to the active theme.
+
+**Layout:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│ [RadFlow Prompts] [Theme Prompts] [Styles]                  │
+├─────────────────────────────────────────────────────────────┤
+│ THEME PROMPTS (RadOS)                                       │
+│ Custom prompts for this theme                               │
+│                                                             │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │ RadOS Pixel Art Style                              [📋] │ │
+│ │ Apply retro pixel aesthetic to component                │ │
+│ └─────────────────────────────────────────────────────────┘ │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │ Add Solarium Animation                             [📋] │ │
+│ │ Animate component with sun-themed motion                │ │
+│ └─────────────────────────────────────────────────────────┘ │
+│                                                             │
+│ [+ Add Custom Prompt]                                       │
+└─────────────────────────────────────────────────────────────┘
+```
 
 **Features:**
 
 | Feature | Description |
 |---------|-------------|
 | Copy button | Copy prompt to clipboard |
-| Use button | Opens in AI chat (future) |
 | Categories | Organized by task type |
-| Custom prompts | Add your own templates |
+| Custom prompts | Add theme-specific templates |
 | Search | Filter prompts |
-
-**Layout:**
-```
-┌─────────────────────────────────────────────────────────────┐
-│ 🔍 Search prompts...                                        │
-├─────────────────────────────────────────────────────────────┤
-│ COMPONENTS                                                  │
-│ ┌─────────────────────────────────────────────────────────┐ │
-│ │ "Create a card component with image, title, and CTA    │ │
-│ │  button that links to a detail page"                   │ │
-│ │                                              [Copy] 📋  │ │
-│ └─────────────────────────────────────────────────────────┘ │
-│ ┌─────────────────────────────────────────────────────────┐ │
-│ │ "Add a navigation bar with logo, links, and a CTA      │ │
-│ │  button using the Button component"                    │ │
-│ │                                              [Copy] 📋  │ │
-│ └─────────────────────────────────────────────────────────┘ │
-├─────────────────────────────────────────────────────────────┤
-│ STYLING                                                     │
-│ ┌─────────────────────────────────────────────────────────┐ │
-│ │ "Update this component to use semantic tokens instead  │ │
-│ │  of hardcoded colors"                                  │ │
-│ │                                              [Copy] 📋  │ │
-│ └─────────────────────────────────────────────────────────┘ │
-├─────────────────────────────────────────────────────────────┤
-│ + Add Custom Prompt                                         │
-└─────────────────────────────────────────────────────────────┘
-```
 
 **Prompt Data Structure:**
 ```typescript
 interface PromptTemplate {
   id: string;
+  source: 'radflow' | 'theme';        // NEW: identifies prompt source
+  themeId?: string;                    // NEW: for theme-specific prompts
   category: 'components' | 'layout' | 'styling' | 'refactoring' | 'accessibility' | 'custom';
   title: string;
   prompt: string;

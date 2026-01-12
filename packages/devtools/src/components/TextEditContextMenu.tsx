@@ -110,7 +110,7 @@ export function TextEditContextMenu({ element, position, onClose }: TextEditCont
       newTag,
       reactComponent,
       isRadToolsChange: false,
-      radToolsType: null as const,
+      radToolsType: null,
     };
 
     addChange(change);

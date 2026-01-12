@@ -43,7 +43,6 @@ export function Skeleton({
     : undefined;
 
   const baseClasses = clsx(
-    'bg-surface-secondary/10',
     'animate-pulse',
     variant === 'circular' && 'rounded-full',
     variant === 'text' && 'rounded-sm',
@@ -57,6 +56,14 @@ export function Skeleton({
       style={{
         width: widthStyle,
         height: heightStyle,
+        backgroundColor: 'transparent',
+        backgroundImage: `
+          radial-gradient(circle, var(--color-black) 0.5px, transparent 0.5px),
+          radial-gradient(circle, var(--color-black) 0.5px, transparent 0.5px)
+        `,
+        backgroundSize: '2px 4px, 2px 4px',
+        backgroundPosition: '0 0, 1px 2px',
+        backgroundRepeat: 'repeat',
       }}
       aria-label="Loading"
       role="status"

@@ -31,7 +31,7 @@ export type { DividerOrientation, DividerVariant, DividerProps } from './Divider
 // ============================================================================
 
 export { Select } from './Select';
-export type { SelectOption, SelectProps } from './Select';
+export type { SelectOption, SelectOptionGroup, SelectProps } from './Select';
 
 export { Checkbox, Radio, RadioGroup } from './Checkbox';
 export type { CheckboxProps, RadioProps, RadioGroupProps } from './Checkbox';
@@ -99,13 +99,13 @@ export type { DialogProps, DialogTriggerProps, DialogContentProps } from './Dial
 
 export { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetBody, SheetFooter, SheetClose } from './Sheet';
 
-export { Popover, PopoverTrigger, PopoverContent } from './Popover';
+export { Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverTitle, PopoverBody, PopoverFooter, PopoverClose } from './Popover';
 
 export { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from './DropdownMenu';
 
-export { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from './ContextMenu';
+export { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuLabel } from './ContextMenu';
 
-export { HelpPanel } from './HelpPanel';
+export { HelpPanel, HelpSection, HelpItem, HelpShortcut } from './HelpPanel';
 
 // ============================================================================
 // Icons
