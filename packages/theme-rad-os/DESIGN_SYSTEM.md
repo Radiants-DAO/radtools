@@ -237,32 +237,69 @@ In dark mode, hard shadows become **yellow glows**:
 
 ## Borders & Radius
 
+### Hierarchical Radius System
+
+RadOS uses a **cascading radius system** where child elements have progressively smaller radii than their parents. This creates visual harmony and prevents nested elements from having awkward corner relationships.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Nesting Level        │  Radius   │  Example                   │
+├─────────────────────────────────────────────────────────────────┤
+│  Level 0 (Window)     │  16px     │  Modal, Dialog, Window     │
+│  Level 1 (Child)      │  8px      │  Card inside modal         │
+│  Level 2 (Grandchild) │  4px      │  Button inside card        │
+│  Level 3 (Leaf)       │  2px      │  Badge inside button       │
+└─────────────────────────────────────────────────────────────────┘
+
+Rule: Each nesting level = parent radius ÷ 2
+```
+
 ### Border Radius Scale
 
-| Name | Value | Usage |
-|------|-------|-------|
-| `rounded-none` | 0px | Never use (too harsh) |
-| `rounded-xs` | 2px | Rarely used |
-| `rounded-sm` | 4px | **Default for most components** |
-| `rounded-md` | 8px | Larger containers |
-| `rounded-lg` | 16px | Hero sections, modals |
-| `rounded-full` | 9999px | Pills, badges, avatars |
+| Name | Value | Nesting Level | Usage |
+|------|-------|---------------|-------|
+| `rounded-none` | 0px | — | Never use (too harsh) |
+| `rounded-xs` | 2px | Level 3 (leaf) | Badges, tags, nested small elements |
+| `rounded-sm` | 4px | Level 2 | Buttons, inputs, chips |
+| `rounded-md` | 8px | Level 1 | Cards, sections, panels |
+| `rounded-lg` | 16px | Level 0 | Windows, modals, dialogs, page containers |
+| `rounded-full` | 9999px | — | Pills, avatars, circular buttons |
+
+### Visual Hierarchy Example
+
+```
+╭──────────────────────────────────────────────────╮  ← Window (16px)
+│                                                  │
+│  ╭────────────────────────────────────────────╮  │  ← Card (8px)
+│  │                                            │  │
+│  │  ╭────────────────╮  ╭────────────────╮   │  │  ← Buttons (4px)
+│  │  │    Cancel      │  │     Save       │   │  │
+│  │  ╰────────────────╯  ╰────────────────╯   │  │
+│  │                                            │  │
+│  ╰────────────────────────────────────────────╯  │
+│                                                  │
+╰──────────────────────────────────────────────────╯
+```
 
 ### Border Rules
 
 - Default border: `1px solid` using `edge-primary`
 - Border color is always black (light) or cream (dark)
 - Focus borders use `edge-focus` (Sky Blue)
+- **Match radius to nesting level**, not component type
 
-### Visual Guide
+### Don't
 
 ```
-Too sharp (don't):      RadOS default (do):     Too round (don't):
-┌────────────────┐      ╭────────────────╮      ╭────────────────╮
-│                │      │                │      │                │
-│                │      │                │      │                │
-└────────────────┘      ╰────────────────╯      ╰────────────────╯
-0px radius              4px radius              16px+ radius
+WRONG: Same radius at all levels    RIGHT: Cascading radius
+╭────────────────────────────╮      ╭────────────────────────────╮
+│ ╭────────────────────────╮ │      │ ╭────────────────────────╮ │
+│ │ ╭────────────────────╮ │ │      │ │ ╭──────────────────╮   │ │
+│ │ │      Button        │ │ │      │ │ │     Button       │   │ │
+│ │ ╰────────────────────╯ │ │      │ │ ╰──────────────────╯   │ │
+│ ╰────────────────────────╯ │      │ ╰────────────────────────╯ │
+╰────────────────────────────╯      ╰────────────────────────────╯
+All 16px (visually awkward)         16px → 8px → 4px (harmonious)
 ```
 
 ---

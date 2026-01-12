@@ -30,8 +30,9 @@ interface WizardFormData {
   monoFont: string;
   fontPreset?: string;
 
-  // Step 4: Icons (to be implemented)
-  iconSet?: string;
+  // Step 4: Icons
+  iconSet: 'rad-os' | 'custom';
+  customIcons?: string[]; // List of selected icon names
 
   // Step 5: Preview (no data)
   // Step 6: Confirmation (no additional data)
@@ -215,8 +216,11 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
     headingFont: 'Joystix',
     bodyFont: 'Mondwest',
     monoFont: 'PixelCode',
+    iconSet: 'rad-os',
   });
   const [availableFonts, setAvailableFonts] = useState<Array<{ family: string; files: Array<{ filename: string; path: string; format: string }> }>>([]);
+  const [availableIcons, setAvailableIcons] = useState<string[]>([]);
+  const [selectedIcons, setSelectedIcons] = useState<string[]>([]);
 
   // Fetch available fonts when dialog opens
   React.useEffect(() => {
@@ -230,6 +234,20 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
         })
         .catch((err) => {
           console.error('Failed to fetch fonts:', err);
+        });
+
+      // Fetch available icons
+      fetch('/api/devtools/icons')
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.icons) {
+            setAvailableIcons(data.icons);
+            // Select all icons by default
+            setSelectedIcons(data.icons);
+          }
+        })
+        .catch((err) => {
+          console.error('Failed to fetch icons:', err);
         });
     }
   }, [open]);
@@ -261,14 +279,21 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
       headingFont: 'Joystix',
       bodyFont: 'Mondwest',
       monoFont: 'PixelCode',
+      iconSet: 'rad-os',
     });
     setCurrentStep(1);
+    setSelectedIcons([]);
     onClose();
   };
 
   const handleComplete = () => {
     if (onComplete) {
-      onComplete(formData);
+      // Include selected icons in the final data
+      const finalData = {
+        ...formData,
+        customIcons: formData.iconSet === 'custom' ? selectedIcons : undefined,
+      };
+      onComplete(finalData);
     }
     handleCancel();
   };
@@ -331,6 +356,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
           formData.monoFont
         );
       case 4:
+        return !!formData.iconSet && (formData.iconSet === 'rad-os' || (formData.iconSet === 'custom' && selectedIcons.length > 0));
       case 5:
       case 6:
         return true; // Other steps always valid for now
@@ -976,15 +1002,177 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
 
           {/* Step 4: Icons */}
           {currentStep === 4 && (
-            <div className="space-y-4">
-              <p className="font-mondwest text-sm text-content-primary/60">
-                Icon configuration will be implemented in the next iteration.
-              </p>
-              <div className="p-8 border-2 border-dashed border-edge-primary/20 rounded text-center">
-                <p className="font-joystix text-sm uppercase text-content-primary/40">
-                  Coming Soon
-                </p>
+            <div className="space-y-6">
+              {/* Icon Set Selection */}
+              <div>
+                <h4 className="font-joystix text-sm uppercase text-content-primary mb-3">
+                  Choose Icon Set
+                </h4>
+                <div className="grid grid-cols-2 gap-3">
+                  {/* Use RadOS Icons */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        iconSet: 'rad-os',
+                        customIcons: undefined,
+                      }))
+                    }
+                    className={`p-4 border rounded text-left transition-all hover:shadow-md ${
+                      formData.iconSet === 'rad-os'
+                        ? 'border-accent-primary bg-accent-primary/5'
+                        : 'border-edge-primary bg-surface-primary hover:border-accent-primary/50'
+                    }`}
+                  >
+                    <p className="font-mondwest font-semibold text-sm text-content-primary mb-1">
+                      RadOS Icons (Default)
+                    </p>
+                    <p className="font-mondwest text-xs text-content-primary/60 mb-3">
+                      Use the complete RadOS icon library ({availableIcons.length} icons)
+                    </p>
+                    {/* Show sample icons */}
+                    <div className="flex gap-2 flex-wrap">
+                      {availableIcons.slice(0, 8).map((icon) => (
+                        <div
+                          key={icon}
+                          className="w-6 h-6 p-1 bg-surface-secondary/20 rounded flex items-center justify-center"
+                          title={icon}
+                        >
+                          <img
+                            src={`/assets/icons/${icon}.svg`}
+                            alt={icon}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </button>
+
+                  {/* Custom Icon Selection */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        iconSet: 'custom',
+                        customIcons: selectedIcons,
+                      }))
+                    }
+                    className={`p-4 border rounded text-left transition-all hover:shadow-md ${
+                      formData.iconSet === 'custom'
+                        ? 'border-accent-primary bg-accent-primary/5'
+                        : 'border-edge-primary bg-surface-primary hover:border-accent-primary/50'
+                    }`}
+                  >
+                    <p className="font-mondwest font-semibold text-sm text-content-primary mb-1">
+                      Custom Selection
+                    </p>
+                    <p className="font-mondwest text-xs text-content-primary/60 mb-3">
+                      Choose specific icons for your theme
+                    </p>
+                    <p className="font-mondwest text-xs text-accent-primary">
+                      {selectedIcons.length} icons selected
+                    </p>
+                  </button>
+                </div>
               </div>
+
+              {/* Custom Icon Selection Grid */}
+              {formData.iconSet === 'custom' && (
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-joystix text-sm uppercase text-content-primary">
+                      Select Icons ({selectedIcons.length}/{availableIcons.length})
+                    </h4>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedIcons(availableIcons)}
+                        className="px-3 py-1 text-xs font-mondwest text-accent-primary hover:underline"
+                      >
+                        Select All
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedIcons([])}
+                        className="px-3 py-1 text-xs font-mondwest text-content-primary/60 hover:underline"
+                      >
+                        Clear All
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="max-h-[400px] overflow-y-auto p-4 border border-edge-primary/20 rounded bg-surface-secondary/5">
+                    <div className="grid grid-cols-6 gap-3">
+                      {availableIcons.map((icon) => {
+                        const isSelected = selectedIcons.includes(icon);
+                        return (
+                          <button
+                            key={icon}
+                            type="button"
+                            onClick={() => {
+                              if (isSelected) {
+                                setSelectedIcons(selectedIcons.filter((i) => i !== icon));
+                              } else {
+                                setSelectedIcons([...selectedIcons, icon]);
+                              }
+                            }}
+                            className={`p-3 border rounded transition-all hover:shadow-sm group ${
+                              isSelected
+                                ? 'border-accent-primary bg-accent-primary/10'
+                                : 'border-edge-primary/20 bg-surface-primary hover:border-accent-primary/50'
+                            }`}
+                            title={icon}
+                          >
+                            <div className="w-8 h-8 mx-auto mb-1 flex items-center justify-center">
+                              <img
+                                src={`/assets/icons/${icon}.svg`}
+                                alt={icon}
+                                className="w-full h-full object-contain"
+                              />
+                            </div>
+                            <p className="font-mondwest text-[10px] text-content-primary/60 text-center truncate group-hover:text-content-primary">
+                              {icon}
+                            </p>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Preview Selected Icons */}
+              {formData.iconSet === 'rad-os' && (
+                <div>
+                  <h4 className="font-joystix text-sm uppercase text-content-primary mb-3">
+                    Icon Library Preview
+                  </h4>
+                  <div className="p-4 border border-edge-primary/20 rounded bg-surface-secondary/5">
+                    <div className="grid grid-cols-8 gap-2">
+                      {availableIcons.slice(0, 24).map((icon) => (
+                        <div
+                          key={icon}
+                          className="p-2 rounded hover:bg-surface-primary transition-colors group"
+                          title={icon}
+                        >
+                          <div className="w-6 h-6 mx-auto">
+                            <img
+                              src={`/assets/icons/${icon}.svg`}
+                              alt={icon}
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="font-mondwest text-xs text-content-primary/50 text-center mt-3">
+                      Showing 24 of {availableIcons.length} icons
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

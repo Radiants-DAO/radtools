@@ -137,9 +137,11 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
   - Select fonts for headings, body, and monospace
   - Font selection from available fonts in /public/fonts/ and system fonts
   - Live preview panel showing headings, body text, and code blocks
-- [ ] **Step 4: Icons**
-  - Upload icon set or use default
-  - Preview icons in grid
+- [x] **Step 4: Icons**
+  - Choose between RadOS icon library (complete set) or custom selection
+  - Icon preview grid showing sample icons
+  - Custom selection mode with select/deselect individual icons
+  - Shows icon count and preview of selected icons
 - [ ] **Step 5: Preview**
   - Live preview of theme applied to sample UI
   - Show Variables, Typography, Components tabs
