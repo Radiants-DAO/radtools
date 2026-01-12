@@ -155,9 +155,8 @@ export interface ComponentInfo {
 
 // Help Types
 export interface HelpItem {
+  id: string;
   title: string;
   description: string;
-  shortcut?: string;
-  tips?: string[];
 }
 

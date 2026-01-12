@@ -9,6 +9,7 @@ import { TopBar } from './components/TopBar';
 import { LeftRail } from './components/LeftRail';
 import { ResizeHandle } from './components/ResizeHandle';
 import { SettingsPanel } from './components/SettingsPanel';
+import { HelpMode } from './components/HelpMode';
 
 // Import actual tab components
 import { VariablesTab } from './tabs/VariablesTab';
@@ -154,6 +155,9 @@ export function DevToolsPanel() {
           showFullscreenButton={true}
           onSettingsClick={openSettings}
         />
+
+        {/* Help Mode Info Bar */}
+        <HelpMode />
 
         {/* Tab Content */}
         <div className="flex-1 overflow-y-auto">
