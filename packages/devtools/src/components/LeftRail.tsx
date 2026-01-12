@@ -32,66 +32,69 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onS
   const pendingChangeCount = pendingChanges.length;
 
   return (
-    <div className="flex flex-col items-center border-r border-edge-primary/10 py-2 px-1">
-      {/* Tools Section */}
-      <div className="flex flex-col gap-1 mb-2">
-        {TOOLS.map((tool) => (
-          <Tooltip
-            key={tool.id}
-            content={`${tool.label} (${tool.shortcut})`}
-            position="right"
-            size="sm"
-            delay={300}
-          >
-            <div className="relative">
+    <div className="flex flex-col items-center border-r border-edge-primary/10 py-2 px-1 h-full">
+      {/* Top Section */}
+      <div className="flex flex-col">
+        {/* Tools Section */}
+        <div className="flex flex-col gap-1 mb-2">
+          {TOOLS.map((tool) => (
+            <Tooltip
+              key={tool.id}
+              content={`${tool.label} (${tool.shortcut})`}
+              position="right"
+              size="sm"
+              delay={300}
+            >
+              <div className="relative">
+                <Button
+                  variant={activeTool === tool.id ? 'secondary' : 'ghost'}
+                  size="md"
+                  iconOnly
+                  iconName={tool.icon}
+                  onClick={() => onToolToggle(tool.id)}
+                  data-help-id={`tool-${tool.id}`}
+                />
+                {/* Badge for Text Edit mode showing pending change count */}
+                {tool.id === 'textEdit' && pendingChangeCount > 0 && (
+                  <div className="absolute -top-1 -right-1 flex items-center justify-center min-w-[16px] h-4 px-1 bg-surface-tertiary text-content-primary text-[9px] font-joystix rounded-full border border-edge-primary">
+                    {pendingChangeCount}
+                  </div>
+                )}
+              </div>
+            </Tooltip>
+          ))}
+        </div>
+
+        {/* Divider */}
+        <div className="w-6 h-px bg-surface-secondary/20 mb-2" />
+
+        {/* Tabs Section */}
+        <div className="flex flex-col gap-1">
+          {TABS.map((tab) => (
+            <Tooltip
+              key={tab.id}
+              content={`${tab.label} (${tab.shortcut})`}
+              position="right"
+              size="sm"
+              delay={300}
+            >
               <Button
-                variant={activeTool === tool.id ? 'secondary' : 'ghost'}
+                variant={activeTab === tab.id ? 'secondary' : 'ghost'}
                 size="md"
                 iconOnly
-                iconName={tool.icon}
-                onClick={() => onToolToggle(tool.id)}
-                data-help-id={`tool-${tool.id}`}
+                iconName={tab.icon}
+                onClick={() => onTabChange(tab.id)}
+                data-help-id={`tab-${tab.id}`}
               />
-              {/* Badge for Text Edit mode showing pending change count */}
-              {tool.id === 'textEdit' && pendingChangeCount > 0 && (
-                <div className="absolute -top-1 -right-1 flex items-center justify-center min-w-[16px] h-4 px-1 bg-surface-tertiary text-content-primary text-[9px] font-joystix rounded-full border border-edge-primary">
-                  {pendingChangeCount}
-                </div>
-              )}
-            </div>
-          </Tooltip>
-        ))}
+            </Tooltip>
+          ))}
+        </div>
       </div>
 
-      {/* Divider */}
-      <div className="w-6 h-px bg-surface-secondary/20 mb-2" />
+      {/* Spacer */}
+      <div className="flex-1" />
 
-      {/* Tabs Section */}
-      <div className="flex flex-col gap-1">
-        {TABS.map((tab) => (
-          <Tooltip
-            key={tab.id}
-            content={`${tab.label} (${tab.shortcut})`}
-            position="right"
-            size="sm"
-            delay={300}
-          >
-            <Button
-              variant={activeTab === tab.id ? 'secondary' : 'ghost'}
-              size="md"
-              iconOnly
-              iconName={tab.icon}
-              onClick={() => onTabChange(tab.id)}
-              data-help-id={`tab-${tab.id}`}
-            />
-          </Tooltip>
-        ))}
-      </div>
-
-      {/* Divider */}
-      <div className="w-6 h-px bg-surface-secondary/20 my-2" />
-
-      {/* Settings Button */}
+      {/* Settings Button - Bottom */}
       <Tooltip
         content="Settings"
         position="right"

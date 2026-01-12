@@ -59,9 +59,6 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
 
       // Show success message
       alert(`Theme "${config.themeName}" created successfully! You can now switch to it in the theme switcher.`);
-
-      // TODO: Refresh available themes list
-      // This will be handled when we implement theme discovery
     } catch (error) {
       console.error('Error creating theme:', error);
       alert(`Failed to create theme: ${error instanceof Error ? error.message : 'Unknown error'}`);
