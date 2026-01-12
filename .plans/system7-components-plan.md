@@ -33,17 +33,28 @@ This plan defines the complete set of **Apple System 7 UI components** to be imp
 
 ### Tier 1: Core Controls (Priority)
 
-These are the foundational interactive elements used everywhere.
+These are the foundational interactive elements used everywhere. Based on System 7's `ControlManager.h`:
 
-| Component | System 7 Original | RadOS Implementation | Status |
-|-----------|-------------------|---------------------|--------|
-| **PushButton** | Rounded rect, 3D bevel | Sun Yellow fill, hard shadow | To Build |
-| **DefaultButton** | Thick outline around button | Double border + glow | To Build |
-| **Checkbox** | Square box with X mark | Square with checkmark icon | To Build |
-| **RadioButton** | Circle with dot | Circle with filled dot | To Build |
-| **Scrollbar** | Track + thumb + arrows | Cream thumb, dot pattern track | Exists (scrollbar CSS) |
-| **PopupMenu** | Button with down arrow | Dropdown trigger style | To Build |
-| **Slider** | Track with draggable thumb | Horizontal track + thumb | To Build |
+```c
+/* Control Definitions (procIDs) from ControlTypes.h */
+pushButProc     = 0,    /* Standard push button */
+checkBoxProc    = 1,    /* Standard checkbox */
+radioButProc    = 2,    /* Standard radio button */
+scrollBarProc   = 16,   /* Standard scroll bar */
+popupMenuProc   = 1008  /* Popup menu control */
+```
+
+| Component | System 7 procID | RadOS Implementation | Status |
+|-----------|-----------------|---------------------|--------|
+| **PushButton** | `pushButProc (0)` | Sun Yellow fill, hard shadow | To Build |
+| **DefaultButton** | `pushButProc` + thick outline | Double border + Sky Blue pulse | To Build |
+| **Checkbox** | `checkBoxProc (1)` | Square with checkmark icon | To Build |
+| **RadioButton** | `radioButProc (2)` | Circle with filled dot | To Build |
+| **Scrollbar** | `scrollBarProc (16)` | Cream thumb, dot pattern track | Exists (CSS) |
+| **PopupMenu** | `popupMenuProc (1008)` | Dropdown trigger style | To Build |
+| **EditText** | Text control | Sunken input with focus | Exists (basic) |
+| **StaticText** | Text control | Label component | Exists |
+| **Slider** | Custom | Horizontal track + thumb | To Build |
 
 ### Tier 2: Window System
 
@@ -74,15 +85,32 @@ Classic Mac menu bar and dropdowns.
 
 ### Tier 4: Dialog Types
 
-Modal and alert dialogs with classic styling.
+Modal and alert dialogs with classic styling. Based on `DialogManager.h`:
+
+```c
+/* Alert dialog functions */
+SInt16 Alert(SInt16 alertID, ModalFilterProcPtr filterProc);
+SInt16 StopAlert(SInt16 alertID, ModalFilterProcPtr filterProc);
+SInt16 NoteAlert(SInt16 alertID, ModalFilterProcPtr filterProc);
+SInt16 CautionAlert(SInt16 alertID, ModalFilterProcPtr filterProc);
+
+/* Keyboard navigation */
+DM_HandleReturnKey()   // Default button activation
+DM_HandleEscapeKey()   // Cancel button activation
+DM_HandleTabKey()      // Focus traversal
+DM_HandleSpaceKey()    // Button press when focused
+```
 
 | Component | System 7 Original | RadOS Implementation | Status |
 |-----------|-------------------|---------------------|--------|
-| **ModalDialog** | Centered window, no chrome | Card with shadow | Exists (basic) |
-| **AlertDialog** | Icon + message + buttons | Icon left, content right | To Build |
-| **AlertIcon** | Stop/Note/Caution icons | Custom SVG icons | To Build |
+| **ModalDialog** | Centered, no window chrome | Card with shadow, focus trap | Exists (basic) |
+| **Alert** | Generic alert | Base alert component | To Build |
+| **StopAlert** | Red hand icon (critical) | Sun Red icon, destructive style | To Build |
+| **NoteAlert** | Info icon (note) | Sky Blue icon, info style | To Build |
+| **CautionAlert** | Yellow triangle (warning) | Sun Yellow icon, warning style | To Build |
 | **FileDialog** | Open/Save with file list | Full file picker UI | To Build |
 | **ProgressDialog** | Progress bar + message | Determinate/indeterminate | To Build |
+| **FocusRing** | Thick outline on focused control | Sky Blue ring animation | To Build |
 
 ### Tier 5: Text & Input
 
@@ -631,10 +659,38 @@ The implementation is complete when:
 
 ## References
 
+### Local Source Files (Downloaded)
+
+```
+/Users/rivermassey/Downloads/System7-main/
+├── include/
+│   ├── ControlManager/
+│   │   ├── ControlManager.h      # Full control API
+│   │   ├── ControlTypes.h        # Control type constants
+│   │   └── StandardControls.h    # Standard control defs
+│   ├── DialogManager/
+│   │   └── DialogManager.h       # Dialog & alert API
+│   ├── MenuManager/
+│   │   └── MenuManager.h         # Menu system API
+│   ├── WindowManager/
+│   │   ├── WindowManager.h       # Window API
+│   │   └── WindowTypes.h         # Window type defs
+│   └── ListManager/              # List controls
+├── src/
+│   ├── ControlManager/           # Control implementations
+│   ├── DialogManager/            # Dialog implementations
+│   ├── MenuManager/              # Menu implementations
+│   └── WindowManager/            # Window implementations
+└── docs/                         # Component documentation
+```
+
+### External References
+
 - [Kelsidavis/System7](https://github.com/Kelsidavis/System7) - Reference implementation
-- [Inside Macintosh](https://developer.apple.com/library/archive/documentation/mac/pdf/Macintosh_Toolbox_Essentials/MTbx_Controls.pdf) - Original Apple documentation
-- [GUIdebook](https://guidebookgallery.org/screenshots/macos7) - System 7 screenshots
+- [Inside Macintosh: Toolbox Essentials](https://developer.apple.com/library/archive/documentation/mac/pdf/Macintosh_Toolbox_Essentials/MTbx_Controls.pdf) - Original Apple documentation
+- [GUIdebook: System 7](https://guidebookgallery.org/screenshots/macos7) - System 7 screenshots
 - [512pixels Mac OS Gallery](https://512pixels.net/projects/default-mac-wallpapers-in-5k/) - High-res references
+- [System 7 Human Interface Guidelines](https://developer.apple.com/library/archive/documentation/mac/pdf/HIGuidelines.pdf) - Apple HIG
 
 ---
 
