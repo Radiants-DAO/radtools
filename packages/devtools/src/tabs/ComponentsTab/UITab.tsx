@@ -523,7 +523,7 @@ export function UITab({ searchQuery: propSearchQuery = '' }: UITabProps) {
           ))
         ) : (
           <div className="text-center py-8 text-content-primary/60 font-mondwest text-base">
-            No components match "{searchQuery}"
+            No components match &ldquo;{searchQuery}&rdquo;
           </div>
         )}
       </div>

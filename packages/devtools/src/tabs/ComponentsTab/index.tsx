@@ -175,9 +175,9 @@ export function ComponentsTab({
 
   // Expose handleAddFolder for footer access
   useEffect(() => {
-    (window as any).__componentsTabAddFolder = handleAddFolder;
+    (window as Window & { __componentsTabAddFolder?: (folderName: string) => Promise<void> }).__componentsTabAddFolder = handleAddFolder;
     return () => {
-      delete (window as any).__componentsTabAddFolder;
+      delete (window as Window & { __componentsTabAddFolder?: (folderName: string) => Promise<void> }).__componentsTabAddFolder;
     };
   }, [dynamicTabs]);
 

@@ -596,7 +596,7 @@ function FeedbackContent() {
         <Row props='variant="info"'>
           <div className="max-w-md w-full">
             <Alert variant="info" title="Info" data-edit-scope="component-definition" data-component="Alert" data-edit-variant="info">
-              Here's some helpful information for you.
+              Here&apos;s some helpful information for you.
             </Alert>
           </div>
         </Row>
@@ -1151,7 +1151,7 @@ function OverlaysContent() {
                   This is a contextual help panel that slides in from the right side of its container.
                 </p>
                 <p>
-                  It's useful for providing contextual help within app windows or modals.
+                  It&apos;s useful for providing contextual help within app windows or modals.
                 </p>
               </div>
             </HelpPanel>
@@ -1654,7 +1654,7 @@ export function DesignSystemTab({
             ))
           ) : (
             <div className="text-center py-8 text-content-primary/60 font-mondwest text-base">
-              No components match "{searchQuery}"
+              No components match &ldquo;{searchQuery}&rdquo;
             </div>
           )}
         </div>

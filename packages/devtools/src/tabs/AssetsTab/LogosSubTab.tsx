@@ -177,7 +177,7 @@ export function LogosSubTab({ searchQuery }: LogosSubTabProps) {
 
       {filteredLogos.length === 0 && (
         <p className="text-content-tertiary text-center py-8">
-          No logos found matching "{searchQuery}"
+          No logos found matching &ldquo;{searchQuery}&rdquo;
         </p>
       )}
     </div>

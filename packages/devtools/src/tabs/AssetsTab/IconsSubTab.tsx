@@ -146,7 +146,7 @@ export function IconsSubTab({ searchQuery }: IconsSubTabProps) {
           All Icons ({filteredIcons.length})
         </h3>
         {filteredIcons.length === 0 ? (
-          <p className="text-content-tertiary text-center py-8">No icons found matching "{searchQuery}"</p>
+          <p className="text-content-tertiary text-center py-8">No icons found matching &ldquo;{searchQuery}&rdquo;</p>
         ) : (
           <div className="grid grid-cols-8 gap-3">
             {filteredIcons.map((icon) => (
