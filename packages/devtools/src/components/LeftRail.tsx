@@ -1,6 +1,7 @@
 'use client';
 
 import { Button, Tooltip } from '@radflow/ui';
+import { useDevToolsStore } from '../store';
 import type { Tab, Tool } from '../types';
 
 interface LeftRailProps {
@@ -27,6 +28,9 @@ const TABS: Array<{ id: Tab; icon: string; label: string; shortcut: string }> = 
 ];
 
 export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onSettingsClick }: LeftRailProps) {
+  const { pendingChanges } = useDevToolsStore();
+  const pendingChangeCount = pendingChanges.length;
+
   return (
     <div className="flex flex-col items-center bg-surface-secondary/5 border-r border-edge-primary/10 py-2 px-1">
       {/* Tools Section */}
@@ -39,14 +43,22 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onS
             size="sm"
             delay={300}
           >
-            <Button
-              variant={activeTool === tool.id ? 'secondary' : 'ghost'}
-              size="sm"
-              iconOnly
-              iconName={tool.icon}
-              onClick={() => onToolToggle(tool.id)}
-              data-help-id={`tool-${tool.id}`}
-            />
+            <div className="relative">
+              <Button
+                variant={activeTool === tool.id ? 'secondary' : 'ghost'}
+                size="sm"
+                iconOnly
+                iconName={tool.icon}
+                onClick={() => onToolToggle(tool.id)}
+                data-help-id={`tool-${tool.id}`}
+              />
+              {/* Badge for Text Edit mode showing pending change count */}
+              {tool.id === 'textEdit' && pendingChangeCount > 0 && (
+                <div className="absolute -top-1 -right-1 flex items-center justify-center min-w-[16px] h-4 px-1 bg-surface-secondary text-content-inverted text-[9px] font-joystix rounded-full border border-edge-primary">
+                  {pendingChangeCount}
+                </div>
+              )}
+            </div>
           </Tooltip>
         ))}
       </div>

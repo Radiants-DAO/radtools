@@ -430,7 +430,7 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
   - Wire up `clearSelectedComponent` callback
 
 ### 8.5 Text Edit Mode Badge (~1 iteration)
-- [ ] Update `packages/devtools/src/components/LeftRail.tsx`
+- [x] Update `packages/devtools/src/components/LeftRail.tsx`
   - Add badge to Text Edit button showing pending change count
   - Read from `textEditSlice.pendingChanges.length`
   - Badge style: Small circle, cream background, black text
@@ -446,7 +446,7 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 - ✅ Minimized panel state functional (Cmd+Shift+K toggles)
 - ✅ Help mode displays as static info bar (not tooltip)
 - ✅ Component ID mode click navigates to Components tab
-- Text Edit mode button shows pending change count badge
+- ✅ Text Edit mode button shows pending change count badge
 - Component ID mode shows data-theme attribute
 
 ---
