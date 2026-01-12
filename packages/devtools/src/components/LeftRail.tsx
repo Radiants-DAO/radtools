@@ -22,7 +22,8 @@ const TABS: Array<{ id: Tab; icon: string; label: string; shortcut: string }> = 
   { id: 'typography', icon: 'cursor-text', label: 'Typography', shortcut: '2' },
   { id: 'components', icon: 'code-window', label: 'Components', shortcut: '3' },
   { id: 'assets', icon: 'multiple-images', label: 'Assets', shortcut: '4' },
-  { id: 'mockStates', icon: 'settings-cog', label: 'Mock States', shortcut: '5' },
+  { id: 'ai', icon: 'sparkles', label: 'AI', shortcut: '5' },
+  { id: 'mockStates', icon: 'settings-cog', label: 'Mock States', shortcut: '6' },
 ];
 
 export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onSettingsClick }: LeftRailProps) {

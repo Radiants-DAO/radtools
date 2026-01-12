@@ -11,6 +11,7 @@ import { TextEditSlice, createTextEditSlice } from './slices/textEditSlice';
 import { ComponentIdSlice, createComponentIdSlice } from './slices/componentIdSlice';
 import { HelpSlice, createHelpSlice } from './slices/helpSlice';
 import { ThemeSlice, createThemeSlice } from './slices/themeSlice';
+import { AISlice, createAISlice } from './slices/aiSlice';
 
 type DevToolsState = PanelSlice &
   VariablesSlice &
@@ -22,7 +23,8 @@ type DevToolsState = PanelSlice &
   TextEditSlice &
   ComponentIdSlice &
   HelpSlice &
-  ThemeSlice;
+  ThemeSlice &
+  AISlice;
 
 export const useDevToolsStore = create<DevToolsState>()(
   devtools(
@@ -39,6 +41,7 @@ export const useDevToolsStore = create<DevToolsState>()(
         ...createComponentIdSlice(set, get, api),
         ...createHelpSlice(set, get, api),
         ...createThemeSlice(set, get, api),
+        ...createAISlice(set, get, api),
       }),
       {
         name: 'devtools-storage',

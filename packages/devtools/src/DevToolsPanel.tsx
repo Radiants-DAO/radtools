@@ -15,6 +15,7 @@ import { VariablesTab } from './tabs/VariablesTab';
 import { TypographyTab } from './tabs/TypographyTab';
 import { ComponentsTab } from './tabs/ComponentsTab';
 import { AssetsTab } from './tabs/AssetsTab';
+import { AITab } from './tabs/AITab';
 import { MockStatesTab } from './tabs/MockStatesTab';
 import { ContextualFooter } from './components/ContextualFooter';
 
@@ -172,6 +173,11 @@ export function DevToolsPanel() {
           {activeTab === 'assets' && (
             <div className="h-full pr-2 pl-2 pb-2 rounded">
               <AssetsTab />
+            </div>
+          )}
+          {activeTab === 'ai' && (
+            <div className="h-full pr-2 pl-2 pb-2 rounded">
+              <AITab />
             </div>
           )}
           {activeTab === 'mockStates' && (

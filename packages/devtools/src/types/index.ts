@@ -81,7 +81,7 @@ export interface MockState {
 }
 
 // Tab Types
-export type Tab = 'variables' | 'typography' | 'components' | 'assets' | 'mockStates';
+export type Tab = 'variables' | 'typography' | 'components' | 'assets' | 'ai' | 'mockStates';
 
 // Typography Types
 
