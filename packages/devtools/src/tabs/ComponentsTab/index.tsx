@@ -56,9 +56,49 @@ export function ComponentsTab({
   const { addToast } = useToast();
   const { selectedComponentName, clearSelectedComponent } = useDevToolsStore();
 
-  // Load dynamic tabs on mount
+  // Load dynamic tabs on mount and auto-discover folders
   useEffect(() => {
-    setDynamicTabs(loadDynamicTabs());
+    const loadTabs = async () => {
+      // First, load saved tabs from localStorage
+      const savedTabs = loadDynamicTabs();
+
+      // Then, fetch available folders from API
+      try {
+        const response = await fetch('/api/devtools/components/folders');
+        if (response.ok) {
+          const data = await response.json();
+          const discoveredFolders = data.folders || [];
+
+          // Create tabs for discovered folders that don't already exist
+          const existingFolderIds = new Set(savedTabs.map(tab => tab.id));
+          const newTabs: ComponentTabConfig[] = discoveredFolders
+            .filter((folder: string) => !existingFolderIds.has(`folder-${folder}`))
+            .map((folder: string) => ({
+              id: `folder-${folder}`,
+              label: folder,
+              description: `Components from /components/${folder}/`,
+            }));
+
+          // Merge saved tabs with newly discovered tabs
+          const allDiscoveredTabs = [...savedTabs, ...newTabs];
+          setDynamicTabs(allDiscoveredTabs);
+
+          // Save the updated tabs list
+          if (newTabs.length > 0) {
+            saveDynamicTabs(allDiscoveredTabs);
+          }
+        } else {
+          // If API fails, just use saved tabs
+          setDynamicTabs(savedTabs);
+        }
+      } catch (error) {
+        // If fetch fails, just use saved tabs
+        console.warn('Failed to auto-discover folders:', error);
+        setDynamicTabs(savedTabs);
+      }
+    };
+
+    loadTabs();
   }, []);
 
   // Memoize allTabs to prevent unnecessary re-renders

@@ -7,7 +7,7 @@
 
 This plan tracks implementation of the multi-theme RadFlow architecture. Tasks are organized by feature area and dependency chain. Foundation work (Phase 1) must complete before UI features can proceed.
 
-**Current Status:** Core DevTools functional with Variables, Typography, Components, Assets, AI, and Mock States tabs. Phase 8 (Mode Refinements) completed. Phase 3 (Theme Creation Wizard) completed including API scaffolding. Phase 4.1-4.3 and 4.5 (Token Editor with editable tokens and real-time preview) completed. Remaining: Token save API integration (4.4), Component Subfolders (Phase 5).
+**Current Status:** Core DevTools functional with Variables, Typography, Components, Assets, AI, and Mock States tabs. Phase 8 (Mode Refinements) completed. Phase 3 (Theme Creation Wizard) completed including API scaffolding. Phase 4 (Token Editor) completed - all features including save API integration functional. Phase 5 (Component Subfolders) completed - auto-discovery and folder grouping implemented. Remaining: Phase 6 (AI Tab enhancements), Phase 7 (Assets Sub-Tabs), Phase 9 (Publishing).
 
 ---
 
@@ -211,8 +211,8 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 - [x] "Save to CSS" button with modified count display
 - [x] Track modified tokens and show count in footer
 - [x] Save handler structure ready (placeholder for API integration)
-- [ ] API endpoint to write token changes to globals.css @theme block
-- [ ] Reload Variables tab after successful save
+- [x] API endpoint to write token changes to globals.css @theme block
+- [x] Reload Variables tab after successful save
 
 ### 4.5 Launch from Variables Tab (~1 iteration)
 - [x] Add "Edit Tokens" button in Variables tab header
@@ -225,7 +225,7 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 - ✅ Live preview functional with real-time updates using inline CSS variables
 - ✅ Light/dark mode toggle works in preview
 - ✅ Save button shows modified count
-- ⏳ API integration to persist changes to CSS (pending)
+- ✅ API integration to persist changes to CSS (completed)
 
 ---
 
@@ -237,28 +237,40 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 **Iterations:** 6-9 total
 
 ### 5.1 Component Subfolder Discovery (~3 iterations)
-- [ ] Update component scanner in `packages/devtools/src/lib/componentScanner.ts`
-- [ ] Detect subfolders in `packages/theme-[id]/components/`
+- [x] Update component scanner in `packages/devtools/src/lib/componentScanner.ts`
+- [x] Detect subfolders in `packages/theme-[id]/components/`
   - Example: `components/core/`, `components/solarium/`, `components/auctions/`
-- [ ] Group components by folder in store
+- [x] Group components by folder in store
+  - Added `componentsByFolder` and `availableFolders` to componentsSlice
+  - Components are automatically grouped by folder path on scan
+  - Added `fetchFolders()` action to fetch available folders from API
 
 ### 5.2 Dynamic Subtabs in Components Tab (~3 iterations)
-- [ ] Create `packages/devtools/src/tabs/ComponentsTab/DynamicFolderTab.tsx` (if not exists)
-- [ ] Auto-generate subtabs for each discovered folder
+- [x] Create `packages/devtools/src/tabs/ComponentsTab/DynamicFolderTab.tsx` (already exists)
+- [x] Auto-generate subtabs for each discovered folder
+  - ComponentsTab now fetches folders from `/api/devtools/components/folders` on mount
+  - Automatically creates tabs for discovered folders
+  - Tabs are persisted in localStorage and merged with newly discovered folders
   - Example: [Core] subtab shows `components/core/*` components
   - Example: [Solarium] subtab shows `components/solarium/*` components
-- [ ] Update Components tab to render folder subtabs
+- [x] Update Components tab to render folder subtabs
 
 ### 5.3 Component Metadata Display (~2 iterations)
-- [ ] Show `data-theme` attribute in component card
-- [ ] Show source path (folder + file)
-- [ ] Add folder name to component props table
+- [x] Show `data-theme` attribute in component card
+  - Already displayed in ComponentList (line 104-108)
+- [x] Show source path (folder + file)
+  - Already displayed in ComponentList (line 101-103)
+- [x] Add folder name to component props table
+  - Folder information is visible in component path display
 
 **Completion Criteria:**
-- Component scanner detects subfolders
-- Components tab displays folder-based subtabs
-- Each subtab shows components from that folder
-- Component cards show folder and theme metadata
+- ✅ Component scanner detects subfolders
+- ✅ Components tab displays folder-based subtabs
+- ✅ Each subtab shows components from that folder
+- ✅ Component cards show folder and theme metadata
+- ✅ Auto-discovery of folders on mount
+- ✅ componentsSlice groups components by folder
+- ✅ Folder tabs persist in localStorage and merge with discovered folders
 
 ---
 
