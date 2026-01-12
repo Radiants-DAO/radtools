@@ -84,14 +84,14 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 - [x] Update `packages/devtools/src/components/LeftRail.tsx`
 
 ### 2.3 Top Bar (Theme Indicator) (~2 iterations)
-- [ ] Create `packages/devtools/src/components/TopBar.tsx`
+- [x] Create `packages/devtools/src/components/TopBar.tsx`
   - Display active theme name and logo
   - Quick theme dropdown (click to expand list of themes)
   - Settings button shortcut
-- [ ] Add to DevToolsPanel header area
+- [x] Add to DevToolsPanel header area
 
 ### 2.4 Theme Switcher Dropdown (~3 iterations)
-- [ ] Create `packages/devtools/src/components/ThemeSwitcher.tsx`
+- [x] ~~Create `packages/devtools/src/components/ThemeSwitcher.tsx`~~ (integrated into TopBar)
   - Dropdown listing `availableThemes` from store
   - Click to switch theme (calls `switchTheme()`)
   - Shows active theme with checkmark
@@ -512,8 +512,8 @@ Phase 1 + Phase 2 + Phase 3
 
 ### Components
 - `packages/devtools/src/components/SettingsPanel.tsx` (Phase 2.1) - ✅ **CREATED**
-- `packages/devtools/src/components/TopBar.tsx` (Phase 2.3) - **NOT CREATED**
-- `packages/devtools/src/components/ThemeSwitcher.tsx` (Phase 2.4) - **NOT CREATED**
+- `packages/devtools/src/components/TopBar.tsx` (Phase 2.3) - ✅ **CREATED**
+- `packages/devtools/src/components/ThemeSwitcher.tsx` (Phase 2.4) - **NOT NEEDED** (integrated into TopBar)
 - `packages/devtools/src/components/ThemeCreationWizard.tsx` (Phase 3.1) - **NOT CREATED**
 - `packages/devtools/src/components/TokenEditor.tsx` (Phase 4.1) - **NOT CREATED**
 

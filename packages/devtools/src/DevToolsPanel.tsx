@@ -5,7 +5,7 @@ import { useDevToolsStore } from './store';
 import type { Tab, Tool } from './types';
 
 // Import UI components
-import { PanelHeader } from './components/PanelHeader';
+import { TopBar } from './components/TopBar';
 import { LeftRail } from './components/LeftRail';
 import { ResizeHandle } from './components/ResizeHandle';
 import { SettingsPanel } from './components/SettingsPanel';
@@ -132,13 +132,13 @@ export function DevToolsPanel() {
       {/* Main Content */}
       <div className="flex-1 overflow-hidden flex flex-col">
         {/* Header */}
-        <PanelHeader
+        <TopBar
           title="RADTOOLS"
           onClose={togglePanel}
           onFullscreen={toggleFullscreen}
           showCloseButton={true}
           showFullscreenButton={true}
-          iconName="plug"
+          onSettingsClick={openSettings}
         />
 
         {/* Tab Content */}
