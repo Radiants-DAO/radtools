@@ -27,6 +27,7 @@ export interface PanelSlice {
   setDockPosition: (position: DockPosition) => void;
   openSettings: () => void;
   closeSettings: () => void;
+  expandAndNavigate: (tab: Tab) => void;
 }
 
 export const createPanelSlice: StateCreator<PanelSlice, [], [], PanelSlice> = (set) => ({
@@ -53,4 +54,5 @@ export const createPanelSlice: StateCreator<PanelSlice, [], [], PanelSlice> = (s
   setDockPosition: (position) => set({ dockPosition: position }),
   openSettings: () => set({ isSettingsOpen: true }),
   closeSettings: () => set({ isSettingsOpen: false }),
+  expandAndNavigate: (tab: Tab) => set({ isMinimized: false, activeTab: tab, isOpen: true }),
 });

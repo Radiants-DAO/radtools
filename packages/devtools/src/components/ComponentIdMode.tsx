@@ -90,6 +90,8 @@ export function ComponentIdMode() {
     tooltipPosition,
     setHoveredComponent,
     toggleComponentIdMode,
+    navigateToComponent,
+    expandAndNavigate,
   } = useDevToolsStore();
 
   const [clickedComponent, setClickedComponent] = useState<ComponentInfo | null>(null);
@@ -125,11 +127,18 @@ export function ComponentIdMode() {
       const componentInfo = findReactComponent(target);
       setClickedComponent(componentInfo);
 
-      // Copy to clipboard if component found
+      // Navigate to component in Components tab
       if (componentInfo) {
+        // Set the component to navigate to
+        navigateToComponent(componentInfo.name);
+
+        // Expand panel and switch to Components tab
+        expandAndNavigate('components');
+
+        // Copy to clipboard as well
         const text = `${componentInfo.name} (${componentInfo.path})`;
         navigator.clipboard.writeText(text).then(() => {
-          // Show feedback (could use toast here)
+          // Show feedback briefly
           setTimeout(() => setClickedComponent(null), 2000);
         });
       }

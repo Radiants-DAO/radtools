@@ -8,6 +8,7 @@ import { DynamicFolderTab } from './DynamicFolderTab';
 import { AddTabButton } from './AddTabButton';
 import { COMPONENT_TABS, type ComponentTabConfig } from './tabConfig';
 import { ComponentsSecondaryNav } from '../../components/ComponentsSecondaryNav';
+import { useDevToolsStore } from '../../store';
 
 const STORAGE_KEY = 'devtools-dynamic-component-tabs';
 
@@ -53,6 +54,7 @@ export function ComponentsTab({
 }: ComponentsTabProps) {
   const [dynamicTabs, setDynamicTabs] = useState<ComponentTabConfig[]>([]);
   const { addToast } = useToast();
+  const { selectedComponentName, clearSelectedComponent } = useDevToolsStore();
 
   // Load dynamic tabs on mount
   useEffect(() => {
@@ -169,7 +171,10 @@ export function ComponentsTab({
           if (tab.id === 'design-system' && activeSubTab === 'design-system') {
             return (
               <div key={tab.id} className="h-full pr-2 pl-2 pb-2 rounded overflow-auto">
-                <DesignSystemTab />
+                <DesignSystemTab
+                  selectedComponentName={selectedComponentName}
+                  onComponentFocused={clearSelectedComponent}
+                />
               </div>
             );
           }

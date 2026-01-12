@@ -411,15 +411,23 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 - [x] Add help bar to `DevToolsPanel.tsx` header area
 
 ### 8.4 Component ID Mode Click Handler (~3 iterations)
-- [ ] Update `packages/devtools/src/components/ComponentIdMode.tsx`
+- [x] Update `packages/devtools/src/components/ComponentIdMode.tsx`
   - Add click event listener on component overlay
   - On click: `expandPanel()` + `setActiveTab('components')` + `selectComponent(name)`
   - Auto-scroll to component in Components tab
   - Highlight selected component (visual feedback)
-- [ ] Update `packages/devtools/src/store/slices/componentIdSlice.ts`
+- [x] Update `packages/devtools/src/store/slices/componentIdSlice.ts`
   - Add `navigateToComponent(name: string)` action
-- [ ] Update `packages/devtools/src/store/slices/panelSlice.ts`
-  - Add `expandAndNavigate(tab: string, componentName?: string)` action
+  - Add `selectedComponentName` state
+  - Add `clearSelectedComponent()` action
+- [x] Update `packages/devtools/src/store/slices/panelSlice.ts`
+  - Add `expandAndNavigate(tab: Tab)` action
+- [x] Update `packages/devtools/src/tabs/ComponentsTab/DesignSystemTab.tsx`
+  - Add `selectedComponentName` prop
+  - Add scroll-to and highlight effect when component is selected
+- [x] Update `packages/devtools/src/tabs/ComponentsTab/index.tsx`
+  - Pass `selectedComponentName` to DesignSystemTab
+  - Wire up `clearSelectedComponent` callback
 
 ### 8.5 Text Edit Mode Badge (~1 iteration)
 - [ ] Update `packages/devtools/src/components/LeftRail.tsx`
@@ -437,7 +445,7 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 - ✅ Conflicting keyboard shortcuts removed (only button activation)
 - ✅ Minimized panel state functional (Cmd+Shift+K toggles)
 - ✅ Help mode displays as static info bar (not tooltip)
-- Component ID mode click navigates to Components tab
+- ✅ Component ID mode click navigates to Components tab
 - Text Edit mode button shows pending change count badge
 - Component ID mode shows data-theme attribute
 

@@ -1482,10 +1482,48 @@ const COMPONENT_SECTIONS = [
 
 interface DesignSystemTabProps {
   searchQuery?: string;
+  selectedComponentName?: string | null;
+  onComponentFocused?: () => void;
 }
 
-export function DesignSystemTab({ searchQuery: propSearchQuery = '' }: DesignSystemTabProps) {
+export function DesignSystemTab({
+  searchQuery: propSearchQuery = '',
+  selectedComponentName = null,
+  onComponentFocused
+}: DesignSystemTabProps) {
   const searchQuery = propSearchQuery;
+
+  // Scroll to and highlight selected component
+  useEffect(() => {
+    if (!selectedComponentName) return;
+
+    // Try to find a subsection matching the component name
+    const componentNameLower = selectedComponentName.toLowerCase();
+
+    // Look for exact match in SEARCH_INDEX
+    const matchingItem = SEARCH_INDEX.find(
+      (item) => item.text.toLowerCase() === componentNameLower
+    );
+
+    if (matchingItem?.subsectionTitle) {
+      const subsectionId = SUBSECTION_ID_MAP[matchingItem.subsectionTitle];
+      if (subsectionId) {
+        // Wait for DOM to update
+        setTimeout(() => {
+          const element = document.querySelector(`[data-subsection-id="${subsectionId}"]`);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Add highlight effect
+            element.classList.add('ring-2', 'ring-brand-primary', 'ring-offset-2');
+            setTimeout(() => {
+              element.classList.remove('ring-2', 'ring-brand-primary', 'ring-offset-2');
+              if (onComponentFocused) onComponentFocused();
+            }, 2000);
+          }
+        }, 100);
+      }
+    }
+  }, [selectedComponentName, onComponentFocused]);
 
   // Get matching suggestions (for autocomplete in footer)
   const suggestions = searchQuery
