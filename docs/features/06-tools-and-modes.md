@@ -9,7 +9,19 @@ Tools and Modes provide specialized interaction paradigms for specific tasks. Th
 ## Component ID Mode
 
 ### Purpose
-Inspect and identify any component or element on the page. Understand what something is and where it comes from.
+Provide a universal addressing system for page elements that enables precise AI-assisted editing. The goal is minimal tokens, maximum precision — an LLM should know exactly where to edit without searching.
+
+### Core Principle
+**Visual:** Minimal — small pills showing element type (`<Button>`, `AnimatedStatCard`)
+**Clipboard:** Complete — full file path + line number for direct navigation
+
+```
+AnimatedStatCard @ app/dashboard/page.tsx:47
+```
+
+This format tells an LLM exactly where to go. No DOM paths, no CSS classes, no noise.
+
+---
 
 ### Activation
 Enter Component ID Mode through toolbar or keyboard shortcut.
@@ -17,54 +29,130 @@ Enter Component ID Mode through toolbar or keyboard shortcut.
 **Indicators:**
 - Cursor changes to crosshair
 - Mode indicator visible in toolbar
-- Optional overlay tint on page
+- Subtle overlay on interactive elements
 
-### Hover Behavior
-Information appears as user hovers over elements.
+---
 
-**Displayed Information:**
-- Component name (React component or HTML element)
-- File path and line number
-- Theme association (if applicable)
-- Props summary
+### Visual Display
 
-**Tooltip Behavior:**
-- Appears after brief delay (avoid flicker)
-- Positioned to not obscure target
-- Follows cursor near target
-- Dismisses on mouse move
+**Element Pills**
+Small, unobtrusive tags appear on or near elements.
 
-### Click Behavior
-Clicking an element performs actions.
+**Display:**
+- Component name for React components: `AnimatedStatCard`
+- HTML tag for non-components: `<div>`, `<button>`, `<h1>`
+- Positioned to not obscure element content
+- Semi-transparent until hovered
 
-**Actions:**
-- Copy component information to clipboard
-- Navigate to component in Components tab
-- Open component file in editor (if integrated)
-- Highlight component in component tree
+**Hover State:**
+- Pill becomes fully opaque
+- Element gets subtle highlight outline
+- No tooltip clutter — the pill IS the identifier
 
-**Feedback:**
-- Toast confirms copy action
-- Visual pulse on successful selection
-- Auto-navigation to relevant panel
+---
 
-### Element Highlighting
-Visual feedback shows what will be selected.
+### Selection Behaviors
 
-**Highlighting:**
-- Outline appears on hover
-- Background tint optional
-- Padding/margin visualization
-- Nested element boundaries visible
+**Single Click — Select One**
+- Element highlighted
+- Location copied to clipboard
+- Toast confirms: "Copied: AnimatedStatCard @ page.tsx:47"
+
+**Shift+Click — Add to Selection**
+- Add element to current selection
+- All selected elements copied as list
+- Visual indicator on all selected elements
+
+```
+AnimatedStatCard @ app/dashboard/page.tsx:47
+MetricsCard @ app/dashboard/page.tsx:52
+Button @ app/dashboard/page.tsx:61
+```
+
+**Shift+Cmd+Click — Select All of Type**
+- Select all instances of that component/element on current page
+- Clipboard contains summary format:
+
+```
+ALL AnimatedStatCard on /dashboard (4 instances)
+→ app/dashboard/page.tsx:47, 89, 134, 201
+```
+
+**Click+Drag — Rectangle Selection**
+- Draw rectangle to select multiple elements
+- All elements within rectangle selected
+- Same clipboard format as Shift+Click
+
+---
+
+### Clipboard Format
+
+**React Component:**
+```
+ComponentName @ path/to/file.tsx:lineNumber
+```
+
+**HTML Element (non-component):**
+```
+<tagName> @ path/to/file.tsx:lineNumber "content preview"
+```
+
+The content preview (first ~30 chars) helps disambiguate multiple same-tag elements.
+
+**Multiple Selection:**
+```
+ComponentA @ file.tsx:12
+ComponentB @ file.tsx:34
+<h1> @ file.tsx:56 "Welcome to RadFlow"
+```
+
+**All of Type:**
+```
+ALL ComponentName on /pagePath (count instances)
+→ file.tsx:12, 34, 56, 78
+```
+
+---
+
+### Line Number Accuracy
+
+Line numbers are **live and accurate** because:
+- Rust backend maintains file index
+- File watcher updates index on save
+- Line numbers recalculated on file change
+- Sub-second accuracy after edits
+
+If a file changes between copy and paste, line numbers reflect the new state (not stale data).
+
+---
+
+### Element Identification
+
+**What Gets an ID:**
+- All React components (detected by React DevTools fiber)
+- All semantic HTML elements (headings, buttons, links, etc.)
+- Elements with `data-edit-scope` attribute
+- Focusable/interactive elements
+
+**What's Excluded:**
+- Pure layout containers (unless they're components)
+- Styling wrappers
+- Internal library elements
+
+---
 
 ### Exit Behavior
-Leave Component ID Mode cleanly.
 
 **Exit Methods:**
 - Press Escape key
 - Click toolbar toggle
 - Activate different mode
 - Close DevTools panel
+
+**On Exit:**
+- All visual pills removed
+- Selection cleared
+- Clipboard retains last copied selection
 
 ---
 
@@ -275,17 +363,29 @@ How modes work with tabs.
 
 ### Component ID Enhancements
 
+**Embedded Terminal Integration**
+Visual element pills appear in terminal input. Pills show truncated name, clipboard contains full path. Any CLI tool can receive element context.
+
+**Selection Sets**
+Save named selection sets for reuse. "Header elements", "Dashboard cards". Quick recall without re-selecting.
+
 **Tree View**
 Show component hierarchy tree alongside inspection. Hovering in tree highlights on page. Click in tree selects element.
 
 **Props Inspector**
 Show full props for selected component. Live values, not just defaults. Update as state changes.
 
+**Context Injection**
+Selected elements automatically available to AI tools. No manual paste needed. MCP-style bridge to external tools.
+
 **Source Preview**
 Inline preview of component source code. Scroll to relevant line. One-click open in editor.
 
 **History**
 Remember recently inspected components. Quick navigation to previous selections.
+
+**Batch Edit Prompting**
+Select multiple elements → type instruction → AI applies to all. "Make all these use rounded corners."
 
 ### Text Edit Enhancements
 
