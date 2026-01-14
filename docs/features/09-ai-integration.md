@@ -2,55 +2,64 @@
 
 ## Purpose
 
-AI Integration enables intelligent assistance throughout the design system workflow. It provides contextual suggestions, automated generation, and natural language interaction for design tasks.
+AI Integration enables intelligent assistance throughout the design system workflow. RadFlow acts as a **prompt builder and context provider** for external AI tools, not an embedded AI system.
+
+**MVP Scope:** Prompt building and context injection for external AI (Claude Code, etc.)
+**Post-MVP:** Embedded AI capabilities
 
 ---
 
-## AI Capabilities
+## Core Concept
 
-### Design Assistance
-AI helps with design decisions.
+RadFlow makes it easy to build precise, context-rich prompts for AI-assisted design work.
 
-**Capabilities:**
-- Color palette generation
-- Typography pairing suggestions
-- Component style recommendations
-- Layout suggestions
-- Accessibility improvements
+```
+Select elements → Cmd+E → Build prompt → Copy → Paste in AI tool
+```
 
-### Code Generation
-AI generates implementation code.
+The app provides:
+1. **Context** — What's selected, what file, what line
+2. **Quick prompts** — Common actions for selected element types
+3. **Prompt library** — Organized, reusable prompts
+4. **SREF codes** — Style references per theme
 
-**Capabilities:**
-- Component code from description
-- Style code from visual description
-- Token definitions from palette
-- Variant generation from base component
+---
 
-### Content Generation
-AI helps with text and copy.
+## Prompt Builder (Cmd+E)
 
-**Capabilities:**
-- Placeholder text generation
-- Microcopy suggestions
-- Accessible label text
-- Documentation generation
+### Concept
+Contextual command palette for building AI prompts quickly.
 
-### Analysis
-AI understands the design system.
+### Flow
+1. Select element(s) on canvas or in editor
+2. Press Cmd+E
+3. See contextual quick prompts
+4. Select/modify prompt
+5. Enter to copy to clipboard
+6. Paste into external AI tool
 
-**Capabilities:**
-- Consistency checking
-- Pattern recognition
-- Usage analysis
-- Improvement suggestions
+### Context Injection
+Prompts automatically include relevant context:
+- Selected element type and name
+- File path and line number
+- Current theme
+- Relevant token values
+- Component variant (if applicable)
+
+### Quick Prompts
+Suggested actions based on selection type.
+
+**Examples by Selection:**
+- Component → "Add variant", "Update styles", "Fix accessibility"
+- Token → "Generate scale", "Find usage", "Suggest alternatives"
+- Multiple items → "Make consistent", "Apply to all", "Batch update"
 
 ---
 
 ## Prompt Library
 
-### Pre-Built Prompts
-Curated prompts for common tasks.
+### Organization
+Prompts organized by category.
 
 **Categories:**
 - RadFlow Prompts (tool-specific workflows)
@@ -59,291 +68,112 @@ Curated prompts for common tasks.
 - Style References (visual direction codes)
 
 ### Prompt Structure
-How prompts are organized.
+What a prompt contains.
 
-**Prompt Contains:**
+**Fields:**
 - Title (what it does)
 - Description (when to use)
-- Prompt text (what to send to AI)
+- Prompt text (template with variables)
 - Variables (customizable parts)
 - Category tags
 
-### Prompt Usage
-How users interact with prompts.
-
-**Workflow:**
-- Browse or search prompts
-- Select relevant prompt
-- Customize variables if needed
-- Copy to clipboard
-- Paste in AI interface
-- Apply AI response to design system
-
 ### Custom Prompts
-Users can add their own prompts.
+Users can create and save prompts.
 
 **Features:**
-- Create new prompts
+- Create from scratch
+- Save from Cmd+E builder
 - Edit existing prompts
-- Organize with categories
-- Share prompts (export/import)
+- Organize with tags
+- Export/import
 
 ---
 
 ## Style References (SREF)
 
-### Purpose
-Visual direction codes for consistent AI generation.
+### Concept
+Visual direction codes for consistent AI-generated output. Per-theme basis.
 
-### SREF System
-How style references work.
+### Per-Theme SREFs
+Each theme can define its own style references.
 
-**Structure:**
-- SREF code (identifier)
-- Associated visual style
+**Contains:**
+- SREF code identifier
+- Associated visual characteristics
 - Example outputs
 - Usage guidelines
 
-### SREF Library
-Collection of available style references.
+### Usage
+Include SREF in prompts for visual consistency.
 
-**Organization:**
-- Browse by visual style
-- Preview example outputs
-- Copy SREF code
-- Search by characteristics
-
-### SREF in Practice
-Using style references with AI.
-
-**Workflow:**
-- Choose SREF matching desired aesthetic
-- Include SREF code in AI prompt
-- AI generates output in that style
-- Apply to design system
+**Example:**
+```
+Using SREF-RAD01, update this button to match the theme aesthetic.
+```
 
 ---
 
-## Contextual AI
+## Claude Code Integration
 
-### Context Awareness
-AI understands current state.
+### Access Model
+Claude Code can interact with RadFlow directly (local app, no browser needed).
 
-**Available Context:**
-- Current theme and tokens
-- Selected component
-- Active editing mode
-- Recent changes
-- Project structure
+**Capabilities:**
+- View pages in the app
+- Read component definitions
+- Access design tokens
+- Understand project structure
 
-### Context Injection
-Automatically include relevant context.
+### Skills Integration
+RadFlow-specific skills for Claude Code.
 
-**Behavior:**
-- AI prompts include current state
-- No manual context copying
-- Relevant tokens, styles shared
-- Component definitions available
+**Potential Skills:**
+- Component editing
+- Token management
+- Theme switching
+- Violation detection
 
-### Smart Suggestions
-AI proactively suggests improvements.
-
-**Triggers:**
-- Contrast issues detected
-- Inconsistent spacing found
-- Missing variants identified
-- Accessibility concerns
+*Note: Skills integration details TBD based on Claude Code capabilities.*
 
 ---
 
-## AI Workflows
+## Future: Embedded AI
 
-### Component Generation
-Create components from description.
+Post-MVP consideration for built-in AI capabilities.
 
-**Workflow:**
-1. Describe desired component
-2. AI generates component code
-3. Preview generated component
-4. Refine with follow-up prompts
-5. Accept and add to library
+### Potential Features
+- In-app chat interface
+- Direct prompt execution
+- AI suggestions in Properties Panel
+- Violation auto-fix
+- Component generation
 
-### Theme Generation
-Create themes from concepts.
-
-**Workflow:**
-1. Describe theme aesthetic
-2. AI generates color palette
-3. AI suggests typography
-4. Preview theme
-5. Refine as needed
-6. Save as new theme
-
-### Style Transfer
-Apply visual style to components.
-
-**Workflow:**
-1. Select source style (SREF or example)
-2. Select target components
-3. AI generates styled versions
-4. Review changes
-5. Apply to design system
-
-### Documentation Generation
-Auto-generate component documentation.
-
-**Workflow:**
-1. Select component
-2. AI analyzes component structure
-3. AI generates documentation
-4. Review and edit
-5. Save documentation
-
----
-
-## AI Interface
-
-### Chat Interface
-Conversational AI interaction.
-
-**Features:**
-- Message input
-- Response display
-- Conversation history
-- Context indicator
-- Code blocks with copy
-
-### Quick Actions
-One-click AI operations.
-
-**Actions:**
-- Improve accessibility
-- Suggest variants
-- Generate documentation
-- Analyze consistency
-
-### Inline AI
-AI assistance within editors.
-
-**Features:**
-- AI suggestions while editing
-- Accept/reject suggestions
-- Explain current value
-- Suggest alternatives
-
----
-
-## AI Configuration
-
-### AI Provider
-Configure which AI service to use.
-
-**Options:**
-- Claude API
-- OpenAI API
-- Local models (if supported)
-- Custom endpoints
-
-### API Configuration
-Setup for AI service.
-
-**Settings:**
-- API key
+### Requirements (Future)
+- API key configuration
 - Model selection
-- Temperature/creativity
-- Token limits
+- Privacy controls
+- Response handling
 
-### Privacy Settings
-Control what context is shared.
-
-**Options:**
-- Share full context
-- Share minimal context
-- Review before sending
-- Local-only mode
+*Note: Embedded AI is post-MVP. This section is placeholder for future planning.*
 
 ---
 
-## AI + CLI Integration
+## Framework Principles
 
-### CLI AI Tools
-AI accessible from command line.
+### RadFlow's Role
+- **Context provider** — Rich, accurate context for AI prompts
+- **Prompt builder** — Quick, contextual prompt construction
+- **Library manager** — Organized, reusable prompts
+- **Style enforcer** — SREF codes for visual consistency
 
-**Commands:**
-- Generate component from description
-- Analyze design system
-- Batch generate documentation
-- Run accessibility audit
+### What RadFlow Does NOT Do (MVP)
+- Execute AI requests directly
+- Embed chat interface
+- Store API keys
+- Process AI responses
 
-### Claude Code Integration
-Integration with Claude Code CLI.
-
-**Capabilities:**
-- Context sharing with Claude Code
-- RadFlow as Claude Code extension
-- Bidirectional communication
-- Shared project understanding
-
-### MCP Server
-RadFlow as Model Context Protocol server.
-
-**Capabilities:**
-- Expose design system to AI tools
-- AI can query components
-- AI can read tokens
-- AI can propose changes
-
----
-
-## Persistence
-
-### Prompt Storage
-Where prompts are saved.
-
-**Storage:**
-- Custom prompts in project config
-- Built-in prompts from package
-- Shared prompts in team config
-
-### AI History
-Conversation and generation history.
-
-**Storage:**
-- Recent conversations
-- Generated content
-- Applied changes
-- Rejected suggestions
-
----
-
-## Ideal Behaviors
-
-### Design System Understanding
-AI deeply understands design system concepts. Knows token relationships. Understands component composition.
-
-### Visual Input
-Describe what you want visually. Sketch or screenshot as input. AI interprets visual intent.
-
-### Iterative Refinement
-Multi-turn conversations for refinement. "Make it more subtle." "Try a warmer palette."
-
-### Learning from Project
-AI learns project patterns. Suggests styles consistent with existing system. Matches project conventions.
-
-### Batch Operations
-AI processes multiple components. "Update all buttons to use rounded corners." System-wide changes from description.
-
-### Explanation Mode
-AI explains design decisions. "Why is this contrast ratio used?" Educational assistance.
-
-### Alternative Generation
-Generate multiple options. Present variations to choose from. A/B comparison.
-
-### Undo AI Changes
-Easily revert AI modifications. Preview before applying. Clear separation of AI vs manual changes.
-
-### Feedback Loop
-Rate AI suggestions. Improve future suggestions. Train on project preferences.
-
-### Real-Time Collaboration
-AI participates in design reviews. Suggests improvements during editing. Proactive assistance without being intrusive.
+### Integration Points
+- Cmd+E prompt builder
+- Component ID clipboard format
+- Prompts tab/library
+- SREF codes in themes
