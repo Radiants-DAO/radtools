@@ -156,86 +156,6 @@ If a file changes between copy and paste, line numbers reflect the new state (no
 
 ---
 
-## Text Edit Mode
-
-### Purpose
-Edit text content directly on the page. Quick way to explore copy changes without editing source files.
-
-### Activation
-Enter Text Edit Mode through toolbar or keyboard shortcut.
-
-**Indicators:**
-- Mode indicator in toolbar
-- Cursor changes over editable text
-- Editable elements subtly highlighted
-
-### Editable Elements
-Which elements can be edited in this mode.
-
-**Supported Elements:**
-- Headings (h1-h6)
-- Paragraphs (p)
-- Spans
-- Labels
-- Button text
-- Link text
-
-**Not Editable:**
-- Images
-- Icons
-- Inputs (use their native editing)
-- Non-text elements
-
-### Click-to-Edit
-Clicking editable text enters edit state.
-
-**Behavior:**
-- Element becomes contenteditable
-- Existing text selected
-- Cursor positioned in text
-- Keyboard input captured
-
-### Editing Experience
-While editing text content.
-
-**Features:**
-- Standard text editing (select, delete, type)
-- No formatting controls (plain text only)
-- Enter completes edit
-- Escape cancels edit
-- Click away completes edit
-
-### Context Menu
-Right-click provides additional options.
-
-**Options:**
-- Change element tag (h1 → h2, p → span, etc.)
-- Copy original text
-- Reset to original
-- Mark as changed
-
-### Change Tracking
-All text modifications are tracked.
-
-**Tracking:**
-- Changed elements marked visually
-- Original text preserved
-- Change count displayed
-- Changes listed in summary
-
-### Exit Behavior
-Leaving Text Edit Mode handles changes.
-
-**On Exit:**
-- All changes compiled into summary
-- Summary copied to clipboard automatically
-- Toast shows change count
-- Page returns to original state (changes not persisted to source)
-
-**Note:** Text Edit Mode is for exploration and copy review. Changes are not saved to source files. The clipboard export allows sharing proposed changes with content editors.
-
----
-
 ## Inspect Mode
 
 ### Purpose
@@ -560,33 +480,10 @@ Remember recently inspected components. Quick navigation to previous selections.
 **Batch Edit Prompting**
 Select multiple elements → type instruction → AI applies to all. "Make all these use rounded corners."
 
-### Text Edit Enhancements
-
-**Rich Text Support**
-Support bold, italic, links in edit mode. Format preservation on edit.
-
-**Spell Check**
-Highlight spelling errors while editing. Suggest corrections.
-
-**Character Count**
-Show character/word count while editing. Helpful for constrained text areas.
-
-**Multi-language Preview**
-Preview text at different lengths (for i18n). Test with longer/shorter translations.
-
 ### New Modes to Consider
-
-**Spacing Mode**
-Visualize all spacing in the design. Click elements to see margin/padding. Drag to adjust spacing values.
-
-**Color Mode**
-Highlight all instances of a color. Click to see where a color is used. Bulk change color across page.
 
 **Accessibility Mode**
 Highlight accessibility issues. Show focus order. Display ARIA attributes. Contrast ratio indicators.
-
-**Responsive Mode**
-Quick viewport size switching. See breakpoint boundaries. Preview at common device sizes.
 
 **Animation Mode**
 Highlight animated elements. Pause/play animations. Adjust animation timing. Preview transitions.
