@@ -347,11 +347,11 @@ Help content adapts to current state.
 
 **Contexts:**
 - Variables Tab — explain token editing workflow
-- Typography Tab — explain typography controls
+- Typography Tab — explain typography controls and direct text editing
 - Components Tab — explain component preview system
 - Assets Tab — explain asset management
 - Component ID Mode — explain inspection workflow
-- Text Edit Mode — explain text editing workflow
+- Inspect Mode — explain spacing and measurement tools
 
 ### Help Content
 What help includes.
@@ -446,7 +446,7 @@ How modes work with tabs.
 
 **Behavior:**
 - Component ID Mode works across all tabs (it's about the page, not the panel)
-- Text Edit Mode works across all tabs
+- Inspect Mode works across all tabs
 - Help Mode content changes with active tab
 - Some modes may restrict tab switching
 

@@ -107,7 +107,7 @@ Shortcuts for modes.
 | Action | Shortcut |
 |--------|----------|
 | Toggle Component ID Mode | Cmd+Shift+I |
-| Toggle Text Edit Mode | Cmd+Shift+T |
+| Toggle Inspect Mode | Cmd+Shift+T |
 | Toggle Help Mode | Cmd+Shift+? |
 
 ### Editing Shortcuts
