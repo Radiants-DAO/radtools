@@ -2,334 +2,442 @@
 
 ## Purpose
 
-Search and Navigation systems enable rapid discovery and access to any element within the design system. They provide keyboard-driven workflows and intelligent search across all content types.
+Search and Navigation systems enable rapid discovery and keyboard-driven workflows throughout the app. As a native Mac application, RadFlow uses system-standard shortcuts plus Figma-inspired spatial navigation.
+
+**Key Principle:** Git is the save function. Cmd+S commits. No ambiguity about what "save" means.
 
 ---
 
-## Global Search
+## Search Systems
 
-### Search Scope
-What global search covers.
+RadFlow has two distinct search interfaces.
+
+### Content Search (Cmd+F)
+Find and navigate to content.
 
 **Searchable Content:**
-- Components (by name)
-- Icons (by name and tags)
-- Design tokens (by name and value)
-- Typography elements (by tag and properties)
-- Assets (by name and path)
-- Colors (by name and hex value)
+- Components (by name, category)
+- Pages (by name, route)
+- Design tokens (by name, value)
+- Icons (by name, tags)
+- Docs (by title, content)
+- Colors (by name, hex value)
 
-### Search Activation
-How to initiate search.
+**Behavior:**
+- Opens search overlay
+- Type to filter results
+- Results categorized by type
+- Arrow keys to navigate
+- Enter to jump to result
+- Escape to close
+
+**Result Actions:**
+- Navigate to item on canvas
+- Spotlight/highlight result
+- Expand section if collapsed
+- Switch canvas section if needed
+
+### Prompt Builder (Cmd+E)
+Contextual command palette for AI prompts.
+
+**Concept:**
+Select element(s) → Cmd+E → contextual quick prompts → Enter to copy
+
+**Behavior:**
+- Opens based on current selection
+- Shows relevant quick prompts for selected element type
+- Progressive prompt building
+- Enter copies built prompt to clipboard
+- Integrates with Prompts tab library
+
+**Context Examples:**
+- Button selected → "Change variant", "Update colors", "Add hover state"
+- Multiple components selected → "Apply to all", "Make consistent", "Update spacing"
+- Token selected → "Generate scale", "Find usage", "Suggest alternatives"
+
+**Prompt Building:**
+- Start with context (selected elements)
+- Add modifiers from quick prompts
+- Preview final prompt
+- Copy or send directly to AI
+
+---
+
+## Canvas Navigation
+
+### Zoom
+Figma-quality zoom behavior.
+
+**Controls:**
+- Pinch to zoom (trackpad) — smooth, precise
+- Scroll wheel zoom
+- Cmd++ / Cmd+- for step zoom
+- Cmd+0 to fit all
+- Cmd+1 to zoom to 100%
+
+**Quality Bar:** Must feel as good as Figma. No lag, no jitter.
+
+### Pan
+Move around the canvas.
 
 **Methods:**
-- Keyboard shortcut (Cmd+K / Ctrl+K)
-- Click search field
-- Start typing when panel focused
+- Two-finger drag (trackpad)
+- Spacebar + drag
+- Middle mouse drag
+- Arrow keys (when nothing selected)
 
-### Search Input
-The search interface.
+### Section Navigation
+Jump between canvas sections.
 
-**Features:**
-- Single input field
-- Placeholder text with shortcut hint
-- Clear button
-- Focus indicator
-
-### Search Results
-How results are displayed.
-
-**Display:**
-- Categorized by type (Components, Icons, Tokens, etc.)
-- Result count per category
-- Visual previews where applicable
-- Relevance-sorted within categories
-
-**Result Information:**
-- Name/title
-- Type indicator
-- Path/location
-- Preview thumbnail (for visual content)
-
-### Result Navigation
-Moving through search results.
+**Floating Pill Nav:**
+- Persistent floating control
+- Shows section names/icons
+- Click to snap to section
+- Current section highlighted
 
 **Keyboard:**
-- Arrow up/down moves between results
-- Arrow left/right switches categories (optional)
-- Enter selects/navigates to result
-- Escape closes search
+| Shortcut | Action |
+|----------|--------|
+| Cmd+1 | Snap to Components section |
+| Cmd+2 | Snap to Pages section |
+| Cmd+3 | Snap to Docs section |
+| Cmd+4 | Snap to Violations section |
 
-**Mouse:**
-- Click selects result
-- Hover shows preview
-- Click outside closes search
+### Mini Map
+Navigation aid for large canvases.
 
-### Search Actions
-What happens when selecting a result.
+**Features:**
+- Thumbnail of entire canvas
+- Current viewport rectangle
+- Click to jump
+- Collapsible
+- Section boundaries visible
 
-**Actions:**
-- Navigate to containing tab
-- Scroll result into view
-- Highlight/spotlight result
-- Expand containing section if collapsed
-- Close search overlay
+---
+
+## Edit Mode Navigation
+
+### Entering Edit Mode
+Open items for detailed editing.
+
+**From Canvas:**
+- Select page/component/doc
+- Press **E** to enter edit mode
+- Or double-click item
+
+**Behavior:**
+- Canvas transitions out
+- Edit view opens
+- Snapshot taken for discard option
+- Original state preserved until commit
+
+### Page Editor Tabs
+Multiple pages can be open.
+
+**Behavior:**
+- Each open page is a tab
+- Single canvas view (only one canvas)
+- Multiple page editor tabs allowed
+- Tab shows page name + modified indicator
+
+### Exiting Edit Mode
+
+| Shortcut | Action |
+|----------|--------|
+| Escape | Quick return to canvas (prompts if unsaved) |
+| Cmd+S | Commit changes and return |
+| Cmd+W | Close with "Commit or Discard?" prompt |
+
+**Commit or Discard Dialog:**
+- "You have unsaved changes to [Page Name]"
+- [Commit] — saves to git, closes
+- [Discard] — reverts to snapshot, closes
+- [Cancel] — stays in editor
+
+---
+
+## Git as Save
+
+### Core Concept
+Every "save" is a git commit. No ambiguous local saves.
+
+**Cmd+S Behavior:**
+1. Stage changed files
+2. Open commit message input (pre-filled with smart default)
+3. Commit on Enter
+4. Return to canvas
+
+**Smart Commit Messages:**
+- "Update Button primary variant colors"
+- "Edit HomePage hero section"
+- "Modify --color-primary token"
+
+### Snapshot System
+Preserve state for discard option.
+
+**On Enter Edit Mode:**
+- Snapshot current file state
+- Store in memory (not git stash)
+- Enable discard option
+
+**On Discard:**
+- Restore files to snapshot
+- No git history created
+- Clean return to canvas
+
+*Note: Snapshot system needs separate detailed spec.*
 
 ---
 
 ## Keyboard Shortcuts
 
-### Panel Control
-Shortcuts for panel management.
+### Global (Always Active)
 
-| Action | Shortcut |
-|--------|----------|
-| Toggle DevTools Panel | Cmd+Shift+K |
-| Focus Search | Cmd+K |
-| Open Settings | Cmd+Shift+. |
-| Close/Exit | Escape |
+| Shortcut | Action |
+|----------|--------|
+| Cmd+F | Content search |
+| Cmd+E | Prompt builder (contextual) |
+| Cmd+, | Preferences |
+| Cmd+Q | Quit (with warning if unsaved) |
+| Cmd+Z | Undo |
+| Cmd+Shift+Z | Redo |
 
-### Tab Navigation
-Quick access to tabs.
+### Canvas View
 
-| Action | Shortcut |
-|--------|----------|
-| Variables Tab | 1 |
-| Typography Tab | 2 |
-| Components Tab | 3 |
-| Assets Tab | 4 |
-| AI Tab | 5 |
-| Mock States Tab | 6 |
+| Shortcut | Action |
+|----------|--------|
+| Cmd+1 | Snap to Components |
+| Cmd+2 | Snap to Pages |
+| Cmd+3 | Snap to Docs |
+| Cmd+4 | Snap to Violations |
+| E | Enter edit mode (with selection) |
+| Cmd+0 | Zoom to fit |
+| Cmd++ | Zoom in |
+| Cmd+- | Zoom out |
 
-### Mode Toggles
-Shortcuts for modes.
+### Edit Mode (Page/Component Editor)
 
-| Action | Shortcut |
-|--------|----------|
-| Toggle Component ID Mode | Cmd+Shift+I |
-| Toggle Inspect Mode | Cmd+Shift+T |
-| Toggle Help Mode | Cmd+Shift+? |
+| Shortcut | Action |
+|----------|--------|
+| Escape | Return to canvas |
+| Cmd+S | Commit and close |
+| Cmd+W | Close (commit/discard prompt) |
+| T | Text edit mode |
+| V | Select mode |
+| I | Inspect mode |
+| Cmd+Shift+I | Component ID mode |
 
-### Editing Shortcuts
-Shortcuts while editing.
+### Function Keys
+Mappable in preferences.
 
-| Action | Shortcut |
-|--------|----------|
-| Save/Commit Change | Enter |
-| Cancel Change | Escape |
-| Undo (if supported) | Cmd+Z |
-
-### Shortcut Discovery
-How users learn shortcuts.
-
-**Methods:**
-- Displayed in tooltips
-- Listed in settings/help
-- Shown next to menu items
-- Accessible via help mode
-
----
-
-## Tab Navigation
-
-### Tab Bar
-Primary navigation between feature areas.
-
-**Display:**
-- Horizontal or vertical tab bar
-- Tab name or icon
-- Active tab indicator
-- Badge for pending changes (if applicable)
-
-### Tab Switching
-Moving between tabs.
-
-**Methods:**
-- Click tab
-- Keyboard number keys
-- Swipe gesture (touch)
-- Search result navigation
-
-### Tab State
-What's preserved when switching tabs.
-
-**Preserved:**
-- Scroll position within tab
-- Expanded/collapsed sections
-- Search filters
-- Selection state
-
-**Not Preserved:**
-- Temporary highlights
-- Active inline edits
-- Mode states (some modes)
-
-### Tab Memory
-Return to previous position.
-
-**Behavior:**
-- Switching back to tab returns to previous scroll
-- Recently viewed items remembered
-- Collapsed state remembered
+| Key | Default (Suggested) |
+|-----|---------------------|
+| F1 | Help / Documentation |
+| F2 | Rename selected |
+| F3 | Find next |
+| F4 | — |
+| F5 | Refresh preview |
+| F6-F12 | User mappable |
 
 ---
 
-## Panel Navigation
+## Figma-Style Shortcuts
 
-### Section Expansion
-Collapsible sections within tabs.
+Familiar shortcuts for designers.
+
+### Selection & Tools
+
+| Shortcut | Action |
+|----------|--------|
+| V | Select tool |
+| T | Text tool / Text edit mode |
+| I | Inspect mode |
+| H | Hand tool (pan) |
+| Z | Zoom tool |
+
+### Object Manipulation
+
+| Shortcut | Action |
+|----------|--------|
+| Cmd+D | Duplicate |
+| Cmd+G | Group |
+| Cmd+Shift+G | Ungroup |
+| Cmd+] | Bring forward |
+| Cmd+[ | Send backward |
+| Cmd+Shift+] | Bring to front |
+| Cmd+Shift+[ | Send to back |
+
+### Zoom Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| Cmd+0 | Zoom to fit |
+| Cmd+1 | Zoom to 100% |
+| Cmd+2 | Zoom to selection |
+| Shift+1 | Zoom to Components |
+| Shift+2 | Zoom to Pages |
+
+---
+
+## Window Management
+
+### Single Canvas
+Only one canvas view at a time.
 
 **Behavior:**
-- Click header to expand/collapse
-- Indicator shows expanded state
-- Smooth animation
-- Multiple sections can be open
+- Opening project shows canvas
+- Canvas cannot be duplicated
+- Canvas is the "home" view
 
-### Scroll Behavior
-Navigating long content.
+### Page Editor Tabs
+Multiple editors in tabs.
 
-**Features:**
-- Smooth scrolling
-- Scroll to section (via internal links)
-- Back to top shortcut
-- Scroll position indicator
+**Behavior:**
+- Cmd+T — (reserved, TBD)
+- Cmd+W — Close current tab
+- Cmd+Shift+W — Close all tabs
+- Cmd+Tab — Next tab (within app)
+- Ctrl+Tab — Next editor tab
 
-### Breadcrumbs
-Path indication for nested content.
+### Window Controls
+Standard Mac window behavior.
 
-**Display:**
-- Show navigation path
-- Click to navigate back
-- Current location highlighted
+**Behavior:**
+- Red (close) — Quit app (with warning)
+- Yellow (minimize) — Minimize to dock
+- Green (fullscreen) — Enter fullscreen
+- No multi-window (single canvas constraint)
+
+---
+
+## Menu Bar
+
+*Note: Full menu structure TBD once features finalized.*
+
+### File Menu
+- New... (TBD)
+- Open Project...
+- Open Recent →
+- Close Tab (Cmd+W)
+- Save / Commit (Cmd+S)
+- Export Theme...
+
+### Edit Menu
+- Undo (Cmd+Z)
+- Redo (Cmd+Shift+Z)
+- Cut (Cmd+X)
+- Copy (Cmd+C)
+- Paste (Cmd+V)
+- Select All (Cmd+A)
+
+### View Menu
+- Zoom In (Cmd++)
+- Zoom Out (Cmd+-)
+- Zoom to Fit (Cmd+0)
+- Components Section (Cmd+1)
+- Pages Section (Cmd+2)
+- Docs Section (Cmd+3)
+- Violations Section (Cmd+4)
+- Enter Fullscreen
+
+### Help Menu
+- RadFlow Help
+- Keyboard Shortcuts
+- Release Notes
+- Check for Updates...
+
+---
+
+## Preferences
+
+### Keyboard Section
+Customize shortcuts.
+
+**Options:**
+- View all shortcuts
+- Search shortcuts
+- Remap function keys
+- Reset to defaults
+- Import/export keybindings
+
+### Vim Mode
+Optional vim-style navigation.
+
+**When Enabled:**
+- j/k for up/down navigation
+- h/l for left/right
+- / for search
+- : for command mode
+- gg/G for top/bottom
+
+**Scope:**
+- Canvas navigation
+- List navigation
+- Panel navigation
+- Not text editing (standard text input)
 
 ---
 
 ## Spotlight System
 
 ### Purpose
-Draw attention to specific elements.
+Draw attention to search results and navigation targets.
 
 ### Visual Treatment
-How spotlight appears.
 
 **Spotlight Effect:**
 - Target element highlighted
-- Surrounding content dimmed
+- Surrounding content dimmed (subtle)
 - Outline or glow on target
 - Smooth transition animation
 
-### Spotlight Triggers
-What causes spotlight.
+### Triggers
 
-**Triggers:**
-- Search result selection
+**What Causes Spotlight:**
+- Content search result selection
 - Component ID click
-- External navigation (link to element)
-- Help context (showing what's relevant)
+- Cross-section navigation
+- Error/violation indicator click
 
-### Spotlight Duration
-How long spotlight lasts.
+### Duration
 
 **Behavior:**
-- Automatic fade after timeout
+- Automatic fade after 2 seconds
 - Click anywhere dismisses
-- New selection replaces old spotlight
-- Option for persistent highlight
+- New spotlight replaces old
+- Persists while hovering target
 
 ---
 
-## Navigation Integration
+## Navigation History
 
-### Cross-Tab Navigation
-Navigation that crosses tab boundaries.
-
-**Examples:**
-- Click token → navigate to Variables tab
-- Click component → navigate to Components tab
-- Search result → navigate to relevant tab
+### Back/Forward
+Navigate through recent locations.
 
 **Behavior:**
-- Tab switches automatically
-- Section expands if needed
-- Element scrolled into view
-- Spotlight applied
+- Cmd+[ — Go back
+- Cmd+] — Go forward
+- History tracks canvas position, section, selection
+- History clears on project close
 
-### External Navigation
-Navigation from outside DevTools.
+### Recent Items
+Quick access to recently viewed.
 
-**Methods:**
-- URL parameters (link to specific view)
-- Console commands (developer use)
-- API calls (integration with other tools)
-
-### Navigation History
-Track navigation within session.
-
-**Features:**
-- Back/forward navigation
-- Recent locations list
-- Quick return to previous view
+**Behavior:**
+- Shown in Content Search (Cmd+F)
+- "Recent" section at top of results
+- Clear recent option
+- Persists across sessions
 
 ---
 
-## Filter Systems
+## Reserved / TBD
 
-### Per-Tab Filters
-Filtering specific to each tab.
+Shortcuts reserved for future features:
 
-**Examples:**
-- Assets: filter by type (icon, logo, image)
-- Components: filter by category
-- Variables: filter by token type (color, shadow, radius)
-
-### Filter Persistence
-Filter state is remembered.
-
-**Behavior:**
-- Filters persist within session
-- Return to tab shows previous filter
-- Clear filters button available
-- Default state on new session
-
-### Combined Filtering
-Multiple filters work together.
-
-**Behavior:**
-- Filters combine (AND logic)
-- Show active filter count
-- Clear all filters option
-- Individual filter removal
-
----
-
-## Ideal Behaviors
-
-### Fuzzy Search
-Forgive typos and partial matches. "butn" finds "Button". Score by relevance.
-
-### Recent History
-Show recently accessed items. Quick access without searching. Clear recent history option.
-
-### Favorites/Bookmarks
-Save frequently accessed items. Quick access list. Custom organization.
-
-### Command Palette
-Cmd+Shift+P for command search. Search actions, not just content. Execute commands from search.
-
-### Search Filters Inline
-Type-to-filter syntax: "type:icon search" or "in:components button". Power user feature.
-
-### Deep Linking
-URLs that link to specific states. Share links to specific components, tokens. Restore view from URL.
-
-### Vim-Style Navigation
-Optional vim key bindings. j/k for navigation. / for search. Power user mode.
-
-### Quick Actions
-Keyboard shortcuts for common actions. Single key access when panel focused. Customizable shortcuts.
-
-### Smart Suggestions
-Suggest searches based on context. Recently viewed. Related items.
-
-### Navigation Graph
-Visualize relationships between items. Click to navigate. See what's connected.
+| Shortcut | Reserved For |
+|----------|--------------|
+| Cmd+N | New... (terminal window?) |
+| Cmd+T | TBD |
+| Cmd+P | TBD (print? publish?) |
+| Cmd+R | TBD (refresh? run?) |
