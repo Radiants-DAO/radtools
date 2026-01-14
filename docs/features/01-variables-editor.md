@@ -2,7 +2,19 @@
 
 ## Purpose
 
-The Variables Editor manages design tokens—the foundational values that define a design system's visual language. It provides a visual interface for editing colors, shadows, spacing, and border radius values, with changes persisting directly to the design system's source files.
+The Variables Editor manages design tokens—the foundational values that define a design system's visual language. It provides a visual interface for editing colors, shadows, border radius, animation timing, and effects, with changes persisting directly to the theme's source files.
+
+**What Variables Editor owns:**
+- Colors (brand palette + semantic tokens)
+- Shadows (elevation system)
+- Border Radius (shape language)
+- Animation (duration + timing function)
+- Effects (backdrop blur, focus ring)
+
+**What it doesn't own:**
+- Spacing (Tailwind handles this)
+- Typography (Typography Editor owns this)
+- Component-specific tokens (Component Browser)
 
 ---
 
@@ -63,6 +75,41 @@ Corner rounding values for consistent shape language.
 - `radius-md` — Standard rounding
 - `radius-lg` — Pronounced rounding
 - `radius-full` — Pill/circle shapes
+
+### Animation Tokens
+Timing values that define the theme's motion feel.
+
+**Duration Scale** — How long animations take
+- `duration-fast` — Micro-interactions, instant feedback (100-150ms)
+- `duration-base` — Standard transitions, hover states (200-300ms)
+- `duration-slow` — Emphasis, entrance animations (400-500ms)
+- `duration-slower` — Complex sequences, page transitions (600ms+)
+
+**Timing Function** — How animations accelerate
+- `timing-default` — Standard easing (ease-out or theme-specific)
+- `timing-linear` — Constant speed (progress indicators)
+- `timing-bounce` — Playful overshoot (optional, theme-specific)
+
+Animation timing is part of theme identity. A retro theme might feel snappy (fast, linear). A modern theme might feel smooth (slower, ease-out).
+
+### Effects Tokens
+Visual effects that vary by theme.
+
+**Backdrop Blur** — Glass/frosted effects
+- `blur-none` — No blur (0)
+- `blur-sm` — Subtle frosting (4px)
+- `blur-md` — Standard glass effect (8px)
+- `blur-lg` — Heavy frosting (16px)
+
+Not all themes use blur. RadOS has none (pixel aesthetic). Phase uses it heavily (glass morphism).
+
+**Focus Ring** — Accessibility focus indicators
+- `focus-ring-width` — Ring thickness (2px typical)
+- `focus-ring-color` — Ring color (often accent or edge-focus)
+- `focus-ring-offset` — Gap between element and ring (2px typical)
+- `focus-ring-style` — Solid, glow, or theme-specific treatment
+
+Focus ring style is theme identity. RadOS uses hard outlines. Phase uses soft glows.
 
 ---
 
@@ -179,6 +226,8 @@ Committing changes writes to source files.
   - Semantic tokens → token mapping definitions
   - Shadows → shadow token definitions
   - Radius → radius token definitions
+  - Animation → animation token definitions
+  - Effects → effects token definitions
 - Success confirmation shows what was saved
 - Failure shows specific errors with guidance
 
@@ -226,6 +275,8 @@ The system validates that all required tokens are defined.
 - All semantic token categories have values
 - No orphaned references to deleted colors
 - Shadow and radius scales are complete
+- Animation duration scale is defined
+- Focus ring tokens are defined (accessibility requirement)
 
 ---
 
@@ -245,3 +296,12 @@ The editor should offer tools for generating harmonious color palettes—complem
 
 ### Import/Export
 Users should be able to import colors from external sources (Figma, Adobe, CSS files) and export the current palette in multiple formats.
+
+### Animation Preview
+When editing animation tokens, preview actual motion. Slider to scrub through duration. Side-by-side comparison of timing functions.
+
+### Effect Comparison
+Toggle effects on/off to see impact. A/B preview of blur levels. Focus ring preview on interactive elements.
+
+### Theme Comparison
+View same tokens across different themes. See how RadOS shadows differ from Phase shadows. Understand theme identity through token differences.
