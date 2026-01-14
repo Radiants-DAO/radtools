@@ -2,359 +2,271 @@
 
 ## Purpose
 
-The Assets Manager provides organization, preview, and management of visual assets used in the design system. It handles icons, logos, images, and other media files, making them discoverable and easy to use throughout the application.
+The Assets Manager provides a browser for theme-owned visual assets: icons and logos. Assets are components with variants/names — click to copy for use in code or prompts.
+
+**Assets Manager owns:**
+- Icons (Icon component with `name` prop)
+- Logos (Logo component with `variant` prop)
+- Size configuration for both
+
+**What it doesn't own:**
+- Fonts (Typography Editor)
+- Images (project-specific, use Finder)
+- File organization (offload to native filesystem)
 
 ---
 
-## Asset Types
+## Icons
 
-### Icons
-Small symbolic graphics for UI elements.
+### Icon as Component
+Icons are a single component with each icon as a `name` option.
 
-**Characteristics:**
-- Vector format (SVG preferred)
-- Multiple sizes supported
-- Monochrome or limited color
-- Consistent style within set
+```tsx
+<Icon name="search" />
+<Icon name="home" />
+<Icon name="settings" size="lg" />
+```
 
-**Organization:**
-- Grouped by category (navigation, actions, status)
-- Searchable by name and tags
-- Multiple icon sets supported
-- Size variants available
-
-### Logos
-Brand identity graphics.
-
-**Characteristics:**
-- Multiple formats (SVG, PNG)
-- Various orientations (horizontal, stacked, icon-only)
-- Color variants (full color, monochrome, reversed)
-- Size variants for different contexts
-
-**Organization:**
-- Grouped by brand/product
-- Variant types labeled
-- Usage guidelines available
-- Clear file naming
-
-### Images
-Photographs, illustrations, and complex graphics.
-
-**Characteristics:**
-- Raster formats (PNG, JPG, WebP)
-- Various dimensions
-- May require optimization
-- Larger file sizes
-
-**Organization:**
-- Grouped by purpose or project area
-- Metadata preserved
-- Thumbnails generated
-- File size displayed
-
-### Other Media
-Additional asset types.
-
-**Supported:**
-- Videos (MP4, WebM)
-- Animations (Lottie, GIF)
-- Documents (PDF for reference)
-- Fonts (managed separately in Typography)
-
----
-
-## Asset Discovery
-
-### Directory Scanning
-Assets discovered from designated directories.
-
-**Behavior:**
-- Scan asset directories recursively
-- Identify file types automatically
-- Extract metadata (dimensions, size, format)
-- Build searchable index
-- Watch for new files
-
-### Metadata Extraction
-Information gathered about each asset.
-
-**Extracted Data:**
-- File name
-- File path
-- Dimensions (width × height)
-- File size
-- Format/extension
-- Color profile (if applicable)
-
-### Tagging System
-Assets can be tagged for organization.
-
-**Features:**
-- Manual tag assignment
-- Auto-generated tags from path/name
-- Filter by tags
-- Tag suggestions
-
----
-
-## Asset Preview
-
-### Icon Preview
-Visual display of icons with options.
-
-**Features:**
-- Grid view of all icons
-- Adjustable preview size (16, 20, 24, 32px)
-- Search and filter
-- Click to copy reference
-- Hover shows icon name
-
-### Logo Preview
-Display logos with context.
-
-**Features:**
-- Multiple variants shown together
-- Background toggle (light/dark)
-- Actual size display
-- Download original option
-
-### Image Preview
-View images with details.
-
-**Features:**
-- Thumbnail grid view
-- Click for full-size preview
-- Image dimensions shown
-- File size displayed
-- Zoom and pan support
-
-### Asset Details Panel
-Detailed view of selected asset.
-
-**Information:**
-- Full file path
-- All metadata
-- Usage examples
-- Related assets
-
----
-
-## Asset Operations
-
-### Upload
-Add new assets to the library.
-
-**Methods:**
-- Drag and drop onto panel
-- File picker dialog
-- Paste from clipboard
-- Import from URL
-
-**Behavior:**
-- Validate file type
-- Check file size limits
-- Generate thumbnail
-- Update index
-- Confirm success
-
-### Organize
-Manage asset organization.
-
-**Actions:**
-- Move to different folder
-- Rename file
-- Add/remove tags
-- Create new folders
-- Delete assets
-
-### Copy Reference
-Get asset reference for use in code.
-
-**Formats:**
-- Import path
-- Public URL
-- Component usage
-- CSS reference
-
-**Behavior:**
-- Click copies to clipboard
-- Toast confirms copy
-- Multiple format options
-
-### Download
-Retrieve asset files.
-
-**Options:**
-- Original file
-- Specific size variant
-- Optimized version
-- Multiple files (zip)
-
----
-
-## Icon System
-
-### Icon Library
-Comprehensive icon collection management.
-
-**Features:**
-- Multiple icon libraries supported
-- Consistent icon interface
-- Size standardization
-- Color customization
-
-### Icon Search
-Find icons quickly.
-
-**Search By:**
-- Icon name
-- Tags/categories
-- Visual similarity (ideal)
-- Recent usage
-
-### Icon Size Options
-Preview icons at standard sizes.
-
-**Standard Sizes:**
-- 16px — Inline, compact UI
-- 20px — Standard UI elements
-- 24px — Emphasized UI
-- 32px — Feature icons, navigation
-
-### Icon Usage
-Information on using icons.
-
-**Guidance:**
-- Import syntax
-- Component usage
-- Accessibility requirements
-- Color customization
-
----
-
-## Asset Optimization
-
-### Automatic Optimization
-Assets optimized on upload.
-
-**Optimizations:**
-- SVG minification
-- Image compression
-- Format conversion
-- Dimension standardization
-
-### Manual Optimization
-User-triggered optimization.
-
-**Options:**
-- Compress selected assets
-- Convert formats
-- Resize images
-- Generate variants
-
-### Optimization Preview
-See impact before applying.
+### Icon Browser
+Grid view of all available icons.
 
 **Display:**
-- Before/after file size
-- Visual quality comparison
-- Estimated savings
+```
+ICONS                              [Open in Finder]
+─────────────────────────────────────────────────
+Size: [16] [20] [24] [32]
+
+┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐
+│  🔍  │ │  🏠  │ │  ⚙️  │ │  👤  │ │  ✉️  │
+│search│ │ home │ │ settings│ │ user │ │ mail │
+└──────┘ └──────┘ └──────┘ └──────┘ └──────┘
+```
+
+### Size Options
+Preview icons at different sizes.
+
+**Size Selector:**
+- Buttons to switch preview size (16, 20, 24, 32px)
+- All icons re-render at selected size
+- Shows how icons look at each scale
+
+### Click to Copy
+Single click copies the icon name.
+
+**Behavior:**
+- Click icon → copies `search` to clipboard
+- Toast confirms: "Copied: search"
+- Default size assumed
+
+### Right-Click Context Menu
+Right-click shows size options.
+
+**Menu:**
+```
+┌─────────────────────┐
+│ Copy "search"       │
+├─────────────────────┤
+│ sm (16px)          │
+│ md (20px)       ✓  │
+│ lg (24px)          │
+│ xl (32px)          │
+├─────────────────────┤
+│ Edit sizes...       │
+└─────────────────────┘
+```
+
+**Behavior:**
+- Select size → copies `search` (size context for prompt)
+- Edit sizes → opens size configuration panel
+
+### Size Configuration
+Define available sizes for icons.
+
+**Panel:**
+```
+ICON SIZES
+─────────────────────
+sm:  [16] px
+md:  [20] px  (default)
+lg:  [24] px
+xl:  [32] px
+
+[+ Add Size]
+```
+
+**Behavior:**
+- Edit pixel values
+- Set default size
+- Add/remove size options
+- Changes persist to theme
+
+### Search
+Filter icons by name.
+
+**Behavior:**
+- Type to filter
+- Matches icon names
+- Real-time filtering
 
 ---
 
-## Search and Filter
+## Logos
 
-### Global Asset Search
-Search across all asset types.
+### Logo as Component
+Logos are a single component with visual variants.
 
-**Search Fields:**
-- File name
-- Tags
-- Path
-- Metadata
+```tsx
+<Logo variant="wordmark" />
+<Logo variant="logomark" />
+<Logo variant="horizontal" />
+<Logo variant="vertical" />
+```
 
-### Type Filter
-Filter by asset type.
+### Logo Browser
+Display all logo variants.
 
-**Filters:**
-- Icons only
-- Logos only
-- Images only
-- All assets
+**Display:**
+```
+LOGOS                              [Open in Finder]
+─────────────────────────────────────────────────
 
-### Folder Filter
-Navigate by folder structure.
+┌─────────────────────────────────┐
+│                                 │
+│      RADFLOW                    │  wordmark
+│                                 │
+└─────────────────────────────────┘
+
+┌──────────┐
+│    ◉     │  logomark
+└──────────┘
+
+┌─────────────────────────────────┐
+│   ◉  RADFLOW                    │  horizontal
+└─────────────────────────────────┘
+
+┌──────────┐
+│    ◉     │
+│ RADFLOW  │  vertical
+└──────────┘
+```
+
+### Click to Copy
+Single click copies the variant name.
 
 **Behavior:**
-- Folder tree navigation
-- Click to filter by folder
-- Breadcrumb path display
+- Click logo → copies `wordmark` to clipboard
+- Toast confirms: "Copied: wordmark"
+
+### Right-Click Context Menu
+Right-click shows options.
+
+**Menu:**
+```
+┌─────────────────────┐
+│ Copy "wordmark"     │
+├─────────────────────┤
+│ View in Finder      │
+│ Edit variant...     │
+└─────────────────────┘
+```
+
+### Variant Management
+Logo variants defined in theme.
+
+**Variants vary by theme but typically include:**
+- `wordmark` — Text only
+- `logomark` — Icon/symbol only
+- `horizontal` — Icon + text side by side
+- `vertical` — Icon + text stacked
+
+---
+
+## Open in Finder
+
+### Purpose
+Offload file organization to native filesystem.
+
+**Behavior:**
+- Click "Open in Finder" button
+- Opens theme's assets directory in native file browser
+- User can add, rename, organize files there
+- Assets Manager refreshes on focus return
+
+### Why
+- Native file management is better than building it
+- Drag-and-drop already works in Finder
+- Batch operations easier in native UI
+- Keeps editor focused on design work
+
+---
+
+## Asset Ownership
+
+### Theme-Owned
+All assets belong to the active theme.
+
+**Structure:**
+```
+@radflow/theme-example/
+├── components/
+│   ├── Icon.tsx       ← Icon component
+│   └── Logo.tsx       ← Logo component
+├── assets/
+│   ├── icons/         ← SVG files
+│   └── logos/         ← Logo files
+└── ...
+```
+
+### Component Implementation
+Icons and Logos are React components in theme.
+
+**Icon Component Pattern:**
+```tsx
+// Icon.tsx
+export default function Icon({ name, size = 'md' }) {
+  // Renders SVG based on name
+}
+```
+
+**Logo Component Pattern:**
+```tsx
+// Logo.tsx
+export default function Logo({ variant = 'wordmark' }) {
+  // Renders logo based on variant
+}
+```
 
 ---
 
 ## Persistence
 
-### File System Integration
-Assets stored in project file system.
+### Size Configuration
+Icon sizes save to theme configuration.
 
-**Structure:**
-- Designated asset directories
-- Organized folder hierarchy
-- Version control friendly
-- Standard naming conventions
+**Destination:**
+- Theme manifest or dedicated config file
+- Size scale persisted
 
-### Asset Configuration
-Asset settings stored in configuration.
-
-**Configuration:**
-- Asset directory paths
-- Optimization settings
-- Library preferences
-- Custom tags
-
-### Index Refresh
-Keep index synchronized with files.
+### Asset Discovery
+Icons and logos discovered from filesystem.
 
 **Behavior:**
-- Watch for file changes
-- Manual refresh option
-- Sync status indicator
-- Handle external changes
+- Scan theme's assets directory
+- Match SVG files to icon names
+- Refresh on file changes
 
 ---
 
 ## Ideal Behaviors
 
-### Visual Asset Search
-Search icons by visual appearance, not just name. Sketch an icon shape, find similar icons in library.
+### Fuzzy Search
+Forgiving search that finds icons even with typos.
 
-### Automatic Alt Text
-Generate alt text suggestions for images using AI. Ensure accessibility compliance.
+### Usage Tracking
+Show which icons are used in the project. Identify unused icons.
 
-### Asset Usage Tracking
-Track where each asset is used in the codebase. Identify unused assets. Prevent accidental deletion of used assets.
+### Quick Add
+Drag SVG onto panel to add new icon. Auto-names from filename.
 
-### CDN Integration
-Upload assets to CDN directly from manager. Generate CDN URLs. Manage CDN cache.
-
-### Design Tool Sync
-Import assets from Figma, Sketch, Adobe XD. Keep libraries synchronized. Pull updates automatically.
-
-### Asset Versioning
-Track asset versions over time. Compare versions visually. Revert to previous versions.
-
-### Bulk Operations
-Select multiple assets for batch operations. Bulk rename, tag, move, delete. Apply filters to selection.
-
-### Format Conversion
-Convert between formats on demand. SVG to PNG at various sizes. PNG to WebP for optimization.
-
-### Color Extraction
-Extract color palette from images. Apply extracted colors to theme. Find images matching theme colors.
-
-### Responsive Image Generation
-Generate srcset variants automatically. Configure breakpoints. Optimize for different devices.
-
-### Placeholder Generation
-Generate placeholder images matching dimensions. Support blur-up patterns. Development-friendly placeholders.
+### Preview in Context
+Show icon in a mini component preview (button, nav item, etc.)
